@@ -8,7 +8,6 @@ import android.view.WindowManager;
 
 public class DroidzActivity extends Activity {
     /** Called when the activity is first created. */
-	
 	private static final String TAG = DroidzActivity.class.getSimpleName();
 	
     @Override

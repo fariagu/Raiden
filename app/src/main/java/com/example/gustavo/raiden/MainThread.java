@@ -7,10 +7,7 @@ import android.graphics.Canvas;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
-
 /**
- * @author impaler
- *
  * The Main thread which contains the game loop. The thread must have access to 
  * the surface view and holder to trigger events every game tick.
  */
@@ -48,9 +45,10 @@ public class MainThread extends Thread {
 				canvas = this.surfaceHolder.lockCanvas();
 				synchronized (surfaceHolder) {
 					// update game state 
+					this.gamePanel.update();
 					// render state to the screen
 					// draws the canvas on the panel
-					this.gamePanel.onDraw(canvas);				
+					this.gamePanel.render(canvas);				
 				}
 			} finally {
 				// in case of an exception the surface is not left in 

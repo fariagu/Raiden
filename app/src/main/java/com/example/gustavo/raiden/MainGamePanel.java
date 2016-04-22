@@ -4,6 +4,7 @@
 package com.example.gustavo.raiden;
 
 import com.example.gustavo.raiden.model.Droid;
+import com.example.gustavo.raiden.model.components.Speed;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
@@ -15,7 +16,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 /**
- * @author impaler
  * This is the main surface that handles the ontouch events and draws
  * the image to the screen.
  */
@@ -101,11 +101,39 @@ public class MainGamePanel extends SurfaceView implements
 		return true;
 	}
 
-	@Override
-	protected void onDraw(Canvas canvas) {
-		// fills the canvas with black
+	public void render(Canvas canvas) {
 		canvas.drawColor(Color.BLACK);
 		droid.draw(canvas);
+	}
+
+	/**
+	 * This is the game update method. It iterates through all the objects
+	 * and calls their update method if they have one or calls specific
+	 * engine's update method.
+	 */
+	public void update() {
+		// check collision with right wall if heading right
+		if (droid.getSpeed().getxDirection() == Speed.DIRECTION_RIGHT
+				&& droid.getX() + droid.getBitmap().getWidth() / 2 >= getWidth()) {
+			droid.getSpeed().toggleXDirection();
+		}
+		// check collision with left wall if heading left
+		if (droid.getSpeed().getxDirection() == Speed.DIRECTION_LEFT
+				&& droid.getX() - droid.getBitmap().getWidth() / 2 <= 0) {
+			droid.getSpeed().toggleXDirection();
+		}
+		// check collision with bottom wall if heading down
+		if (droid.getSpeed().getyDirection() == Speed.DIRECTION_DOWN
+				&& droid.getY() + droid.getBitmap().getHeight() / 2 >= getHeight()) {
+			droid.getSpeed().toggleYDirection();
+		}
+		// check collision with top wall if heading up
+		if (droid.getSpeed().getyDirection() == Speed.DIRECTION_UP
+				&& droid.getY() - droid.getBitmap().getHeight() / 2 <= 0) {
+			droid.getSpeed().toggleYDirection();
+		}
+		// Update the lone droid
+		droid.update();
 	}
 
 }

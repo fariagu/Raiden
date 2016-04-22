@@ -8,7 +8,6 @@ import android.view.WindowManager;
 
 public class MainActivity extends AppCompatActivity {
     /** Called when the activity is first created. */
-
     private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
