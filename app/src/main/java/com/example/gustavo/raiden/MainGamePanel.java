@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.example.gustavo.raiden;
 
 import com.example.gustavo.raiden.model.Droid;
@@ -59,7 +56,7 @@ public class MainGamePanel extends SurfaceView implements
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		Log.d(TAG, "Surface is being destroyed");
 		// tell the thread to shut down and wait for it to finish
-		// this is a clean shutdown
+		// clean shutdown
 		boolean retry = true;
 		while (retry) {
 			try {

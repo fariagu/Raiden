@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.example.gustavo.raiden.model.components;
 
 /**
@@ -24,8 +21,8 @@ public class Speed {
 	private int yDirection = DIRECTION_DOWN;
 	
 	public Speed() {
-		this.xv = 1;
-		this.yv = 1;
+		this.xv = 5;
+		this.yv = 5;
 	}
 
 	public Speed(float xv, float yv) {
@@ -33,18 +30,10 @@ public class Speed {
 		this.yv = yv;
 	}
 
-	public float getXv() {
-		return xv;
-	}
-	public void setXv(float xv) {
-		this.xv = xv;
-	}
-	public float getYv() {
-		return yv;
-	}
-	public void setYv(float yv) {
-		this.yv = yv;
-	}
+	public float getXv() {return xv;}
+	public void setXv(float xv) {this.xv = xv;}
+	public float getYv() {return yv;}
+	public void setYv(float yv) {this.yv = yv;}
 
 	public int getxDirection() {
 		return xDirection;

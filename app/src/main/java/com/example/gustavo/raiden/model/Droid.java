@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.example.gustavo.raiden.model;
 
 import com.example.gustavo.raiden.model.components.Speed;
@@ -12,9 +9,6 @@ import android.view.MotionEvent;
  * This is a test droid that is dragged, dropped, moved, smashed against
  * the wall and done other terrible things with.
  * Wait till it gets a weapon!
- * 
- * @author impaler
- *
  */
 public class Droid {
 
