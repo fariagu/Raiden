@@ -1,33 +1,45 @@
 package com.example.gustavo.raiden;
 
+import java.text.DecimalFormat;
+
 import android.graphics.Canvas;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.SuperscriptSpan;
 import android.util.Log;
 import android.view.SurfaceHolder;
-import android.widget.TextView;
 
 /**
  * The Main thread which contains the game loop.
  * The thread must have access to the surface view and holder to trigger events every game tick.
  */
 public class MainThread extends Thread {
-	
+
 	private static final String TAG = MainThread.class.getSimpleName();
 
-	// Surface holder that can access the physical surface
-	private SurfaceHolder surfaceHolder;
-	// The actual view that handles inputs
-	// and draws to the surface
-	private MainGamePanel gamePanel;
+	private final static int    MAX_FPS = 60; // desired fps
+	private final static int    MAX_FRAME_SKIPS = 5; // maximum number of frames to be skipped
+	private final static int    FRAME_PERIOD = 1000 / MAX_FPS; // the frame period
 
-	// flag to hold game state 
-	private boolean running;
-	public void setRunning(boolean running) {
+	// Stuff for stats
+	private DecimalFormat df = new DecimalFormat("0.##");  // 2 dp
+	// we'll be reading the stats every second
+	private final static int    STAT_INTERVAL = 1000; //ms
+	// the average will be calculated by storing
+	private final static int    FPS_HISTORY_NR = 10; // the last n FPSs
+	private long lastStatusStore = 0; // last time the status was stored
+	private long statusIntervalTimer = 0L; // the status time counter
+	private long totalFramesSkipped = 0L; // number of frames skipped since the game started
+	private long framesSkippedPerStatCycle = 0L; // number of frames skipped in a store cycle (1 sec)
 
-		this.running = running;
-	}
+	private int frameCountPerStatCycle = 0; // number of rendered frames in an interval
+	private long totalFrameCount = 0L;
+	private double  fpsStore[]; // the last FPS values
+	private long    statsCount = 0; // the number of times the stat has been read
+	private double  averageFps = 0.0; // the average FPS since the game started
+
+	private SurfaceHolder surfaceHolder; // Surface holder that can access the physical surface
+	private MainGamePanel gamePanel;// The actual view that handles inputs, and draws to the surface
+
+	private boolean running; // flag to hold game state
+	public void setRunning(boolean running) {this.running = running;}
 
 	public MainThread(SurfaceHolder surfaceHolder, MainGamePanel gamePanel) {
 		super();
@@ -35,17 +47,11 @@ public class MainThread extends Thread {
 		this.gamePanel = gamePanel;
 	}
 
-	// desired fps
-	private final static int    MAX_FPS = 60;
-	// maximum number of frames to be skipped
-	private final static int    MAX_FRAME_SKIPS = 6;
-	// the frame period
-	private final static int    FRAME_PERIOD = 1000 / MAX_FPS;
-
 	@Override
 	public void run() {
 		Canvas canvas;
 		Log.d(TAG, "Starting game loop");
+		initTimingElements();
 
 		long beginTime;     // the time when the cycle begun, iniciar o contador
 		long timeDiff;      // the time it took for the cycle to execute, diferenca entre final e inicial
@@ -82,6 +88,10 @@ public class MainThread extends Thread {
 						sleepTime += FRAME_PERIOD; // add frame period to check if in next frame
 						framesSkipped++;
 					}
+					if(framesSkipped>0)
+						Log.d(TAG, "Skipped: " + framesSkipped);
+					framesSkippedPerStatCycle += framesSkipped;
+					storeStats();
 				}
 			} finally {
 				// in case of an exception the surface is not left in 
@@ -92,5 +102,61 @@ public class MainThread extends Thread {
 			}	// end finally
 		}
 	}
-	
+
+	/**
+	 * The statistics:
+	 * Called every cycle
+	 * Checks if time since last store is greater than the statistics gathering period (1 sec)
+	 * if so it calculates the FPS for the last period and stores it.
+	 *
+	 * It tracks the number of frames per period.
+	 * The number of frames since the start of the period are summed up
+	 * The calculation takes part only if the next period and the frame count is reset to 0.
+	 */
+
+	private void storeStats() {
+		frameCountPerStatCycle++;
+		totalFrameCount++;
+
+		statusIntervalTimer += (System.currentTimeMillis() - statusIntervalTimer); // check the actual time
+
+		if (statusIntervalTimer >= lastStatusStore + STAT_INTERVAL) {
+			double actualFps = (double) (frameCountPerStatCycle / (STAT_INTERVAL / 1000)); // calculate the actual frames per status check interval
+			fpsStore[(int) statsCount % FPS_HISTORY_NR] = actualFps; // stores the latest fps in the array
+			statsCount++; // increase the number of times statistics was calculated
+
+			double totalFps = 0.0;
+			for (int i = 0; i < FPS_HISTORY_NR; i++) { // sum up the stored fps values
+				totalFps += fpsStore[i];
+			}
+
+			// obtain the average
+			if (statsCount < FPS_HISTORY_NR) {// in case of the first 10 triggers
+				averageFps = totalFps / statsCount;
+			} else { // every case after the 10 first
+				averageFps = totalFps / FPS_HISTORY_NR;
+			}
+			totalFramesSkipped += framesSkippedPerStatCycle; // saving the number of total frames skipped
+			// resetting the counters after a status record (1 sec)
+			framesSkippedPerStatCycle = 0;
+			statusIntervalTimer = 0;
+			frameCountPerStatCycle = 0;
+
+			statusIntervalTimer = System.currentTimeMillis();
+			lastStatusStore = statusIntervalTimer;
+	        Log.d(TAG, "Average FPS:" + df.format(averageFps));
+			gamePanel.setAvgFps("FPS: " + df.format(averageFps));
+		}
+	}
+
+	private void initTimingElements() {
+		// initialise timing elements
+		fpsStore = new double[FPS_HISTORY_NR];
+		for (int i = 0; i < FPS_HISTORY_NR; i++) {
+			fpsStore[i] = 0.0;
+		}
+		Log.d(TAG + ".initTimingElements()", "Timing elements for stats initialised");
+	}
+
+
 }

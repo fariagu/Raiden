@@ -7,17 +7,16 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 /**
- * This is the main surface that handles the ontouch events and draws
- * the image to the screen.
+ * This is the main surface that handles the ontouch events and draws the image to the screen.
  */
-public class MainGamePanel extends SurfaceView implements
-		SurfaceHolder.Callback {
+public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
 	private static final String TAG = MainGamePanel.class.getSimpleName();
 	
@@ -40,8 +39,8 @@ public class MainGamePanel extends SurfaceView implements
 	}
 
 	@Override
-	public void surfaceChanged(SurfaceHolder holder, int format, int width,
-			int height) {
+	public void surfaceChanged(SurfaceHolder holder, int format, int width,	int height) {
+
 	}
 
 	@Override
@@ -98,9 +97,24 @@ public class MainGamePanel extends SurfaceView implements
 		return true;
 	}
 
+	private String avgFps;
+	public void setAvgFps(String avgFps) {
+		this.avgFps = avgFps;
+	}
+
 	public void render(Canvas canvas) {
 		canvas.drawColor(Color.BLACK);
 		droid.draw(canvas);
+		displayFps(canvas, avgFps);
+	}
+
+	private void displayFps(Canvas canvas, String FPS) {
+		if (canvas != null && FPS != null) {
+			Paint paint = new Paint();
+			paint.setARGB(255, 255, 255, 255);
+			canvas.drawText(FPS, this.getWidth() - 50, 20, paint);
+		}
+
 	}
 
 	/**
