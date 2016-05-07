@@ -1,5 +1,6 @@
 package com.example.gustavo.raiden;
 
+import com.example.gustavo.raiden.model.Ship;
 import com.example.gustavo.raiden.model.Droid;
 import com.example.gustavo.raiden.model.components.Speed;
 import android.app.Activity;
@@ -22,6 +23,12 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 	
 	private MainThread thread;
 	private Droid droid;
+	private Ship ship;
+
+	private String avgFps;
+	public void setAvgFps(String avgFps) {
+		this.avgFps = avgFps;
+	}
 
 	public MainGamePanel(Context context) {
 		super(context);
@@ -30,10 +37,17 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
 		// create droid and load bitmap
 		droid = new Droid(BitmapFactory.decodeResource(getResources(), R.drawable.hld), 50, 50);
-		
+
+		// create Ship and load bitmap
+		ship = new Ship(
+				BitmapFactory.decodeResource(getResources(), R.drawable.shipsprite)
+				, 82, 182	// initial position
+				, 35, 38	// width and height of sprite
+				, 11, 11);	// FPS and number of frames in the animation
+
 		// create the game loop thread
 		thread = new MainThread(getHolder(), this);
-		
+
 		// make the GamePanel focusable so it can handle events
 		setFocusable(true);
 	}
@@ -97,14 +111,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 		return true;
 	}
 
-	private String avgFps;
-	public void setAvgFps(String avgFps) {
-		this.avgFps = avgFps;
-	}
-
 	public void render(Canvas canvas) {
 		canvas.drawColor(Color.BLACK);
 		droid.draw(canvas);
+		ship.draw(canvas);
 		displayFps(canvas, avgFps);
 	}
 
@@ -145,6 +155,8 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 		}
 		// Update the lone droid
 		droid.update();
+
+		ship.update(System.currentTimeMillis());
 	}
 
 }
