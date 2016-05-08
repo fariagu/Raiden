@@ -1,8 +1,5 @@
 package com.example.gustavo.raiden;
 
-import com.example.gustavo.raiden.model.Ship;
-import com.example.gustavo.raiden.model.Droid;
-import com.example.gustavo.raiden.model.components.Speed;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
@@ -14,29 +11,43 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.example.gustavo.raiden.model.Droid;
+import com.example.gustavo.raiden.model.Particle;
+import com.example.gustavo.raiden.model.Ship;
+import com.example.gustavo.raiden.model.components.Speed;
+
+import java.util.ArrayList;
+
 /**
  * This is the main surface that handles the ontouch events and draws the image to the screen.
  */
 public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
 	private static final String TAG = MainGamePanel.class.getSimpleName();
-	
+
 	private MainThread thread;
 	private Droid droid;
+	private Particle prtcl;
+	private ArrayList<Particle> vPrt = new ArrayList<Particle>();
 	private Ship ship;
 
 	private String avgFps;
-	public void setAvgFps(String avgFps) {
-		this.avgFps = avgFps;
-	}
-
 	public MainGamePanel(Context context) {
 		super(context);
 		// adding the callback (this) to the surface holder to intercept events
 		getHolder().addCallback(this);
 
-		// create droid and load bitmap
+		// create Droid and load bitmap
 		droid = new Droid(BitmapFactory.decodeResource(getResources(), R.drawable.hld), 50, 50);
+
+		//create Particle
+		prtcl = new Particle(200, 500);
+
+		//create vector of Particles
+		for(int i=0; i<10; i++) {
+			Particle temp = new Particle(200+i, 500+(2*i));
+			vPrt.add(temp);
+		}
 
 		// create Ship and load bitmap
 		ship = new Ship(
@@ -50,6 +61,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
 		// make the GamePanel focusable so it can handle events
 		setFocusable(true);
+	}
+
+	public void setAvgFps(String avgFps) {
+		this.avgFps = avgFps;
 	}
 
 	@Override
@@ -79,15 +94,20 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 				// try again shutting down the thread
 			}
 		}
-		Log.d(TAG, "Thread was shut down cleanly");
+		Log.d(TAG, "Thread was shut down cleanly.");
 	}
-	
+
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+			//prtcl = new Particle((int)event.getX(), (int)event.getY());
+
+			Particle temp = new Particle((int)event.getX(), (int)event.getY());
+			vPrt.add(temp);
+
 			// delegating event handling to the droid
 			droid.handleActionDown((int)event.getX(), (int)event.getY());
-			
+
 			// check if in the lower part of the screen we exit
 			if (event.getY() > getHeight() - 50) {
 				thread.setRunning(false);
@@ -95,14 +115,16 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 			} else {
 				Log.d(TAG, "Coords: x=" + event.getX() + ",y=" + event.getY());
 			}
-		} if (event.getAction() == MotionEvent.ACTION_MOVE) {
+		}
+		if (event.getAction() == MotionEvent.ACTION_MOVE) {
 			// the gestures
 			if (droid.isTouched()) {
 				// the droid was picked up and is being dragged
 				droid.setX((int)event.getX());
 				droid.setY((int)event.getY());
 			}
-		} if (event.getAction() == MotionEvent.ACTION_UP) {
+		}
+		if (event.getAction() == MotionEvent.ACTION_UP) {
 			// touch was released
 			if (droid.isTouched()) {
 				droid.setTouched(false);
@@ -112,9 +134,15 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 	}
 
 	public void render(Canvas canvas) {
-		canvas.drawColor(Color.BLACK);
+		canvas.drawColor(Color.BLACK); // needed so there isnt remains of dead bitmaps
+		if (prtcl.isAlive())
+			prtcl.draw(canvas);
+		for (Particle pr : vPrt)
+			if(pr.isAlive())
+				pr.draw(canvas);
 		droid.draw(canvas);
 		ship.draw(canvas);
+		// display fps
 		displayFps(canvas, avgFps);
 	}
 
@@ -124,7 +152,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 			paint.setARGB(255, 255, 255, 255);
 			canvas.drawText(FPS, this.getWidth() - 50, 20, paint);
 		}
-
 	}
 
 	/**
@@ -153,9 +180,12 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 				&& droid.getY() - droid.getBitmap().getHeight() / 2 <= 0) {
 			droid.getSpeed().toggleYDirection();
 		}
-		// Update the lone droid
-		droid.update();
 
+		// Updates
+		droid.update();
+		prtcl.update();
+		for (Particle pr : vPrt)
+			pr.update();
 		ship.update(System.currentTimeMillis());
 	}
 

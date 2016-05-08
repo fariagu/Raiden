@@ -1,9 +1,9 @@
 package com.example.gustavo.raiden.model;
 
-import com.example.gustavo.raiden.model.components.Speed;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.view.MotionEvent;
+
+import com.example.gustavo.raiden.model.components.Speed;
 
 /**
  * This is a test droid that is dragged, dropped, moved, smashed against
@@ -74,7 +74,6 @@ public class Droid {
 		}
 	}
 	
-	
 	/**
 	 * Handles the {link MotionEvent.ACTION_DOWN} event. If the event happens on the
 	 * bitmap surface then the touched state is set to <code>true</code> otherwise to <code>false</code>
@@ -83,7 +82,7 @@ public class Droid {
 	 */
 	public void handleActionDown(int eventX, int eventY) {
 		if (eventX >= (x - bitmap.getWidth() / 2) && (eventX <= (x + bitmap.getWidth()/2))) {
-			if (eventY >= (y - bitmap.getHeight() / 2) && (y <= (y + bitmap.getHeight() / 2))) {
+			if (eventY >= (y - bitmap.getHeight() / 2) && (eventY <= (y + bitmap.getHeight() / 2))) {
 				// droid touched
 				setTouched(true);
 			} else {
