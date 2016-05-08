@@ -12,11 +12,10 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.example.gustavo.raiden.model.Droid;
+import com.example.gustavo.raiden.model.Explosion;
 import com.example.gustavo.raiden.model.Particle;
 import com.example.gustavo.raiden.model.Ship;
 import com.example.gustavo.raiden.model.components.Speed;
-
-import java.util.ArrayList;
 
 /**
  * This is the main surface that handles the ontouch events and draws the image to the screen.
@@ -27,8 +26,8 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
 	private MainThread thread;
 	private Droid droid;
+	private Explosion[] explosions;
 	private Particle prtcl;
-	private ArrayList<Particle> vPrt = new ArrayList<Particle>();
 	private Ship ship;
 
 	private String avgFps;
@@ -42,12 +41,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
 		//create Particle
 		prtcl = new Particle(200, 500);
-
-		//create vector of Particles
-		for(int i=0; i<10; i++) {
-			Particle temp = new Particle(200+i, 500+(2*i));
-			vPrt.add(temp);
-		}
 
 		// create Ship and load bitmap
 		ship = new Ship(
@@ -74,8 +67,12 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		// at this point the surface is created and
-		// we can safely start the game loop
+		explosions = new Explosion[50];
+		for (int i = 0; i < explosions.length; i++) {
+			explosions[i] = null;
+		}
+
+		// at this point the surface is created and we can safely start the game loop
 		thread.setRunning(true);
 		thread.start();
 	}
@@ -100,10 +97,17 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
-			//prtcl = new Particle((int)event.getX(), (int)event.getY());
 
-			Particle temp = new Particle((int)event.getX(), (int)event.getY());
-			vPrt.add(temp);
+			int currentExplosion = 0; // check if explosion is null or if it is still active
+			Explosion explosion = explosions[currentExplosion];
+			while (explosion != null && explosion.isAlive() && currentExplosion < explosions.length) {
+				currentExplosion++;
+				explosion = explosions[currentExplosion];
+			}
+			if (explosion == null || explosion.isDead()) {
+				explosion = new Explosion(200, (int)event.getX(), (int)event.getY());
+				explosions[currentExplosion] = explosion;
+			}
 
 			// delegating event handling to the droid
 			droid.handleActionDown((int)event.getX(), (int)event.getY());
@@ -137,11 +141,14 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 		canvas.drawColor(Color.BLACK); // needed so there isnt remains of dead bitmaps
 		if (prtcl.isAlive())
 			prtcl.draw(canvas);
-		for (Particle pr : vPrt)
-			if(pr.isAlive())
-				pr.draw(canvas);
+
+		for(int i=0; i< explosions.length; i++)
+			if (explosions[i] != null && explosions[i].isAlive())
+				explosions[i].draw(canvas);
+
 		droid.draw(canvas);
 		ship.draw(canvas);
+
 		// display fps
 		displayFps(canvas, avgFps);
 	}
@@ -184,8 +191,11 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 		// Updates
 		droid.update();
 		prtcl.update();
-		for (Particle pr : vPrt)
-			pr.update();
+
+		for(int i=0; i < explosions.length; i++)
+			if (explosions[i] != null && explosions[i].isAlive())
+				explosions[i].update();
+
 		ship.update(System.currentTimeMillis());
 	}
 

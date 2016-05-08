@@ -13,8 +13,7 @@ import com.example.gustavo.raiden.model.components.Speed;
 public class Droid {
 
 	private Bitmap bitmap;	// the actual bitmap
-	private int x;			// the X coordinate
-	private int y;			// the Y coordinate
+	private int x, y;			// the X and Y coordinate
 	private boolean touched;	// if droid is touched/picked up
 	private Speed speed;	// the speed with its directions
 	
