@@ -49,7 +49,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 				BitmapFactory.decodeResource(getResources(), R.drawable.shipsprite)
 				, 82, 182	// initial position
 				, 35, 38	// width and height of sprite
-				, 11, 10);	// FPS and number of frames in the animation
+				, 11, 11);	// FPS and number of frames in the animation
 
 		// create the game loop thread
 		thread = new MainThread(getHolder(), this);

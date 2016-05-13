@@ -114,8 +114,8 @@ public class Ship {
     }
 
     public void handleActionDown(int eventX, int eventY) {
-        if (eventX >= (x - bitmap.getWidth() / 2) && (eventX <= (x + bitmap.getWidth()/2))) {
-            if (eventY >= (y - bitmap.getHeight() / 2) && (eventY <= (y + bitmap.getHeight() / 2))) {
+        if (eventX >= (x - 50 - bitmap.getWidth() / frameNr) && (eventX <= (x + 50 + bitmap.getWidth()/frameNr))) {
+            if (eventY >= (y - 50 - bitmap.getHeight() / 2) && (eventY <= (y + 50 + bitmap.getHeight() / 2))) {
                 setTouched(true);// droid touched
                 oldX=eventX;
                 oldY=eventY;
