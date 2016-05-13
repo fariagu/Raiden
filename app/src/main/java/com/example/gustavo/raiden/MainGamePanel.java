@@ -29,6 +29,8 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 	private Explosion[] explosions;
 	private Particle prtcl;
 	private Ship ship;
+	private int offsetX;
+	private int offsetY;
 
 	private int oldX,oldY;
 
@@ -100,6 +102,9 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 	public boolean onTouchEvent(MotionEvent event) {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 
+			offsetX = (int)event.getX() - ship.getX();
+			offsetY = (int)event.getY() - ship.getY();
+
 			int currentExplosion = 0; // check if explosion is null or if it is still active
 			Explosion explosion = explosions[currentExplosion];
 			while (explosion != null && explosion.isAlive() && currentExplosion < explosions.length) {
@@ -130,8 +135,8 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 			// the gestures
 			if (ship.isTouched()) {
 				// the droid was picked up and is being dragged
-				ship.setX((int)event.getX());
-				ship.setY((int)event.getY());
+				ship.setX((int)event.getX() - offsetX);
+				ship.setY((int)event.getY() - offsetY);
 			}
 		}
 		if (event.getAction() == MotionEvent.ACTION_UP) {

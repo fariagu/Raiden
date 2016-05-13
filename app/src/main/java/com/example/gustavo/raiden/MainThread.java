@@ -77,7 +77,7 @@ public class MainThread extends Thread {
 						this.gamePanel.render(canvas); // render state to the screen, draws the canvas on the panel
 					}
 					catch (NullPointerException e){
-						break;
+						System.exit(1);
 					}
 
 					timeDiff = System.currentTimeMillis() - beginTime; // calculate how long did the cycle take
