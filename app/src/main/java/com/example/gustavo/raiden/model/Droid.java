@@ -84,12 +84,13 @@ public class Droid {
 			if (eventY >= (y - bitmap.getHeight() / 2) && (eventY <= (y + bitmap.getHeight() / 2))) {
 				// droid touched
 				setTouched(true);
-			} else {
+			}
+			else {
 				setTouched(false);
 			}
-		} else {
+		}
+		else {
 			setTouched(false);
 		}
-
 	}
 }

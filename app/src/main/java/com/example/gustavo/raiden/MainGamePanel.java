@@ -30,6 +30,8 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 	private Particle prtcl;
 	private Ship ship;
 
+	private int oldX,oldY;
+
 	private String avgFps;
 	public MainGamePanel(Context context) {
 		super(context);
@@ -47,7 +49,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 				BitmapFactory.decodeResource(getResources(), R.drawable.shipsprite)
 				, 82, 182	// initial position
 				, 35, 38	// width and height of sprite
-				, 11, 11);	// FPS and number of frames in the animation
+				, 11, 10);	// FPS and number of frames in the animation
 
 		// create the game loop thread
 		thread = new MainThread(getHolder(), this);
@@ -110,7 +112,8 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 			}
 
 			// delegating event handling to the droid
-			droid.handleActionDown((int)event.getX(), (int)event.getY());
+			ship.handleActionDown((int)event.getX(), (int)event.getY());
+			oldX = ship.getX(); oldY = ship.getY();
 
 			// check if in the lower part of the screen we exit
 			if (event.getY() > getHeight() - 50) {
@@ -121,17 +124,20 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 			}
 		}
 		if (event.getAction() == MotionEvent.ACTION_MOVE) {
+			oldX = ship.getX(); oldY = ship.getY();
+			ship.setOldX(oldX);
+			ship.setOldY(oldY);
 			// the gestures
-			if (droid.isTouched()) {
+			if (ship.isTouched()) {
 				// the droid was picked up and is being dragged
-				droid.setX((int)event.getX());
-				droid.setY((int)event.getY());
+				ship.setX((int)event.getX());
+				ship.setY((int)event.getY());
 			}
 		}
 		if (event.getAction() == MotionEvent.ACTION_UP) {
 			// touch was released
-			if (droid.isTouched()) {
-				droid.setTouched(false);
+			if (ship.isTouched()) {
+				ship.setTouched(false);
 			}
 		}
 		return true;
