@@ -11,11 +11,11 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.example.gustavo.raiden.model.Bullet;
 import com.example.gustavo.raiden.model.Droid;
 import com.example.gustavo.raiden.model.Explosion;
 import com.example.gustavo.raiden.model.Particle;
 import com.example.gustavo.raiden.model.Ship;
-import com.example.gustavo.raiden.model.components.Speed;
 
 /**
  * This is the main surface that handles the ontouch events and draws the image to the screen.
@@ -26,6 +26,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
 	private MainThread thread;
 	private Droid droid;
+	private Bullet bullet;
 	private Explosion[] explosions;
 	private Particle prtcl;
 	private Ship ship;
@@ -41,7 +42,9 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 		getHolder().addCallback(this);
 
 		// create Droid and load bitmap
-		droid = new Droid(BitmapFactory.decodeResource(getResources(), R.drawable.hld), 50, 50);
+		droid = new Droid(50, 50, context);
+
+		bullet = new Bullet(50, 50, context, droid);
 
 		//create Particle
 		prtcl = new Particle(200, 500);
@@ -158,6 +161,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 				explosions[i].draw(canvas);
 
 		droid.draw(canvas);
+		bullet.draw(canvas);
 		ship.draw(canvas);
 
 		// display fps
@@ -178,30 +182,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 	 * engine's update method.
 	 */
 	public void update() {
-		// check collision with right wall if heading right
-		if (droid.getSpeed().getxDirection() == Speed.DIRECTION_RIGHT
-				&& droid.getX() + droid.getBitmap().getWidth() / 2 >= getWidth()) {
-			droid.getSpeed().toggleXDirection();
-		}
-		// check collision with left wall if heading left
-		if (droid.getSpeed().getxDirection() == Speed.DIRECTION_LEFT
-				&& droid.getX() - droid.getBitmap().getWidth() / 2 <= 0) {
-			droid.getSpeed().toggleXDirection();
-		}
-		// check collision with bottom wall if heading down
-		if (droid.getSpeed().getyDirection() == Speed.DIRECTION_DOWN
-				&& droid.getY() + droid.getBitmap().getHeight() / 2 >= getHeight()) {
-			droid.getSpeed().toggleYDirection();
-		}
-		// check collision with top wall if heading up
-		if (droid.getSpeed().getyDirection() == Speed.DIRECTION_UP
-				&& droid.getY() - droid.getBitmap().getHeight() / 2 <= 0) {
-			droid.getSpeed().toggleYDirection();
-		}
-
 		// Updates
 		droid.update();
 		prtcl.update();
+		bullet.update();
 
 		for(int i=0; i < explosions.length; i++)
 			if (explosions[i] != null && explosions[i].isAlive())
