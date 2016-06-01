@@ -52,61 +52,35 @@ public class Particle {
 
     // getters & setters
     public static int getStateAlive() {return STATE_ALIVE;}
-
     public static int getStateDead() {return STATE_DEAD;}
-
     public static int getDefaultLifetime() {return DEFAULT_LIFETIME;}
-
     public static int getMaxDimension() {return MAX_DIMENSION;}
-
     public static int getMaxSpeed() {return MAX_SPEED;}
-
     public int getState() {return state;}
-
     public void setState(int state) {this.state = state;}
-
     public boolean isAlive() {
         return this.state == STATE_ALIVE;
     }
-
     public boolean isDead() {
         return this.state == STATE_DEAD;
     }
-
     public float getWidth() {return width;}
-
     public void setWidth(float width) {this.width = width;}
-
     public float getHeight() {return height;}
-
     public void setHeight(float height) {this.height = height;}
-
     public float getX() {return x;}
-
     public void setX(float x) {this.x = x;}
-
     public float getY() {return y;}
-
     public void setY(float y) {this.y = y;}
-
     public double getDx() {return dx;}
-
     public void setDx(double dx) {this.dx = dx;}
-
     public double getDy() {return dy;}
-
     public void setDy(double dy) {this.dy = dy;}
-
     public int getAge() {return age;}
-
     public void setAge(int age) {this.age = age;}
-
     public int getLifetime() {return lifetime;}
-
     public void setLifetime(int lifetime) {this.lifetime = lifetime;}
-
     public Paint getPaint() {return paint;}
-
     public void setPaint(Paint paint) {this.paint = paint;}
 
     public void update() {

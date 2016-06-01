@@ -42,19 +42,15 @@ public class Droid {
 	public void setY(int y) {
 		this.y = y;
 	}
-
 	public boolean isTouched() {
 		return touched;
 	}
-
 	public void setTouched(boolean touched) {
 		this.touched = touched;
 	}
-	
 	public Speed getSpeed() {
 		return speed;
 	}
-
 	public void setSpeed(Speed speed) {
 		this.speed = speed;
 	}

@@ -2,6 +2,7 @@ package com.example.gustavo.raiden;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -11,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.example.gustavo.raiden.model.Bullet;
 import com.example.gustavo.raiden.model.Droid;
 import com.example.gustavo.raiden.model.Explosion;
 import com.example.gustavo.raiden.model.Particle;
@@ -27,10 +29,16 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 	private MainThread thread;
 	private Droid droid;
 	private Explosion[] explosions;
+	private Bullet[] firingmode;
+
+	private Bitmap bulletsprite = BitmapFactory.decodeResource(getResources(), R.drawable.shoot);
+	private Bitmap shipsprite = BitmapFactory.decodeResource(getResources(), R.drawable.shipsprite);
+
+	private Bullet firstBullet;
 	private Particle prtcl;
 	private Ship ship;
 
-	private int oldX,oldY;
+	private int oldX, oldY;
 
 	private String avgFps;
 	public MainGamePanel(Context context) {
@@ -39,17 +47,31 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 		getHolder().addCallback(this);
 
 		// create Droid and load bitmap
-		droid = new Droid(BitmapFactory.decodeResource(getResources(), R.drawable.hld), 50, 50);
+		droid = new Droid(
+				BitmapFactory.decodeResource(getResources(), R.drawable.hld)
+				, 50, 50);
 
 		//create Particle
 		prtcl = new Particle(200, 500);
 
+		/*/create Bullet
+		Bullet b = new Bullet(
+				BitmapFactory.decodeResource(getResources(), R.drawable.shoot)
+				, 200, 200);
+		firingmode[0] = b;*/
+
 		// create Ship and load bitmap
 		ship = new Ship(
-				BitmapFactory.decodeResource(getResources(), R.drawable.shipsprite)
+				shipsprite
 				, 82, 182	// initial position
 				, 35, 38	// width and height of sprite
-				, 11, 10);	// FPS and number of frames in the animation
+				, 11, 11);	// FPS and number of frames in the animation
+		firstBullet = new Bullet(bulletsprite, ship.getX(), 10+ship.getY());
+		firingmode = new Bullet[5];
+		for(int i = 0; i < firingmode.length; i++) {
+			firingmode[i] = firstBullet;
+			firingmode[i].setTicks(i * 20);
+		}
 
 		// create the game loop thread
 		thread = new MainThread(getHolder(), this);
@@ -111,22 +133,30 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 				explosions[currentExplosion] = explosion;
 			}
 
-			// delegating event handling to the droid
 			ship.handleActionDown((int)event.getX(), (int)event.getY());
+
+			Bullet nBull = new Bullet(
+					bulletsprite
+					, ship.getX(), ship.getY());
+
+			/*if(ship.isTouched()) {
+				firingmode[ship.getIbull()] = nBull;
+			}*/
+
 			oldX = ship.getX(); oldY = ship.getY();
 
 			// check if in the lower part of the screen we exit
 			if (event.getY() > getHeight() - 50) {
 				thread.setRunning(false);
 				((Activity)getContext()).finish();
-			} else {
+			}
+			else {
 				Log.d(TAG, "Coords: x=" + event.getX() + ",y=" + event.getY());
 			}
 		}
 		if (event.getAction() == MotionEvent.ACTION_MOVE) {
 			oldX = ship.getX(); oldY = ship.getY();
-			ship.setOldX(oldX);
-			ship.setOldY(oldY);
+			ship.setOldX(oldX);	ship.setOldY(oldY);
 			// the gestures
 			if (ship.isTouched()) {
 				// the droid was picked up and is being dragged
@@ -148,11 +178,21 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 		if (prtcl.isAlive())
 			prtcl.draw(canvas);
 
-		for(int i=0; i< explosions.length; i++)
-			if (explosions[i] != null && explosions[i].isAlive())
-				explosions[i].draw(canvas);
+		for(Explosion i : explosions)
+			if (i != null && i.isAlive()) {
+				i.draw(canvas);
+			}
 
-		droid.draw(canvas);
+		/*for (int i = 0; i < firingmode.length; i++) {
+			droid.draw(canvas);
+		}*/
+
+		for(Bullet i : firingmode)
+			if(i.isAlive()){
+				//firingmode[ship.getIbull()].setX(ship.getX()); firingmode[ship.getIbull()].setY(1+ship.getY());
+				i.draw(canvas);
+		}
+		//firingmode[ship.getIbull()].draw(canvas);
 		ship.draw(canvas);
 
 		// display fps
@@ -198,9 +238,24 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 		droid.update();
 		prtcl.update();
 
-		for(int i=0; i < explosions.length; i++)
-			if (explosions[i] != null && explosions[i].isAlive())
-				explosions[i].update();
+		for(Explosion i : explosions)
+			if (i != null && i.isAlive()) {
+				i.update();
+				//firingmode[i].update();
+			}
+
+		for(Bullet i : firingmode) {
+			if (i.isAlive()) {
+				//firingmode[ship.getIbull()].setX(ship.getX()); firingmode[ship.getIbull()].setY(1+ship.getY());
+				i.update(System.currentTimeMillis());
+			}
+			else{
+				i.setAlive(true);
+				i.setX(ship.getX());
+				i.setY(ship.getY());
+			}
+		}
+
 
 		ship.update(System.currentTimeMillis());
 	}
