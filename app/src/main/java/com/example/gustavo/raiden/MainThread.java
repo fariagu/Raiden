@@ -1,5 +1,6 @@
 package com.example.gustavo.raiden;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 
 import android.graphics.Canvas;
@@ -72,7 +73,12 @@ public class MainThread extends Thread {
 
 					this.gamePanel.update(); // update game state
 
-					this.gamePanel.render(canvas); // render state to the screen, draws the canvas on the panel
+					try {
+						this.gamePanel.render(canvas); // render state to the screen, draws the canvas on the panel
+					}
+					catch (NullPointerException e){
+						System.exit(1);
+					}
 
 					timeDiff = System.currentTimeMillis() - beginTime; // calculate how long did the cycle take
 					sleepTime = (int)(FRAME_PERIOD - timeDiff); // calculate sleep time
