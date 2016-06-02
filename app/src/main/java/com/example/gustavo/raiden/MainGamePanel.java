@@ -34,7 +34,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 	private Bitmap bulletsprite = BitmapFactory.decodeResource(getResources(), R.drawable.shoot);
 	private Bitmap shipsprite = BitmapFactory.decodeResource(getResources(), R.drawable.shipsprite);
 
-	private Bullet firstBullet;
 	private Particle prtcl;
 	private Ship ship;
 
@@ -66,7 +65,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 				, 82, 182	// initial position
 				, 35, 38	// width and height of sprite
 				, 11, 11);	// FPS and number of frames in the animation
-		firstBullet = new Bullet(bulletsprite, ship.getX(), 10+ship.getY());
 		firingmode = new Bullet[6];
 		for(int i = 0; i < firingmode.length; i++) {
 			firingmode[i] = new Bullet(bulletsprite, ship.getX(), 10+ship.getY());
