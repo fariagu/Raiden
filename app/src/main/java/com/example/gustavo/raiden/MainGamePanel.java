@@ -5,12 +5,14 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.WindowManager;
 
 import com.example.gustavo.raiden.model.Bullet;
 import com.example.gustavo.raiden.model.Droid;
@@ -31,9 +33,11 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 	private Explosion[] explosions;
 	private Bullet[] firingmode;
 
+	private Bitmap backgroundimg = BitmapFactory.decodeResource(getResources(), R.drawable.backgroundds);
 	private Bitmap bulletsprite = BitmapFactory.decodeResource(getResources(), R.drawable.shoot);
 	private Bitmap shipsprite = BitmapFactory.decodeResource(getResources(), R.drawable.shipsprite);
 
+	private Background background;
 	private Particle prtcl;
 	private Ship ship;
 
@@ -44,6 +48,13 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 		super(context);
 		// adding the callback (this) to the surface holder to intercept events
 		getHolder().addCallback(this);
+
+		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+		Display display = wm.getDefaultDisplay();
+		DisplayMetrics metrics = new DisplayMetrics();
+		display.getMetrics(metrics);
+		Log.d("ApplicationTagName", "Display width in px is " + metrics.widthPixels + " and height is " + metrics.heightPixels);
+		background = new Background(backgroundimg, metrics.widthPixels, metrics.heightPixels);
 
 		// create Droid and load bitmap
 		droid = new Droid(
@@ -62,7 +73,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 		// create Ship and load bitmap
 		ship = new Ship(
 				shipsprite
-				, 82, 182	// initial position
+				, metrics.widthPixels / 2, 5 * metrics.heightPixels / 6 // initial position
 				, 35, 38	// width and height of sprite
 				, 11, 11);	// FPS and number of frames in the animation
 		firingmode = new Bullet[6];
@@ -172,7 +183,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 	}
 
 	public void render(Canvas canvas) {
-		canvas.drawColor(Color.BLACK); // needed so there isnt remains of dead bitmaps
+		//canvas.drawColor(Color.BLACK); // needed so there isnt remains of dead bitmaps
+
+		background.draw(canvas);
+
 		if (prtcl.isAlive())
 			prtcl.draw(canvas);
 
@@ -212,6 +226,8 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 	 * engine's update method.
 	 */
 	public void update() {
+		background.update(System.currentTimeMillis());
+
 		// check collision with right wall if heading right
 		if (droid.getSpeed().getxDirection() == Speed.DIRECTION_RIGHT
 				&& droid.getX() + droid.getBitmap().getWidth() / 2 >= getWidth()) {
