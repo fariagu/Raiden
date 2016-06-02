@@ -48,21 +48,30 @@ public class Ship {
 
     /**
      * Getter para obter o bitmap associado à Ship.
+     *
      * @return Bitmap
      */
-    public Bitmap getBitmap() {return bitmap;}
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
 
     /**
      * Setter para modificar o bitmap da Ship.
+     *
      * @param bitmap
      */
-    public void setBitmap(Bitmap bitmap) {this.bitmap = bitmap;}
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
 
     /**
      * Getter para obter o Rect associado à classe Ship.
+     *
      * @return Rect
      */
-    public Rect getSourceRect() {return sourceRect;}
+    public Rect getSourceRect() {
+        return sourceRect;
+    }
 
     public void setSourceRect(Rect sourceRect) {
         this.sourceRect = sourceRect;
@@ -70,6 +79,7 @@ public class Ship {
 
     /**
      * Getter para obter o número de Frames do sprite da Ship.
+     *
      * @return int
      */
     public int getFrameNr() {
@@ -82,6 +92,7 @@ public class Ship {
 
     /**
      * Getter para obter o Frame actual no sprite da Ship.
+     *
      * @return int
      */
     public int getCurrentFrame() {
@@ -94,6 +105,7 @@ public class Ship {
 
     /**
      * Retorna o tempo do último update do Frame do sprite da Ship.
+     *
      * @return long
      */
     public long getFrameTicker() {
@@ -114,6 +126,7 @@ public class Ship {
 
     /**
      * Retorna se a Ship está a ser tocada.
+     *
      * @return boolean
      */
     public boolean isTouched() {
@@ -142,6 +155,7 @@ public class Ship {
 
     /**
      * Retorna a coordenada X da Ship.
+     *
      * @return int
      */
     public int getX() {
@@ -154,6 +168,7 @@ public class Ship {
 
     /**
      * Retorna a coordenada Y da Ship.
+     *
      * @return int
      */
     public int getY() {
@@ -189,12 +204,23 @@ public class Ship {
     }
 
     public void update(long gameTime) {
-        if (touched) {
-            if (oldX > x) {
-                currentFrame -= 0.5;
-            } else if (oldX < x) {
-                currentFrame += 0.5;
-            } else {//isto faz com que mesmo a tocar volte ao estado inicial
+        if (gameTime > frameTicker + framePeriod) {
+            frameTicker = gameTime;
+            if (touched) {
+                if (oldX > x) {
+                    currentFrame--;
+                } else if (oldX < x) {
+                    currentFrame++;
+                } else {//isto faz com que mesmo a tocar volte ao estado inicial
+                    if (currentFrame > (frameNr / 2))
+                        currentFrame--;
+                    else if (currentFrame < (frameNr / 2))
+                        currentFrame++;
+                    else {
+                        currentFrame = frameNr / 2;
+                    }
+                }
+            } else {
                 if (currentFrame > (frameNr / 2))
                     currentFrame--;
                 else if (currentFrame < (frameNr / 2))
@@ -203,37 +229,18 @@ public class Ship {
                     currentFrame = frameNr / 2;
                 }
             }
-        } else {
-            if (currentFrame > (frameNr / 2))
-                currentFrame--;
-            else if (currentFrame < (frameNr / 2))
-                currentFrame++;
-            else {
-                currentFrame = frameNr / 2;
-            }
-        }
-        if (currentFrame <= 0)
-            currentFrame = 0;
-        if (currentFrame >= frameNr)
-            currentFrame = frameNr - 1;
+            if (currentFrame <= 0)
+                currentFrame = 0;
+            if (currentFrame >= frameNr)
+                currentFrame = frameNr - 1;
 
-        if (gameTime > frameTicker + framePeriod) {
-            frameTicker = gameTime;
+
             /*currentFrame++; // increment the frame
             if (currentFrame >= frameNr) {
                 currentFrame = 0;
             }*/
         }
-/*
-        //TODO: aqui é que tenho que fazer update da bullet se estiver morta para uma nova criada pela posiçao da nave
-        //update na posição onde será criada a bullet
-        bullet[0].setX(this.x);
-        bullet[0].setY(this.y);
-        if (bullet[1].isAlive())
-            bullet[1].update(gameTime, currentFrame);
-        else
-            bullet[1] = bullet[0];
-*/
+
         // define the rectangle to cut out sprite
         this.sourceRect.left = currentFrame * spriteWidth;
         this.sourceRect.right = this.sourceRect.left + spriteWidth;

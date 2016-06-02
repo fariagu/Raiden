@@ -179,25 +179,29 @@ public class Bullet {
      * Method which updates the bullet's position
      */
     public void update(long gameTime) {
+        if (gameTime > frameTicker + framePeriod) {
+            frameTicker = gameTime;
         ticks++;
         if(ticks > 120) {
             ticks = 0;
             alive = false;
-        }
-        else{
-            this.y -= 14;
+        } else {
+            this.y -= 20;
         }
 
-        if (gameTime > frameTicker + framePeriod) {
-            frameTicker = gameTime;
-            currentFrame++; // increment the frame
+
+            if (ticks % 10 == 0)
+                currentFrame++; // increment the frame
             if (currentFrame >= framenr) {
                 currentFrame = 0;
             }
+
+            // define the rectangle to cut out sprite
+            this.sourceRect.left = currentFrame * spriteWidth;
+            this.sourceRect.right = this.sourceRect.left + spriteWidth;
+
         }
-        // define the rectangle to cut out sprite
-        this.sourceRect.left = currentFrame * spriteWidth;
-        this.sourceRect.right = this.sourceRect.left + spriteWidth;
+
 
         /*if( this.x <20 &&  this.y<20)
             this.alive = false;
