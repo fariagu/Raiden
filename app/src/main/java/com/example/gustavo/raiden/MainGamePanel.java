@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -14,12 +15,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
-import com.example.gustavo.raiden.model.Bullet;
-import com.example.gustavo.raiden.model.Droid;
-import com.example.gustavo.raiden.model.Explosion;
-import com.example.gustavo.raiden.model.Particle;
-import com.example.gustavo.raiden.model.Ship;
-import com.example.gustavo.raiden.model.components.Speed;
+import com.example.gustavo.raiden.model.*;
+import com.example.gustavo.raiden.model.components.*;
 
 /**
  * This is the main surface that handles the ontouch events and draws the image to the screen.
@@ -32,10 +29,13 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 	private Droid droid;
 	private Explosion[] explosions;
 	private Bullet[] firingmode;
+	private AimedBullet enemyBullet;
 
 	private Bitmap backgroundimg = BitmapFactory.decodeResource(getResources(), R.drawable.backgroundds);
 	private Bitmap bulletsprite = BitmapFactory.decodeResource(getResources(), R.drawable.shoot);
 	private Bitmap shipsprite = BitmapFactory.decodeResource(getResources(), R.drawable.shipsprite);
+	private Bitmap enemybulletsprite = BitmapFactory.decodeResource(getResources(), R.drawable.bullet);
+	private Bitmap enemysprite = BitmapFactory.decodeResource(getResources(), R.drawable.enemy);
 
 	private Background background;
 	private Particle prtcl;
@@ -51,15 +51,19 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
 		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 		Display display = wm.getDefaultDisplay();
+
+		Point ScreenSize = new Point();
+		display.getSize(ScreenSize);
+
+		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+		Display display = wm.getDefaultDisplay();
 		DisplayMetrics metrics = new DisplayMetrics();
 		display.getMetrics(metrics);
 		Log.d("ApplicationTagName", "Display width in px is " + metrics.widthPixels + " and height is " + metrics.heightPixels);
 		background = new Background(backgroundimg, metrics.widthPixels, metrics.heightPixels);
 
 		// create Droid and load bitmap
-		droid = new Droid(
-				BitmapFactory.decodeResource(getResources(), R.drawable.hld)
-				, 50, 50);
+		droid = new Droid(enemysprite, 50, 50);
 
 		//create Particle
 		prtcl = new Particle(200, 500);
@@ -76,11 +80,12 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 				, metrics.widthPixels / 2, 5 * metrics.heightPixels / 6 // initial position
 				, 35, 38	// width and height of sprite
 				, 11, 11);	// FPS and number of frames in the animation
-		firingmode = new Bullet[6];
+		firingmode = new Bullet[12];
 		for(int i = 0; i < firingmode.length; i++) {
 			firingmode[i] = new Bullet(bulletsprite, ship.getX(), 10+ship.getY());
-			firingmode[i].setTicks(-i*20);
+			firingmode[i].setTicks(-i*10);
 		}
+		enemyBullet = new AimedBullet(enemybulletsprite, ship);
 
 		// create the game loop thread
 		thread = new MainThread(getHolder(), this);
@@ -205,7 +210,11 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 				i.draw(canvas);
 			}
 		}
+
+		enemyBullet.draw(canvas);
+
 		//firingmode[ship.getIbull()].draw(canvas);
+		droid.draw(canvas);
 		ship.draw(canvas);
 
 		// display fps
@@ -226,8 +235,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 	 * engine's update method.
 	 */
 	public void update() {
-		background.update(System.currentTimeMillis());
-
 		// check collision with right wall if heading right
 		if (droid.getSpeed().getxDirection() == Speed.DIRECTION_RIGHT
 				&& droid.getX() + droid.getBitmap().getWidth() / 2 >= getWidth()) {
@@ -269,6 +276,40 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 				i.setX(ship.getX());
 				i.setY(ship.getY());
 			}
+		}
+
+		if (enemyBullet.isAlive()){
+			enemyBullet.update(System.currentTimeMillis());
+		}
+		else {
+			enemyBullet.setAlive(true);
+			int dy, dx;
+			double angle, hip;
+
+			dx = Math.abs(droid.getX() - ship.getX());
+			dy = Math.abs(droid.getY() - ship.getY());
+			hip = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+
+			angle = Math.atan(dx / dy);
+
+			Speed s = new Speed();
+			//s.setXv((float)Math.cos(angle) * 20);
+			//s.setYv((float)Math.sin(angle) * 20);
+			s.setXv((float)(dx / hip * 10));
+			s.setYv((float)(dy / hip * 10));
+			s.setyDirection(Speed.DIRECTION_DOWN);
+			if (droid.getX() > ship.getX()){
+				s.setxDirection(Speed.DIRECTION_LEFT);
+			}
+			else if (droid.getX() != ship.getX()){
+				s.setxDirection(Speed.DIRECTION_RIGHT);
+			}
+
+			enemyBullet.setX(droid.getX());
+			enemyBullet.setY(droid.getY()+20);
+
+			enemyBullet.setSpeed(s);
+
 		}
 
 
