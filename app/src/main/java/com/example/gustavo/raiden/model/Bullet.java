@@ -123,6 +123,7 @@ public class Bullet {
     private Speed speed;	// the speed with its directions
     private boolean alive;	// whether it's still active or not
     private int ticks;
+    static private int overall_ticks;
 
     public Bullet(Bitmap bitmap) {
         this.bitmap = bitmap;
@@ -168,7 +169,7 @@ public class Bullet {
     public void setTicks(int ticks) {this.ticks = ticks;}
 
     public void draw(Canvas canvas) {
-        if(this.alive==true) {
+        if(this.alive==true && this.ticks >= 0) {
             Rect destRect = new Rect(this.x - (bitmap.getWidth() / 2), this.y - (bitmap.getHeight() / 2),
                     this.x + bitmap.getWidth() / 2, this.y + (bitmap.getHeight() / 2));
             canvas.drawBitmap(bitmap, sourceRect, destRect, null);
@@ -182,6 +183,7 @@ public class Bullet {
         if (gameTime > frameTicker + framePeriod) {
             frameTicker = gameTime;
         ticks++;
+        overall_ticks++;
         if(ticks > 120) {
             ticks = 0;
             alive = false;

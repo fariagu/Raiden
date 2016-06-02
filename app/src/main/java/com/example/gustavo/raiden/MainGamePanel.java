@@ -67,10 +67,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 				, 35, 38	// width and height of sprite
 				, 11, 11);	// FPS and number of frames in the animation
 		firstBullet = new Bullet(bulletsprite, ship.getX(), 10+ship.getY());
-		firingmode = new Bullet[5];
+		firingmode = new Bullet[6];
 		for(int i = 0; i < firingmode.length; i++) {
-			firingmode[i] = firstBullet;
-			firingmode[i].setTicks(i * 20);
+			firingmode[i] = new Bullet(bulletsprite, ship.getX(), 10+ship.getY());
+			firingmode[i].setTicks(-i*20);
 		}
 
 		// create the game loop thread
@@ -187,10 +187,11 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 			droid.draw(canvas);
 		}*/
 
-		for(Bullet i : firingmode)
-			if(i.isAlive()){
+		for(Bullet i : firingmode) {
+			if (i.isAlive()) {
 				//firingmode[ship.getIbull()].setX(ship.getX()); firingmode[ship.getIbull()].setY(1+ship.getY());
 				i.draw(canvas);
+			}
 		}
 		//firingmode[ship.getIbull()].draw(canvas);
 		ship.draw(canvas);
