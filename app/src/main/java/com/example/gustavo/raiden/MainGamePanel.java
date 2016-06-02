@@ -7,10 +7,14 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.WindowManager;
 
 import com.example.gustavo.raiden.model.Bullet;
 import com.example.gustavo.raiden.model.Droid;
@@ -45,6 +49,12 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 		// adding the callback (this) to the surface holder to intercept events
 		getHolder().addCallback(this);
 
+		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+		Display display = wm.getDefaultDisplay();
+
+		Point ScreenSize = new Point();
+		display.getSize(ScreenSize);
+
 		// create Droid and load bitmap
 		droid = new Droid(
 				BitmapFactory.decodeResource(getResources(), R.drawable.hld)
@@ -62,7 +72,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 		// create Ship and load bitmap
 		ship = new Ship(
 				shipsprite
-				, 82, 182	// initial position
+				, (ScreenSize.x / 2), (int)(ScreenSize.y * 0.75) 	// initial position
 				, 35, 38	// width and height of sprite
 				, 11, 11);	// FPS and number of frames in the animation
 		firingmode = new Bullet[6];
