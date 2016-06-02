@@ -118,12 +118,11 @@ public class Bullet {
     private int currentFrame;   // the current frame
     private long frameTicker;   // the time of the last frame update
     private int framePeriod;    // milliseconds between each frame (1000/fps)
-    private int x, y;		// the X and Y coordinate
-    private boolean touched;// if droid is touched/picked up
-    private Speed speed;	// the speed with its directions
-    private boolean alive;	// whether it's still active or not
+    private int x, y;		    // the X and Y coordinates
+    private boolean touched;    // if droid is touched/picked up
+    private Speed speed;	    // the speed with its directions
+    private boolean alive;	    // whether it's still active or not
     private int ticks;
-    static private int overall_ticks;
 
     public Bullet(Bitmap bitmap) {
         this.bitmap = bitmap;
@@ -183,7 +182,6 @@ public class Bullet {
         if (gameTime > frameTicker + framePeriod) {
             frameTicker = gameTime;
         ticks++;
-        overall_ticks++;
         if(ticks > 120) {
             ticks = 0;
             alive = false;
