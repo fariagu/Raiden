@@ -27,9 +27,9 @@ public class TripleBullet extends Bullet {
     private boolean alive;      // whether it's still active or not
     private int ticks;
 
-    public TripleBullet(Bitmap bitmap, int x, int y, int fps) {
+    public TripleBullet(Bitmap bitmap, int x, int y, int FPS) {
         this.frameTicker = 0;
-        this.framePeriod = 1000 / fps;
+        this.framePeriod = 1000 / FPS;
         this.bitmap = bitmap;
         currentFrame = 0;
         framenr = 2;

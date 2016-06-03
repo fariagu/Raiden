@@ -10,9 +10,9 @@ import android.graphics.Rect;
  */
 public class Background {
     int yTop, yBottom, speed;
-    private Bitmap bitmap;    // the actual bitmap
-    private Rect sourceRect;// the rectangle to be drawn from the animation bitmap
-    private Rect sourceRect2;// the rectangle to be drawn from the animation bitmap
+    private Bitmap bitmap;      // the actual bitmap
+    private Rect sourceRect;    // the rectangle to be drawn from the animation bitmap
+    private Rect sourceRect2;   // the rectangle to be drawn from the animation bitmap
     private int screenWidth;    // the width of the screen
     private int screenHeight;   // the height of the screen
     private long frameTicker;   // the time of the last frame update

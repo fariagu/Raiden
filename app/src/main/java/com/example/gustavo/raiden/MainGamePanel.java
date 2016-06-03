@@ -19,6 +19,7 @@ import com.example.gustavo.raiden.model.AimedBullet;
 import com.example.gustavo.raiden.model.Droid;
 import com.example.gustavo.raiden.model.Explosion;
 import com.example.gustavo.raiden.model.Particle;
+import com.example.gustavo.raiden.model.PowerUp;
 import com.example.gustavo.raiden.model.Ship;
 import com.example.gustavo.raiden.model.TripleBullet;
 import com.example.gustavo.raiden.model.components.Speed;
@@ -35,12 +36,14 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private Explosion[] explosions;
     private TripleBullet[] firingmode;
     private AimedBullet enemyBullet;
+    private PowerUp powerup;
 
     private Bitmap backgroundimg = BitmapFactory.decodeResource(getResources(), R.drawable.backgroundds);
     private Bitmap bulletsprite = BitmapFactory.decodeResource(getResources(), R.drawable.shoot);
     private Bitmap shipsprite = BitmapFactory.decodeResource(getResources(), R.drawable.shipsprite);
     private Bitmap enemybulletsprite = BitmapFactory.decodeResource(getResources(), R.drawable.bullet);
     private Bitmap enemysprite = BitmapFactory.decodeResource(getResources(), R.drawable.enemy);
+    private Bitmap powerupsprite = BitmapFactory.decodeResource(getResources(), R.drawable.powerup);
 
     private Background background;
     private Particle prtcl;
@@ -85,6 +88,9 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
         // create Droid and load bitmap
         droid = new Droid(enemysprite, enemybulletsprite, 50, 50, ship, FPS);
+
+        //create a powerup
+        powerup = new PowerUp(powerupsprite, 100, 100, FPS);
 
         // create the game loop thread
         thread = new MainThread(getHolder(), this);
@@ -205,6 +211,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
 		//enemyBullet.draw(canvas);
 
+        powerup.draw(canvas);
         droid.draw(canvas);
         ship.draw(canvas);
 
@@ -250,6 +257,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         }
 
         // Updates
+        powerup.update(System.currentTimeMillis());
         droid.update();
         prtcl.update();
 
