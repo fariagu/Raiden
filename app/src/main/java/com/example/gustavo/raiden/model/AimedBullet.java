@@ -40,9 +40,9 @@ public class AimedBullet extends Bullet {
         this.ship = s;
     }
 
-    public AimedBullet(Bitmap bitmap, int x, int y, Ship s, int fps) {
+    public AimedBullet(Bitmap bitmap, int x, int y, Ship s, int FPS) {
         this.frameTicker = 0;
-        this.framePeriod = 1000 / fps;
+        this.framePeriod = 1000 / FPS;
         this.bitmap = bitmap;
         currentFrame = 0;
         framenr = 2;
@@ -55,6 +55,51 @@ public class AimedBullet extends Bullet {
         this.alive = true;
         this.ticks = 0;
         this.ship = s;
+    }
+
+    //Getters & Setters
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public Speed getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(Speed speed) {
+        this.speed = speed;
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
+
+    public void setTicks(int ticks) {
+        this.ticks = ticks;
     }
 
     public void draw(Canvas canvas) {

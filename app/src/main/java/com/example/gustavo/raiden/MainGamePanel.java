@@ -15,8 +15,13 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
-import com.example.gustavo.raiden.model.*;
-import com.example.gustavo.raiden.model.components.*;
+import com.example.gustavo.raiden.model.AimedBullet;
+import com.example.gustavo.raiden.model.Droid;
+import com.example.gustavo.raiden.model.Explosion;
+import com.example.gustavo.raiden.model.Particle;
+import com.example.gustavo.raiden.model.Ship;
+import com.example.gustavo.raiden.model.TripleBullet;
+import com.example.gustavo.raiden.model.components.Speed;
 
 /**
  * This is the main surface that handles the ontouch events and draws the image to the screen.
@@ -60,7 +65,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 		DisplayMetrics metrics = new DisplayMetrics();
 		display.getMetrics(metrics);
 		Log.d("ApplicationTagName", "Display width in px is " + metrics.widthPixels + " and height is " + metrics.heightPixels);
-		background = new Background(backgroundimg, metrics.widthPixels, metrics.heightPixels);
+        background = new Background(backgroundimg, metrics.widthPixels, metrics.heightPixels, FPS);
 
 
         //create Particle
@@ -79,7 +84,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         }
 
         // create Droid and load bitmap
-		droid = new Droid(enemysprite, enemybulletsprite, 50, 50, ship);
+        droid = new Droid(enemysprite, enemybulletsprite, 50, 50, ship, FPS);
 
         // create the game loop thread
         thread = new MainThread(getHolder(), this);
@@ -263,7 +268,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                 i.setY(ship.getY());
             }
         }
-		}
 
 		ship.update(System.currentTimeMillis());
 	}
