@@ -15,13 +15,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
-import com.example.gustavo.raiden.model.AimedBullet;
-import com.example.gustavo.raiden.model.Droid;
-import com.example.gustavo.raiden.model.Explosion;
-import com.example.gustavo.raiden.model.Particle;
-import com.example.gustavo.raiden.model.Ship;
-import com.example.gustavo.raiden.model.TripleBullet;
-import com.example.gustavo.raiden.model.components.Speed;
+import com.example.gustavo.raiden.model.*;
+import com.example.gustavo.raiden.model.components.*;
 
 /**
  * This is the main surface that handles the ontouch events and draws the image to the screen.
@@ -59,21 +54,19 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
 
-        Point ScreenSize = new Point();
-        display.getSize(ScreenSize);
+		Point ScreenSize = new Point();
+		display.getSize(ScreenSize);
 
-        DisplayMetrics metrics = new DisplayMetrics();
-        display.getMetrics(metrics);
-        Log.d("ApplicationTagName", "Display width in px is " + metrics.widthPixels + " and height is " + metrics.heightPixels);
-        background = new Background(backgroundimg, metrics.widthPixels, metrics.heightPixels, FPS);
+		DisplayMetrics metrics = new DisplayMetrics();
+		display.getMetrics(metrics);
+		Log.d("ApplicationTagName", "Display width in px is " + metrics.widthPixels + " and height is " + metrics.heightPixels);
+		background = new Background(backgroundimg, metrics.widthPixels, metrics.heightPixels);
 
-        // create Droid and load bitmap
-        droid = new Droid(enemysprite, 50, 50);
 
         //create Particle
         prtcl = new Particle(200, 500);
 
-        // create Ship and load bitmap
+		// create Ship and load bitmap
         ship = new Ship(
                 shipsprite
                 , metrics.widthPixels / 2, 5 * metrics.heightPixels / 6 // initial position
@@ -84,7 +77,9 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
             firingmode[i] = new TripleBullet(bulletsprite, ship.getX(), 10 + ship.getY(), FPS);
             firingmode[i].setTicks(i * 30);
         }
-        enemyBullet = new AimedBullet(enemybulletsprite, ship, FPS);
+
+        // create Droid and load bitmap
+		droid = new Droid(enemysprite, enemybulletsprite, 50, 50, ship);
 
         // create the game loop thread
         thread = new MainThread(getHolder(), this);
@@ -203,7 +198,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
             }
         }
 
-        enemyBullet.draw(canvas);
+		//enemyBullet.draw(canvas);
 
         droid.draw(canvas);
         ship.draw(canvas);
@@ -268,40 +263,8 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                 i.setY(ship.getY());
             }
         }
+		}
 
-        if (enemyBullet.isAlive()) {
-            enemyBullet.update(System.currentTimeMillis());
-        } else {
-            enemyBullet.setAlive(true);
-            int dy, dx;
-            double angle, hip;
-
-            dx = Math.abs(droid.getX() - ship.getX());
-            dy = Math.abs(droid.getY() - ship.getY());
-            hip = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-
-            angle = Math.atan(dx / dy);
-
-            Speed s = new Speed();
-            //s.setXv((float)Math.cos(angle) * 20);
-            //s.setYv((float)Math.sin(angle) * 20);
-            s.setXv((float) (dx / hip * 10));
-            s.setYv((float) (dy / hip * 10));
-            s.setyDirection(Speed.DIRECTION_DOWN);
-            if (droid.getX() > ship.getX()) {
-                s.setxDirection(Speed.DIRECTION_LEFT);
-            } else if (droid.getX() != ship.getX()) {
-                s.setxDirection(Speed.DIRECTION_RIGHT);
-            }
-
-            enemyBullet.setX(droid.getX());
-            enemyBullet.setY(droid.getY() + 20);
-
-            enemyBullet.setSpeed(s);
-
-        }
-
-        ship.update(System.currentTimeMillis());
-    }
-
+		ship.update(System.currentTimeMillis());
+	}
 }
