@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
+import com.example.gustavo.raiden.model.components.Colllision;
 import com.example.gustavo.raiden.model.components.Speed;
 
 /**
@@ -83,6 +84,7 @@ public class Bullet {
      * Method which updates the bullet's position
      */
     public void update(long gameTime) {
+
         if (gameTime > frameTicker + framePeriod) {
             frameTicker = gameTime;
         ticks++;
