@@ -111,9 +111,6 @@ public class Bullet {
      * Method which updates the bullet's position
      */
     public void update(long gameTime) {
-        if (Colllision.collisionDetected(bitmap, this.x, this.y, enemy.getBitmap(), enemy.getX(), enemy.getY())){
-            enemy.setAlive(false);
-        }
 
         if (gameTime > frameTicker + framePeriod) {
             frameTicker = gameTime;
@@ -136,7 +133,11 @@ public class Bullet {
             this.sourceRect.left = currentFrame * spriteWidth;
             this.sourceRect.right = this.sourceRect.left + spriteWidth;
         }
+    }
 
-
+    public void checkCollision(){
+        if (Colllision.collisionDetected(bitmap, this.x, this.y, enemy.getBitmap(), enemy.getX(), enemy.getY())){
+            enemy.setAlive(false);
+        }
     }
 }
