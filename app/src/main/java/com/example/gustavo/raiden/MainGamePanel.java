@@ -15,12 +15,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
-import com.example.gustavo.raiden.model.AimedBullet;
-import com.example.gustavo.raiden.model.Droid;
-import com.example.gustavo.raiden.model.Explosion;
-import com.example.gustavo.raiden.model.Particle;
-import com.example.gustavo.raiden.model.Ship;
-import com.example.gustavo.raiden.model.TripleBullet;
+import com.example.gustavo.raiden.model.*;
 import com.example.gustavo.raiden.model.components.Speed;
 
 /**
@@ -33,7 +28,8 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private MainThread thread;
     private Droid droid;
     private Explosion[] explosions;
-    private TripleBullet[] firingmode;
+    //private TripleBullet[] firingmode;
+    private Bullet[] firingmode;
     private AimedBullet enemyBullet;
 
     private Bitmap backgroundimg = BitmapFactory.decodeResource(getResources(), R.drawable.backgroundds);
@@ -77,14 +73,23 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                 , metrics.widthPixels / 2, 5 * metrics.heightPixels / 6 // initial position
                 , 35, 38    // width and height of sprite
                 , FPS, 11);    // FPS and number of frames in the animation
+
+        // create Droid and load bitmap
+        droid = new Droid(enemysprite, enemybulletsprite, 50, 50, ship, FPS);
+
+        /*
         firingmode = new TripleBullet[4];
         for (int i = 0; i < firingmode.length; i++) {
             firingmode[i] = new TripleBullet(bulletsprite, ship.getX(), 10 + ship.getY(), FPS);
             firingmode[i].setTicks(i * 30);
-        }
+        }*/
 
-        // create Droid and load bitmap
-        droid = new Droid(enemysprite, enemybulletsprite, 50, 50, ship, FPS);
+        firingmode = new Bullet[12];
+        for (int i = 0; i < firingmode.length; i++) {
+            firingmode[i] = new Bullet(bulletsprite, ship.getX(), 10 + ship.getY(), FPS);
+            firingmode[i].setTicks(i * 10);
+            firingmode[i].setEnemy(droid);
+        }
 
         // create the game loop thread
         thread = new MainThread(getHolder(), this);
@@ -197,7 +202,13 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
             droid.draw(canvas);
 		}*/
 
-        for (TripleBullet i : firingmode) {
+     /*   for (TripleBullet i : firingmode) {
+            if (i.isAlive()) {
+                i.draw(canvas);
+            }
+        }*/
+
+        for (Bullet i : firingmode) {
             if (i.isAlive()) {
                 i.draw(canvas);
             }
@@ -258,7 +269,18 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                 i.update();
             }
 
-        for (TripleBullet i : firingmode) {
+     /*   for (TripleBullet i : firingmode) {
+            if (i.isAlive()) {
+                i.update(System.currentTimeMillis());
+            } else {
+                i.setAlive(true);
+                i.setTicks(0);
+                i.setX(ship.getX());
+                i.setY(ship.getY());
+            }
+        }*/
+
+        for (Bullet i : firingmode) {
             if (i.isAlive()) {
                 i.update(System.currentTimeMillis());
             } else {
