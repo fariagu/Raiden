@@ -2,6 +2,7 @@ package com.example.gustavo.raiden;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Rect;
 
 /**
@@ -17,17 +18,16 @@ public class Background {
     private long frameTicker;   // the time of the last frame update
     private int framePeriod;    // milliseconds between each frame (1000/fps)
 
-    public Background(Bitmap bitmap, int screenHeight, int screenWidth) {
+    public Background(Bitmap bitmap, int screenHeight, int screenWidth, int fps) {
         this.frameTicker = 0;
-        this.framePeriod = 1000 / 60;//fps;
+        this.framePeriod = 1000 / fps;
         this.bitmap = bitmap;
-        //this.whrelation = this.screenHeight / this.screenWidth;
         this.screenHeight = 5 * screenHeight / 6;
         this.screenWidth = screenWidth;
-        this.sourceRect = new Rect(0, 0, this.screenWidth, this.screenHeight);
-        yTop = bitmap.getHeight() - screenHeight;
-        yBottom = bitmap.getHeight();
-        speed = 2;
+        this.sourceRect = new Rect(0, 0, this.bitmap.getWidth(), this.screenHeight);
+        yTop = bitmap.getHeight() - screenHeight + 250;
+        yBottom = bitmap.getHeight() + 250;
+        speed = 1;
     }
 
     public void update(long gameTime) {
@@ -37,8 +37,8 @@ public class Background {
             yBottom -= speed;
 
             if (yBottom < 0) { //> spriteHeight){
-                yTop = bitmap.getHeight() - screenHeight;
-                yBottom = screenHeight;
+                yTop = bitmap.getHeight() - screenHeight + 250;
+                yBottom = screenHeight + 250;
             }
         }
 
@@ -48,8 +48,9 @@ public class Background {
     }
 
     public void draw(Canvas canvas) {
+        canvas.drawColor(Color.argb(255, 255, 250, 205)); // needed so there isnt remains of dead bitmaps
         // where to draw the sprite
-        Rect destRect = new Rect(0, 0, screenWidth, 2 * screenHeight);
+        Rect destRect = new Rect(0, 0, 2 * this.screenWidth / 3, 19 * this.screenHeight / 10);
         canvas.drawBitmap(bitmap, sourceRect, destRect, null);
     }
 }

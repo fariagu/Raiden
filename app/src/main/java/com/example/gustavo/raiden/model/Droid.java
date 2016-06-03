@@ -19,15 +19,15 @@ public class Droid {
 	private Speed speed;	// the speed with its directions
 	private AimedBullet bullet;
 	private Ship player;
-	
-	public Droid(Bitmap bitmap, Bitmap bullet, int x, int y, Ship ship) {
+
+	public Droid(Bitmap bitmap, Bitmap bullet, int x, int y, Ship ship, int FPS) {
 		this.bitmap = bitmap;
 		this.bulletBitmap = bullet;
 		this.x = x;
 		this.y = y;
 		this.speed = new Speed();
 		this.player = ship;
-		this.bullet = new AimedBullet(bulletBitmap, x + 16, y + 16, player);
+		this.bullet = new AimedBullet(bulletBitmap, x + 16, y + 16, player, FPS);
 	}
 	
 	public Bitmap getBitmap() {

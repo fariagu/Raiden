@@ -10,7 +10,7 @@ import com.example.gustavo.raiden.model.components.Speed;
 /**
  * Created by Gustavo Faria on 02/06/2016.
  */
-public class AimedBullet {
+public class AimedBullet extends Bullet {
     private Bitmap bitmap;	// the actual bitmap
     private Rect sourceRect;// the rectangle to be drawn from the animation bitmap
     private int spriteWidth;    // the width of the sprite to calculate the cut out rectangle
@@ -20,17 +20,15 @@ public class AimedBullet {
     private long frameTicker;   // the time of the last frame update
     private int framePeriod;    // milliseconds between each frame (1000/fps)
     private int x, y;		    // the X and Y coordinates
-    private int xv, yv;         // the X and Y velocity
-    private boolean touched;    // if droid is touched/picked up
     private Speed speed;	    // the speed with its directions
     private boolean alive;	    // whether it's still active or not
     private int ticks;
     private Ship ship;
 
-    public AimedBullet(Bitmap bitmap, Ship s) {
+    public AimedBullet(Bitmap bitmap, Ship s, int fps) {
+        this.frameTicker = 0;
+        this.framePeriod = 1000 / fps;
         this.bitmap = bitmap;
-        currentFrame = 0;
-        framenr = 2;
         spriteWidth = bitmap.getWidth() / 2;
         spriteHeight = bitmap.getHeight();
         sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
@@ -42,7 +40,9 @@ public class AimedBullet {
         this.ship = s;
     }
 
-    public AimedBullet(Bitmap bitmap, int x, int y, Ship s) {
+    public AimedBullet(Bitmap bitmap, int x, int y, Ship s, int FPS) {
+        this.frameTicker = 0;
+        this.framePeriod = 1000 / FPS;
         this.bitmap = bitmap;
         currentFrame = 0;
         framenr = 2;
@@ -58,31 +58,49 @@ public class AimedBullet {
     }
 
     //Getters & Setters
-    public Bitmap getBitmap() {return bitmap;}
-    public void setBitmap(Bitmap bitmap) {this.bitmap = bitmap;}
-    public int getX() {return x;}
-    public void setX(int x) {this.x = x;}
-    public int getY() {return y;}
-    public void setY(int y) {this.y = y;}
-    public int getXv() {
-        return xv;
+    public Bitmap getBitmap() {
+        return bitmap;
     }
-    public void setXv(int xv) {
-        this.xv = xv;
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
     }
-    public int getYv() {
-        return yv;
+
+    public int getX() {
+        return x;
     }
-    public void setYv(int yv) {
-        this.yv = yv;
+
+    public void setX(int x) {
+        this.x = x;
     }
-    public boolean isTouched() {return touched;}
-    public void setTouched(boolean touched) {this.touched = touched;}
-    public Speed getSpeed() {return speed;}
-    public void setSpeed(Speed speed) {this.speed = speed;}
-    public boolean isAlive() {return alive;}
-    public void setAlive(boolean alive) {this.alive = alive;}
-    public void setTicks(int ticks) {this.ticks = ticks;}
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public Speed getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(Speed speed) {
+        this.speed = speed;
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
+
+    public void setTicks(int ticks) {
+        this.ticks = ticks;
+    }
 
     public void draw(Canvas canvas) {
         if(this.alive==true && this.ticks >= 0) {
@@ -91,7 +109,7 @@ public class AimedBullet {
     }
 
     /**
-     * Method which updates the bullet's position
+     * Method which updates the aimedbullet's position
      */
     public void update(long gameTime) {
         if (gameTime > frameTicker + framePeriod) {
@@ -104,6 +122,10 @@ public class AimedBullet {
                 //this.y -= 20;
             }
 
+            if (alive) {
+                x += (speed.getXv() * speed.getxDirection());
+                y += (speed.getYv() * speed.getyDirection());
+            }
 
             if (ticks % 10 == 0)
                 currentFrame++; // increment the frame
@@ -111,22 +133,10 @@ public class AimedBullet {
                 currentFrame = 0;
             }
 
-            if (alive) {
-                x += (speed.getXv() * speed.getxDirection());
-                y += (speed.getYv() * speed.getyDirection());
-            }
-
             // define the rectangle to cut out sprite
             this.sourceRect.left = currentFrame * spriteWidth;
             this.sourceRect.right = this.sourceRect.left + spriteWidth;
 
         }
-
-
-        /*if( this.x <20 &&  this.y<20)
-            this.alive = false;
-        else {
-           this.y -= 1;
-        }*/
     }
 }

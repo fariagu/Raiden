@@ -8,15 +8,16 @@ package com.example.gustavo.raiden.model.components;
  * update its position according to the speed.
  */
 public class Speed {
-	
-	public static final int DIRECTION_RIGHT	= 1;
+
+	public static final int DIRECTION_RIGHT = 1;
 	public static final int DIRECTION_LEFT	= -1;
 	public static final int DIRECTION_UP	= -1;
-	public static final int DIRECTION_DOWN	= 1;
+	public static final int DIRECTION_DOWN = 1;
 	
 	private float xv = 1;	// velocity value on the X axis
 	private float yv = 1;	// velocity value on the Y axis
-	
+
+	// direction where the velocity is pointing
 	private int xDirection = DIRECTION_RIGHT;
 	private int yDirection = DIRECTION_DOWN;
 	
