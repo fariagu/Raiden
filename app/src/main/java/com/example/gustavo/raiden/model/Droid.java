@@ -13,15 +13,21 @@ import com.example.gustavo.raiden.model.components.Speed;
 public class Droid {
 
 	private Bitmap bitmap;	// the actual bitmap
+	private Bitmap bulletBitmap;
 	private int x, y;			// the X and Y coordinate
 	private boolean touched;	// if droid is touched/picked up
 	private Speed speed;	// the speed with its directions
+	private AimedBullet bullet;
+	private Ship player;
 	
-	public Droid(Bitmap bitmap, int x, int y) {
+	public Droid(Bitmap bitmap, Bitmap bullet, int x, int y, Ship ship) {
 		this.bitmap = bitmap;
+		this.bulletBitmap = bullet;
 		this.x = x;
 		this.y = y;
 		this.speed = new Speed();
+		this.player = ship;
+		this.bullet = new AimedBullet(bulletBitmap, x + 16, y + 16, player);
 	}
 	
 	public Bitmap getBitmap() {
@@ -29,6 +35,12 @@ public class Droid {
 	}
 	public void setBitmap(Bitmap bitmap) {
 		this.bitmap = bitmap;
+	}
+	public Bitmap getBulletBitmap() {
+		return bulletBitmap;
+	}
+	public void setBulletBitmap(Bitmap bulletBitmap) {
+		this.bulletBitmap = bulletBitmap;
 	}
 	public int getX() {
 		return x;
@@ -54,8 +66,21 @@ public class Droid {
 	public void setSpeed(Speed speed) {
 		this.speed = speed;
 	}
+	public AimedBullet getBullet() {
+		return bullet;
+	}
+	public void setBullet(AimedBullet bullet) {
+		this.bullet = bullet;
+	}
+	public Ship getPlayer() {
+		return player;
+	}
+	public void setPlayer(Ship player) {
+		this.player = player;
+	}
 
 	public void draw(Canvas canvas) {
+		canvas.drawBitmap(bulletBitmap, bullet.getX() - (bulletBitmap.getWidth() / 2), bullet.getY() - (bulletBitmap.getHeight() / 2), null);
 		canvas.drawBitmap(bitmap, x - (bitmap.getWidth() / 2), y - (bitmap.getHeight() / 2), null);
 	}
 
@@ -66,6 +91,38 @@ public class Droid {
 		if (!touched) {
 			x += (speed.getXv() * speed.getxDirection()); 
 			y += (speed.getYv() * speed.getyDirection());
+		}
+
+		if (bullet.isAlive()){
+			bullet.update(System.currentTimeMillis());
+		}
+		else {
+			bullet.setAlive(true);
+			int dy, dx;
+			double  hip;
+
+			dx = Math.abs(this.x - player.getX());
+			dy = Math.abs(this.x - player.getY());
+			hip = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+
+			Speed s = new Speed();
+			//s.setXv((float)Math.cos(angle) * 20);
+			//s.setYv((float)Math.sin(angle) * 20);
+			s.setXv((float)(dx / hip * 10));
+			s.setYv((float)(dy / hip * 10));
+			s.setyDirection(Speed.DIRECTION_DOWN);
+			if (this.x > player.getX()){
+				s.setxDirection(Speed.DIRECTION_LEFT);
+			}
+			else if (this.x != player.getX()){
+				s.setxDirection(Speed.DIRECTION_RIGHT);
+			}
+
+			bullet.setY(this.y+20);
+			bullet.setX(this.x);
+
+			bullet.setSpeed(s);
+
 		}
 	}
 	

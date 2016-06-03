@@ -54,16 +54,12 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
 		Point ScreenSize = new Point();
 		display.getSize(ScreenSize);
-
-		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-		Display display = wm.getDefaultDisplay();
+		
 		DisplayMetrics metrics = new DisplayMetrics();
 		display.getMetrics(metrics);
 		Log.d("ApplicationTagName", "Display width in px is " + metrics.widthPixels + " and height is " + metrics.heightPixels);
 		background = new Background(backgroundimg, metrics.widthPixels, metrics.heightPixels);
 
-		// create Droid and load bitmap
-		droid = new Droid(enemysprite, 50, 50);
 
 		//create Particle
 		prtcl = new Particle(200, 500);
@@ -85,7 +81,9 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 			firingmode[i] = new Bullet(bulletsprite, ship.getX(), 10+ship.getY());
 			firingmode[i].setTicks(-i*10);
 		}
-		enemyBullet = new AimedBullet(enemybulletsprite, ship);
+
+		// create Droid and load bitmap
+		droid = new Droid(enemysprite, enemybulletsprite, 50, 50, ship);
 
 		// create the game loop thread
 		thread = new MainThread(getHolder(), this);
@@ -211,7 +209,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 			}
 		}
 
-		enemyBullet.draw(canvas);
+		//enemyBullet.draw(canvas);
 
 		//firingmode[ship.getIbull()].draw(canvas);
 		droid.draw(canvas);
@@ -278,39 +276,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 			}
 		}
 
-		if (enemyBullet.isAlive()){
-			enemyBullet.update(System.currentTimeMillis());
-		}
-		else {
-			enemyBullet.setAlive(true);
-			int dy, dx;
-			double angle, hip;
 
-			dx = Math.abs(droid.getX() - ship.getX());
-			dy = Math.abs(droid.getY() - ship.getY());
-			hip = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-
-			angle = Math.atan(dx / dy);
-
-			Speed s = new Speed();
-			//s.setXv((float)Math.cos(angle) * 20);
-			//s.setYv((float)Math.sin(angle) * 20);
-			s.setXv((float)(dx / hip * 10));
-			s.setYv((float)(dy / hip * 10));
-			s.setyDirection(Speed.DIRECTION_DOWN);
-			if (droid.getX() > ship.getX()){
-				s.setxDirection(Speed.DIRECTION_LEFT);
-			}
-			else if (droid.getX() != ship.getX()){
-				s.setxDirection(Speed.DIRECTION_RIGHT);
-			}
-
-			enemyBullet.setX(droid.getX());
-			enemyBullet.setY(droid.getY()+20);
-
-			enemyBullet.setSpeed(s);
-
-		}
 
 
 		ship.update(System.currentTimeMillis());
