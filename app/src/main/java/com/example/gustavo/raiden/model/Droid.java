@@ -16,6 +16,7 @@ public class Droid {
 	private Bitmap bulletBitmap;
 	private int x, y;			// the X and Y coordinate
 	private boolean touched;	// if droid is touched/picked up
+	private boolean alive;
 	private Speed speed;	// the speed with its directions
 	private AimedBullet bullet;
 	private Ship player;
@@ -28,6 +29,7 @@ public class Droid {
 		this.speed = new Speed();
 		this.player = ship;
 		this.bullet = new AimedBullet(bulletBitmap, x + 16, y + 16, player, FPS);
+		this.alive = true;
 	}
 	
 	public Bitmap getBitmap() {
@@ -60,6 +62,12 @@ public class Droid {
 	public void setTouched(boolean touched) {
 		this.touched = touched;
 	}
+	public boolean isAlive() {
+		return alive;
+	}
+	public void setAlive(boolean alive) {
+		this.alive = alive;
+	}
 	public Speed getSpeed() {
 		return speed;
 	}
@@ -80,8 +88,10 @@ public class Droid {
 	}
 
 	public void draw(Canvas canvas) {
-		canvas.drawBitmap(bulletBitmap, bullet.getX() - (bulletBitmap.getWidth() / 2), bullet.getY() - (bulletBitmap.getHeight() / 2), null);
-		canvas.drawBitmap(bitmap, x - (bitmap.getWidth() / 2), y - (bitmap.getHeight() / 2), null);
+		if (this.alive) {
+			canvas.drawBitmap(bulletBitmap, bullet.getX() - (bulletBitmap.getWidth() / 2), bullet.getY() - (bulletBitmap.getHeight() / 2), null);
+			canvas.drawBitmap(bitmap, x - (bitmap.getWidth() / 2), y - (bitmap.getHeight() / 2), null);
+		}
 	}
 
 	/**
@@ -89,7 +99,7 @@ public class Droid {
 	 */
 	public void update() {
 		if (!touched) {
-			x += (speed.getXv() * speed.getxDirection()); 
+			x += (speed.getXv() * speed.getxDirection());
 			y += (speed.getYv() * speed.getyDirection());
 		}
 
@@ -122,6 +132,8 @@ public class Droid {
 			bullet.setX(this.x);
 
 			bullet.setSpeed(s);
+
+
 
 		}
 	}

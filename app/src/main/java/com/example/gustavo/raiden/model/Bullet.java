@@ -3,6 +3,7 @@ package com.example.gustavo.raiden.model;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.example.gustavo.raiden.model.components.Colllision;
 import com.example.gustavo.raiden.model.components.Speed;
@@ -25,6 +26,7 @@ public class Bullet {
     private Speed speed;        // the speed with its directions
     private boolean alive;        // whether it's still active or not
     private int ticks;
+    private Droid enemy;
 
     public Bullet() {
         this.frameTicker = 0;
@@ -60,45 +62,41 @@ public class Bullet {
     public Bitmap getBitmap() {
         return bitmap;
     }
-
     public void setBitmap(Bitmap bitmap) {
         this.bitmap = bitmap;
     }
-
     public int getX() {
         return x;
     }
-
     public void setX(int x) {
         this.x = x;
     }
-
     public int getY() {
         return y;
     }
-
     public void setY(int y) {
         this.y = y;
     }
-
     public Speed getSpeed() {
         return speed;
     }
-
     public void setSpeed(Speed speed) {
         this.speed = speed;
     }
-
     public boolean isAlive() {
         return alive;
     }
-
     public void setAlive(boolean alive) {
         this.alive = alive;
     }
-
     public void setTicks(int ticks) {
         this.ticks = ticks;
+    }
+    public Droid getEnemy() {
+        return enemy;
+    }
+    public void setEnemy(Droid enemy) {
+        this.enemy = enemy;
     }
 
     public void draw(Canvas canvas) {
@@ -134,6 +132,12 @@ public class Bullet {
             // define the rectangle to cut out sprite
             this.sourceRect.left = currentFrame * spriteWidth;
             this.sourceRect.right = this.sourceRect.left + spriteWidth;
+        }
+    }
+
+    public void checkCollision(){
+        if (Colllision.collisionDetected(bitmap, this.x, this.y, enemy.getBitmap(), enemy.getX(), enemy.getY())){
+            enemy.setAlive(false);
         }
     }
 }

@@ -15,13 +15,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
-import com.example.gustavo.raiden.model.AimedBullet;
-import com.example.gustavo.raiden.model.Droid;
-import com.example.gustavo.raiden.model.Explosion;
-import com.example.gustavo.raiden.model.Particle;
-import com.example.gustavo.raiden.model.PowerUp;
-import com.example.gustavo.raiden.model.Ship;
-import com.example.gustavo.raiden.model.TripleBullet;
+import com.example.gustavo.raiden.model.*;
 import com.example.gustavo.raiden.model.components.Speed;
 
 /**
@@ -32,11 +26,11 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private static final String TAG = MainGamePanel.class.getSimpleName();
 
     private MainThread thread;
-    private Droid droid;
+    private Droid[] enemies;
     private Explosion[] explosions;
-    private TripleBullet[] firingmode;
-    private AimedBullet enemyBullet;
     private PowerUp powerup;
+    //private TripleBullet[] firingmode;
+    private Bullet[] firingmode;
 
     private Bitmap backgroundimg = BitmapFactory.decodeResource(getResources(), R.drawable.backgroundds);
     private Bitmap bulletsprite = BitmapFactory.decodeResource(getResources(), R.drawable.shoot);
@@ -80,14 +74,27 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                 , metrics.widthPixels / 2, 5 * metrics.heightPixels / 6 // initial position
                 , 35, 38    // width and height of sprite
                 , FPS, 11);    // FPS and number of frames in the animation
+
+        // create Droid and load bitmap
+
+        enemies = new Droid[2];
+        //for (int i = 0; i < )
+        enemies[0] = new Droid(enemysprite, enemybulletsprite, 50, 50, ship, FPS);
+        enemies[1] = new Droid(enemysprite, enemybulletsprite, metrics.widthPixels - 50, 50, ship, FPS);
+
+        /*
         firingmode = new TripleBullet[4];
         for (int i = 0; i < firingmode.length; i++) {
             firingmode[i] = new TripleBullet(bulletsprite, ship.getX(), 10 + ship.getY(), FPS);
             firingmode[i].setTicks(i * 30);
-        }
+        }*/
 
-        // create Droid and load bitmap
-        droid = new Droid(enemysprite, enemybulletsprite, 50, 50, ship, FPS);
+        firingmode = new Bullet[12];
+        for (int i = 0; i < firingmode.length; i++) {
+            firingmode[i] = new Bullet(bulletsprite, ship.getX(), 10 + ship.getY(), FPS);
+            firingmode[i].setTicks(i * 10);
+            //firingmode[i].setEnemy(enemies[1]);
+        }
 
         //create a powerup
         powerup = new PowerUp(powerupsprite, 100, 100, FPS);
@@ -203,16 +210,25 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
             droid.draw(canvas);
 		}*/
 
-        for (TripleBullet i : firingmode) {
+        /*for (TripleBullet i : firingmode) {
+            if (i.isAlive()) {
+                i.draw(canvas);
+            }
+        }*/
+
+        for (Bullet i : firingmode) {
             if (i.isAlive()) {
                 i.draw(canvas);
             }
         }
 
-		//enemyBullet.draw(canvas);
+        for (Droid i : enemies) {
+            if (i.isAlive()) {
+                i.draw(canvas);
+            }
+        }
 
         powerup.draw(canvas);
-        droid.draw(canvas);
         ship.draw(canvas);
 
         // display fps
@@ -235,30 +251,34 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     public void update() {
         background.update(System.currentTimeMillis());
 
-        // check collision with right wall if heading right
-        if (droid.getSpeed().getxDirection() == Speed.DIRECTION_RIGHT
-                && droid.getX() + droid.getBitmap().getWidth() / 2 >= getWidth()) {
-            droid.getSpeed().toggleXDirection();
-        }
-        // check collision with left wall if heading left
-        if (droid.getSpeed().getxDirection() == Speed.DIRECTION_LEFT
-                && droid.getX() - droid.getBitmap().getWidth() / 2 <= 0) {
-            droid.getSpeed().toggleXDirection();
-        }
-        // check collision with bottom wall if heading down
-        if (droid.getSpeed().getyDirection() == Speed.DIRECTION_DOWN
-                && droid.getY() + droid.getBitmap().getHeight() / 2 >= getHeight()) {
-            droid.getSpeed().toggleYDirection();
-        }
-        // check collision with top wall if heading up
-        if (droid.getSpeed().getyDirection() == Speed.DIRECTION_UP
-                && droid.getY() - droid.getBitmap().getHeight() / 2 <= 0) {
-            droid.getSpeed().toggleYDirection();
+        //wall collisions
+        for (Droid i : enemies){
+            // check collision with right wall if heading right
+            if (i.getSpeed().getxDirection() == Speed.DIRECTION_RIGHT
+                    && i.getX() + i.getBitmap().getWidth() / 2 >= getWidth()) {
+                i.getSpeed().toggleXDirection();
+            }
+            // check collision with left wall if heading left
+            if (i.getSpeed().getxDirection() == Speed.DIRECTION_LEFT
+                    && i.getX() - i.getBitmap().getWidth() / 2 <= 0) {
+                i.getSpeed().toggleXDirection();
+            }
+            // check collision with bottom wall if heading down
+            if (i.getSpeed().getyDirection() == Speed.DIRECTION_DOWN
+                    && i.getY() + i.getBitmap().getHeight() / 2 >= getHeight()) {
+                i.getSpeed().toggleYDirection();
+            }
+            // check collision with top wall if heading up
+            if (i.getSpeed().getyDirection() == Speed.DIRECTION_UP
+                    && i.getY() - i.getBitmap().getHeight() / 2 <= 0) {
+                i.getSpeed().toggleYDirection();
+            }
+
+            i.update();
         }
 
         // Updates
         powerup.update(System.currentTimeMillis());
-        droid.update();
         prtcl.update();
 
         for (Explosion i : explosions)
@@ -266,7 +286,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                 i.update();
             }
 
-        for (TripleBullet i : firingmode) {
+     /*   for (TripleBullet i : firingmode) {
             if (i.isAlive()) {
                 i.update(System.currentTimeMillis());
             } else {
@@ -274,6 +294,22 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                 i.setTicks(0);
                 i.setX(ship.getX());
                 i.setY(ship.getY());
+            }
+        }*/
+
+        for (Bullet i : firingmode) {
+            if (i.isAlive()) {
+                i.update(System.currentTimeMillis());
+            } else {
+                i.setAlive(true);
+                i.setTicks(0);
+                i.setX(ship.getX());
+                i.setY(ship.getY());
+            }
+
+            for (Droid j : enemies){
+                i.setEnemy(j);
+                i.checkCollision();
             }
         }
 
