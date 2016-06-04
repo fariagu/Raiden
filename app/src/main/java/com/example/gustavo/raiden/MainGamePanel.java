@@ -20,7 +20,6 @@ import android.view.WindowManager;
 import com.example.gustavo.raiden.model.Bullet;
 import com.example.gustavo.raiden.model.Droid;
 import com.example.gustavo.raiden.model.Explosion;
-import com.example.gustavo.raiden.model.Particle;
 import com.example.gustavo.raiden.model.PowerUp;
 import com.example.gustavo.raiden.model.Ship;
 import com.example.gustavo.raiden.model.TripleBullet;
@@ -50,10 +49,8 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private Bitmap powerupsprite = BitmapFactory.decodeResource(getResources(), R.drawable.powerup);
 
     private Background background;
-    private Particle prtcl;
     private Ship ship;
 
-    private int oldX, oldY;
     private int FPS = 20;
     private int NR_BULLETS = 4;
 
@@ -75,10 +72,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         Log.d("ApplicationTagName", "Display width in px is " + metrics.widthPixels + " and height is " + metrics.heightPixels);
         background = new Background(backgroundimg, metrics.heightPixels, metrics.widthPixels, FPS);
 
-
-        //create Particle
-        prtcl = new Particle(200, 500);
-
         // create Ship and load bitmap
         ship = new Ship(
                 shipsprite
@@ -92,7 +85,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         for (int i = 0; i < enemies.length; i++) {
             enemies[i] = new Droid(enemysprite, enemybulletsprite,
                     r.nextInt(metrics.widthPixels - enemysprite.getWidth()),
-                    r.nextInt((int) (metrics.heightPixels * 2 / 3) - enemysprite.getHeight()),
+                    r.nextInt((metrics.heightPixels * 2 / 3) - enemysprite.getHeight()),
                     ship, FPS);
             enemies[i].getBullet().setTicks(-r.nextInt(50));
         }
@@ -160,6 +153,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        int oldX, oldY;
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
 
             int currentExplosion = 0; // check if explosion is null or if it is still active
@@ -174,9 +168,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
             }
 
             ship.handleActionDown((int) event.getX(), (int) event.getY());
-
-            oldX = ship.getX();
-            oldY = ship.getY();
 
             // check if in the lower part of the screen we exit
             if (event.getY() > getHeight() - 50) {
@@ -212,22 +203,17 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
         background.draw(canvas);
 
-        if (prtcl.isAlive())
-            prtcl.draw(canvas);
-
-        for (Explosion i : explosions)
-            if (i != null && i.isAlive()) {
-                i.draw(canvas);
+        for (Explosion e : explosions)
+            if (e != null && e.isAlive()) {
+                e.draw(canvas);
             }
 
-        for (TripleBullet i : tripleBullets)
-            i.draw(canvas);
-
-        for (Bullet i : firingmode) {
-            if (i.isAlive()) {
-                i.draw(canvas);
-            }
-        }
+        if (ship.isPoweredup())
+            for (TripleBullet tp : tripleBullets)
+                tp.draw(canvas);
+        else
+            for (Bullet b : firingmode)
+                b.draw(canvas);
 
         for (Droid i : enemies) {
             i.draw(canvas);
@@ -266,6 +252,9 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
         //wall collisions
         for (Droid i : enemies) {
+
+            ship.checkCollision(i);//se morrer nao precisa de fazer o calculo das paredes
+
             if (i.isAlive()) {
                 // check collision with right wall if heading right
                 if (i.getSpeed().getxDirection() == Speed.DIRECTION_RIGHT
@@ -287,8 +276,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                         && i.getY() - i.getBitmap().getHeight() / 2 <= 0) {
                     i.getSpeed().toggleYDirection();
                 }
-
-                ship.checkCollision(i);
             } else {
                 i.getBullet().update(System.currentTimeMillis());
             }
@@ -298,8 +285,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
             i.update(System.currentTimeMillis());
         }
 
-        prtcl.update();
-
         for (Explosion i : explosions)
             if (i != null && i.isAlive()) {
                 i.update();
@@ -307,7 +292,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
         ship.checkCollision(powerup);
 
-        if (ship.isPoweredup())
+        if (ship.isPoweredup()) {
             for (TripleBullet i : tripleBullets) {
                 if (i.isAlive()) {
                     for (Droid j : enemies) {//this collision kills enemy droids
@@ -321,7 +306,9 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                     i.setY(ship.getY());
                 }
             }
-        else
+            for (Bullet i : firingmode)
+                i.setAlive(false);
+        } else
             for (Bullet i : firingmode) {
                 if (i.isAlive()) {
                     for (Droid j : enemies) {//this collision kills enemy droids
@@ -334,10 +321,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                     i.setX(ship.getX());
                     i.setY(ship.getY());
                 }
-
-
             }
-
 
         ship.update(System.currentTimeMillis());
 

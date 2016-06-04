@@ -144,21 +144,10 @@ public class Collidable {
 
     //generic
     public void checkCollision(Collidable c) {
-        if (Collision.collisionDetected(bitmap, this.x, this.y, c.getBitmap(), c.getX(), c.getY())) {
+        if (Collision.collisionDetected(this, c)) {
+            alive = false;
             c.setAlive(false);
         }
     }
 
-    public void checkCollision(Droid d) {
-        if (Collision.shipCollisionDetected(bitmap, this.x, this.y, d.getBitmap(), d.getX(), d.getY())) {
-            this.alive = false;
-        }
-    }
-
-    public void checkCollision(AimedBullet b) {
-        if (Collision.shipCollisionDetected(bitmap, this.x, this.y, b.getBitmap(), b.getX(), b.getY())) {
-            alive = false;
-            b.setAlive(false);
-        }
-    }
 }

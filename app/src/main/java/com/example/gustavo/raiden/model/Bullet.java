@@ -84,7 +84,7 @@ public class Bullet extends Collidable {
     }
 
     public void checkCollision(Droid enemy) {
-        if (Collision.collisionDetected(bitmap, this.x, this.y, enemy.getBitmap(), enemy.getX(), enemy.getY())) {
+        if (Collision.collisionDetected(bitmap, x, y, enemy.getBitmap(), enemy.getX(), enemy.getY())) {
             enemy.setAlive(false);
             enemy.setComeBackCounter(-1);
         }

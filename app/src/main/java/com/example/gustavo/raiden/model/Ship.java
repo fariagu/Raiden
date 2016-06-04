@@ -162,22 +162,22 @@ public class Ship extends Collidable {
 
     }
 
-    public void checkCollision(PowerUp c) {
-        if (Collision.collisionDetected(bitmap, this.x, this.y, c.getBitmap(), c.getX(), c.getY())) {
-            c.setAlive(false);
+    public void checkCollision(PowerUp p) {
+        if (Collision.collisionDetected(this, p)) {
+            p.setAlive(false);
             poweredup = true;
         }
     }
 
     public void checkCollision(Droid d){
-        if (Collision.shipCollisionDetected(bitmap, this.x, this.y, d.getBitmap(), d.getX(), d.getY())) {
-            this.alive = false;
-        }
+        if (d.isAlive())
+            if (Collision.collisionDetected(this, d))
+                alive = false;
     }
 
     public void checkCollision(AimedBullet b){
-        if (Collision.shipCollisionDetected(bitmap, this.x, this.y, b.getBitmap(), b.getX(), b.getY())) {
-            this.alive = false;
+        if (Collision.collisionDetected(this, b)) {
+            alive = false;
             b.setAlive(false);
         }
     }
