@@ -267,10 +267,6 @@ public class Ship {
                     getX() + bitmap.getWidth() / (frameNr + 1), getY() + bitmap.getHeight() / 2);
             canvas.drawBitmap(bitmap, sourceRect, destRect, null);
         }
-        else {
-            this.gameOver(canvas);
-        }
-
     }
 
     public void handleActionDown(int eventX, int eventY) {
@@ -290,13 +286,15 @@ public class Ship {
     }
 
     public void checkCollision(Droid d){
-        if (Colllision.collisionDetected(bitmap, this.x, this.y, d.getBitmap(), d.getX(), d.getY())){
-            this.setAlive(false);
+        if (Colllision.shipCollisionDetected(bitmap, this.x, this.y, d.getBitmap(), d.getX(), d.getY())){
+            this.alive = false;
         }
     }
-    public void checkCollision(AimedBullet bullet){
-        if (Colllision.collisionDetected(bitmap, this.x, this.y, bullet.getBitmap(), bullet.getX(), bullet.getY())){
-            this.setAlive(false);
+
+    public void checkCollision(AimedBullet b){
+        if (Colllision.shipCollisionDetected(bitmap, this.x, this.y, b.getBitmap(), b.getX(), b.getY())){
+            this.alive = false;
+            b.setAlive(false);
         }
     }
 
@@ -305,7 +303,7 @@ public class Ship {
         paint.setStyle(Paint.Style.FILL);
         canvas.drawPaint(paint);
 
-        paint.setColor(Color.BLACK);
+        paint.setColor(Color.WHITE);
         paint.setTextSize(50);
         canvas.drawText("GAME OVER", 10, 50, paint);
     }

@@ -5,8 +5,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -227,9 +229,12 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         }
 
         powerup.draw(canvas);
-        ship.draw(canvas);
+
         if (ship.isAlive()){
             ship.draw(canvas);
+        }
+        else {
+            ship.gameOver(canvas);
         }
 
         // display fps
@@ -239,8 +244,11 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private void displayFps(Canvas canvas, String FPS) {
         if (canvas != null && FPS != null) {
             Paint paint = new Paint();
-            paint.setARGB(255, 255, 255, 255);
-            canvas.drawText(FPS, this.getWidth() - 50, 20, paint);
+            paint.setStyle(Paint.Style.FILL);
+            paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+            paint.setColor(Color.BLACK);
+            paint.setTextSize(40);
+            canvas.drawText(FPS, this.getWidth() - 200, 30, paint);
         }
     }
 
@@ -275,11 +283,12 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                         && i.getY() - i.getBitmap().getHeight() / 2 <= 0) {
                     i.getSpeed().toggleYDirection();
                 }
-
-                //ship.checkCollision(i);
             }
+
             i.update();
-            //ship.checkCollision(i.getBullet());
+
+            ship.checkCollision(i);
+            ship.checkCollision(i.getBullet());
         }
 
 
@@ -306,18 +315,19 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         for (Bullet i : firingmode) {
             if (i.isAlive()) {
                 i.update(System.currentTimeMillis());
-            } else {
+            }
+            else if (ship.isAlive()){
                 i.setAlive(true);
                 i.setTicks(0);
                 i.setX(ship.getX());
                 i.setY(ship.getY());
             }
 
-            for (Droid j : enemies){
+
+            for (Droid j : enemies){//this collision kills enemy droids
                 i.checkCollision(j);
             }
         }
-
 		ship.update(System.currentTimeMillis());
 
         //this.running = ship.isAlive();

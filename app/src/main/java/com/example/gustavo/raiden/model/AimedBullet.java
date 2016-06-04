@@ -24,7 +24,6 @@ public class AimedBullet extends Bullet {
     private Speed speed;	    // the speed with its directions
     private boolean alive;	    // whether it's still active or not
     private int ticks;
-    private Ship ship;
 
     public AimedBullet(Bitmap bitmap, Ship s, int fps) {
         this.frameTicker = 0;
@@ -38,7 +37,6 @@ public class AimedBullet extends Bullet {
         this.speed = new Speed();
         this.alive = true;
         this.ticks = 0;
-        this.ship = s;
     }
 
     public AimedBullet(Bitmap bitmap, int x, int y, Ship s, int FPS) {
@@ -55,7 +53,6 @@ public class AimedBullet extends Bullet {
         this.speed = new Speed();
         this.alive = true;
         this.ticks = 0;
-        this.ship = s;
     }
 
     //Getters & Setters
@@ -89,14 +86,10 @@ public class AimedBullet extends Bullet {
     public void setAlive(boolean alive) {
         this.alive = alive;
     }
-    public int getTicks() {
-        return ticks;
-    }
     public void setTicks(int ticks) {
         this.ticks = ticks;
     }
 
-    //TODO: make it so bullet keeps traveling after droid is dead
     public void draw(Canvas canvas) {
         if(this.alive) {
             canvas.drawBitmap(bitmap, x - (bitmap.getWidth() / 2), y - (bitmap.getHeight() / 2), null);
@@ -112,7 +105,7 @@ public class AimedBullet extends Bullet {
             ticks++;
             if(ticks > 150) {
                 ticks = 0;
-                alive = false;
+                this.alive = false;
             } else {
                 //this.y -= 20;
             }
