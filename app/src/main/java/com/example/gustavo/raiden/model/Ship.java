@@ -2,7 +2,11 @@ package com.example.gustavo.raiden.model;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
+
+import com.example.gustavo.raiden.model.components.Colllision;
 
 /**
  * Created by Diogo on 07/05/2016.
@@ -17,6 +21,7 @@ public class Ship {
     private long frameTicker;   // the time of the last frame update
     private int framePeriod;    // milliseconds between each frame (1000/fps)
     private boolean touched;    // if droid is touched/picked up
+    private boolean alive;
     private int spriteWidth;    // the width of the sprite to calculate the cut out rectangle
     private int spriteHeight;   // the height of the sprite
     private int ibull;
@@ -38,6 +43,7 @@ public class Ship {
         framePeriod = 1000 / fps;
         frameTicker = 0L;
         ibull = 0;
+        this.alive = true;
     }
 
     public static String getTAG() {
@@ -135,6 +141,14 @@ public class Ship {
 
     public void setTouched(boolean touched) {
         this.touched = touched;
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 
     public int getSpriteWidth() {
@@ -247,10 +261,16 @@ public class Ship {
     }
 
     public void draw(Canvas canvas) {
-        // where to draw the sprite
-        Rect destRect = new Rect(getX() - bitmap.getWidth() / (frameNr + 1), getY() - bitmap.getHeight() / 2,
-                getX() + bitmap.getWidth() / (frameNr + 1), getY() + bitmap.getHeight() / 2);
-        canvas.drawBitmap(bitmap, sourceRect, destRect, null);
+        if (this.alive){
+            // where to draw the sprite
+            Rect destRect = new Rect(getX() - bitmap.getWidth() / (frameNr + 1), getY() - bitmap.getHeight() / 2,
+                    getX() + bitmap.getWidth() / (frameNr + 1), getY() + bitmap.getHeight() / 2);
+            canvas.drawBitmap(bitmap, sourceRect, destRect, null);
+        }
+        else {
+            this.gameOver(canvas);
+        }
+
     }
 
     public void handleActionDown(int eventX, int eventY) {
@@ -267,5 +287,26 @@ public class Ship {
             setTouched(false);
         }
 
+    }
+
+    public void checkCollision(Droid d){
+        if (Colllision.collisionDetected(bitmap, this.x, this.y, d.getBitmap(), d.getX(), d.getY())){
+            this.setAlive(false);
+        }
+    }
+    public void checkCollision(AimedBullet bullet){
+        if (Colllision.collisionDetected(bitmap, this.x, this.y, bullet.getBitmap(), bullet.getX(), bullet.getY())){
+            this.setAlive(false);
+        }
+    }
+
+    public void gameOver(Canvas canvas){
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.FILL);
+        canvas.drawPaint(paint);
+
+        paint.setColor(Color.BLACK);
+        paint.setTextSize(50);
+        canvas.drawText("GAME OVER", 10, 50, paint);
     }
 }

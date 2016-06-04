@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
+import com.example.gustavo.raiden.model.components.Colllision;
 import com.example.gustavo.raiden.model.components.Speed;
 
 
@@ -61,49 +62,43 @@ public class AimedBullet extends Bullet {
     public Bitmap getBitmap() {
         return bitmap;
     }
-
     public void setBitmap(Bitmap bitmap) {
         this.bitmap = bitmap;
     }
-
     public int getX() {
         return x;
     }
-
     public void setX(int x) {
         this.x = x;
     }
-
     public int getY() {
         return y;
     }
-
     public void setY(int y) {
         this.y = y;
     }
-
     public Speed getSpeed() {
         return speed;
     }
-
     public void setSpeed(Speed speed) {
         this.speed = speed;
     }
-
     public boolean isAlive() {
         return alive;
     }
-
     public void setAlive(boolean alive) {
         this.alive = alive;
     }
-
+    public int getTicks() {
+        return ticks;
+    }
     public void setTicks(int ticks) {
         this.ticks = ticks;
     }
 
+    //TODO: make it so bullet keeps traveling after droid is dead
     public void draw(Canvas canvas) {
-        if(this.alive==true && this.ticks >= 0) {
+        if(this.alive) {
             canvas.drawBitmap(bitmap, x - (bitmap.getWidth() / 2), y - (bitmap.getHeight() / 2), null);
         }
     }
@@ -115,7 +110,7 @@ public class AimedBullet extends Bullet {
         if (gameTime > frameTicker + framePeriod) {
             frameTicker = gameTime;
             ticks++;
-            if(ticks > 120) {
+            if(ticks > 150) {
                 ticks = 0;
                 alive = false;
             } else {

@@ -106,6 +106,7 @@ public class MainThread extends Thread {
 					surfaceHolder.unlockCanvasAndPost(canvas);
 				}
 			}	// end finally
+			//running = this.gamePanel.isRunning();
 		}
 	}
 
