@@ -283,12 +283,15 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                         && i.getY() - i.getBitmap().getHeight() / 2 <= 0) {
                     i.getSpeed().toggleYDirection();
                 }
+
+                i.update();
+
+                ship.checkCollision(i);
+                ship.checkCollision(i.getBullet());
             }
-
-            i.update();
-
-            ship.checkCollision(i);
-            ship.checkCollision(i.getBullet());
+            else {
+                i.getBullet().update(System.currentTimeMillis());
+            }
         }
 
 

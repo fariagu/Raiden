@@ -100,31 +100,31 @@ public class AimedBullet extends Bullet {
      * Method which updates the aimedbullet's position
      */
     public void update(long gameTime) {
-        if (gameTime > frameTicker + framePeriod) {
-            frameTicker = gameTime;
-            ticks++;
-            if(ticks > 150) {
-                ticks = 0;
-                this.alive = false;
-            } else {
-                //this.y -= 20;
-            }
+        if (this.alive){
+            if (gameTime > frameTicker + framePeriod) {
+                frameTicker = gameTime;
+                ticks++;
+                if(ticks > 150) {
+                    ticks = 0;
+                    this.alive = false;
+                } else {
+                    //this.y -= 20;
+                }
 
-            if (alive) {
                 x += (speed.getXv() * speed.getxDirection());
                 y += (speed.getYv() * speed.getyDirection());
+
+                if (ticks % 10 == 0)
+                    currentFrame++; // increment the frame
+                if (currentFrame >= framenr) {
+                    currentFrame = 0;
+                }
+
+                // define the rectangle to cut out sprite
+                this.sourceRect.left = currentFrame * spriteWidth;
+                this.sourceRect.right = this.sourceRect.left + spriteWidth;
+
             }
-
-            if (ticks % 10 == 0)
-                currentFrame++; // increment the frame
-            if (currentFrame >= framenr) {
-                currentFrame = 0;
-            }
-
-            // define the rectangle to cut out sprite
-            this.sourceRect.left = currentFrame * spriteWidth;
-            this.sourceRect.right = this.sourceRect.left + spriteWidth;
-
         }
     }
 }
