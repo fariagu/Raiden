@@ -162,11 +162,13 @@ public class Ship extends Collidable {
 
     }
 
-    public void checkCollision(PowerUp p) {
+    public boolean checkCollision(PowerUp p) {
         if (Collision.collisionDetected(this, p)) {
             p.setAlive(false);
             poweredup = true;
+            return true;
         }
+        return false;
     }
 
     public void checkCollision(Droid d){
