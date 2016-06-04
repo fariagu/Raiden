@@ -3,7 +3,6 @@ package com.example.gustavo.raiden.model;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.example.gustavo.raiden.model.components.Colllision;
 import com.example.gustavo.raiden.model.components.Speed;
@@ -26,7 +25,6 @@ public class Bullet {
     private Speed speed;        // the speed with its directions
     private boolean alive;        // whether it's still active or not
     private int ticks;
-    private Droid enemy;
 
     public Bullet() {
         this.frameTicker = 0;
@@ -92,15 +90,9 @@ public class Bullet {
     public void setTicks(int ticks) {
         this.ticks = ticks;
     }
-    public Droid getEnemy() {
-        return enemy;
-    }
-    public void setEnemy(Droid enemy) {
-        this.enemy = enemy;
-    }
 
     public void draw(Canvas canvas) {
-        if (this.alive == true) {
+        if (alive) {
             Rect destRect = new Rect(this.x - (bitmap.getWidth() / 2), this.y - (bitmap.getHeight() / 2),
                     this.x + bitmap.getWidth() / 2, this.y + (bitmap.getHeight() / 2));
             canvas.drawBitmap(bitmap, sourceRect, destRect, null);
@@ -111,7 +103,6 @@ public class Bullet {
      * Method which updates the bullet's position
      */
     public void update(long gameTime) {
-
         if (gameTime > frameTicker + framePeriod) {
             frameTicker = gameTime;
             ticks++;
@@ -135,7 +126,7 @@ public class Bullet {
         }
     }
 
-    public void checkCollision(){
+    public void checkCollision(Droid enemy) {
         if (Colllision.collisionDetected(bitmap, this.x, this.y, enemy.getBitmap(), enemy.getX(), enemy.getY())){
             enemy.setAlive(false);
         }

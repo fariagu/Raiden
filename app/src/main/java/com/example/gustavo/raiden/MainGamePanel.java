@@ -15,7 +15,12 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
-import com.example.gustavo.raiden.model.*;
+import com.example.gustavo.raiden.model.Bullet;
+import com.example.gustavo.raiden.model.Droid;
+import com.example.gustavo.raiden.model.Explosion;
+import com.example.gustavo.raiden.model.Particle;
+import com.example.gustavo.raiden.model.PowerUp;
+import com.example.gustavo.raiden.model.Ship;
 import com.example.gustavo.raiden.model.components.Speed;
 
 /**
@@ -56,19 +61,19 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
 
-		Point ScreenSize = new Point();
-		display.getSize(ScreenSize);
+        Point ScreenSize = new Point();
+        display.getSize(ScreenSize);
 
-		DisplayMetrics metrics = new DisplayMetrics();
-		display.getMetrics(metrics);
-		Log.d("ApplicationTagName", "Display width in px is " + metrics.widthPixels + " and height is " + metrics.heightPixels);
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+        Log.d("ApplicationTagName", "Display width in px is " + metrics.widthPixels + " and height is " + metrics.heightPixels);
         background = new Background(backgroundimg, metrics.widthPixels, metrics.heightPixels, FPS);
 
 
         //create Particle
         prtcl = new Particle(200, 500);
 
-		// create Ship and load bitmap
+        // create Ship and load bitmap
         ship = new Ship(
                 shipsprite
                 , metrics.widthPixels / 2, 5 * metrics.heightPixels / 6 // initial position
@@ -89,11 +94,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
             firingmode[i].setTicks(i * 30);
         }*/
 
-        firingmode = new Bullet[12];
+        firingmode = new Bullet[5];
         for (int i = 0; i < firingmode.length; i++) {
             firingmode[i] = new Bullet(bulletsprite, ship.getX(), 10 + ship.getY(), FPS);
-            firingmode[i].setTicks(i * 10);
-            //firingmode[i].setEnemy(enemies[1]);
+            firingmode[i].setTicks(i * 30);
         }
 
         //create a powerup
@@ -217,15 +221,11 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         }*/
 
         for (Bullet i : firingmode) {
-            if (i.isAlive()) {
                 i.draw(canvas);
-            }
         }
 
         for (Droid i : enemies) {
-            if (i.isAlive()) {
-                i.draw(canvas);
-            }
+            i.draw(canvas);
         }
 
         powerup.draw(canvas);
@@ -252,7 +252,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         background.update(System.currentTimeMillis());
 
         //wall collisions
-        for (Droid i : enemies){
+        for (Droid i : enemies) {
             // check collision with right wall if heading right
             if (i.getSpeed().getxDirection() == Speed.DIRECTION_RIGHT
                     && i.getX() + i.getBitmap().getWidth() / 2 >= getWidth()) {
@@ -274,7 +274,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                 i.getSpeed().toggleYDirection();
             }
 
-            i.update();
+            i.update(System.currentTimeMillis());
         }
 
         // Updates
@@ -307,12 +307,11 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                 i.setY(ship.getY());
             }
 
-            for (Droid j : enemies){
-                i.setEnemy(j);
-                i.checkCollision();
+            for (Droid j : enemies) {
+                i.checkCollision(j);
             }
         }
 
-		ship.update(System.currentTimeMillis());
-	}
+        ship.update(System.currentTimeMillis());
+    }
 }
