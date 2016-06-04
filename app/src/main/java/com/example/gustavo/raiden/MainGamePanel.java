@@ -43,6 +43,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
     private Bitmap backgroundimg = BitmapFactory.decodeResource(getResources(), R.drawable.backgroundds);
     private Bitmap bulletsprite = BitmapFactory.decodeResource(getResources(), R.drawable.shoot);
+    private Bitmap bulletsprite2 = BitmapFactory.decodeResource(getResources(), R.drawable.shoot2);
     private Bitmap shipsprite = BitmapFactory.decodeResource(getResources(), R.drawable.shipsprite);
     private Bitmap shipsprite2 = BitmapFactory.decodeResource(getResources(), R.drawable.shipsprite2);
     private Bitmap enemybulletsprite = BitmapFactory.decodeResource(getResources(), R.drawable.bullet);
@@ -97,7 +98,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
         tripleBullets = new TripleBullet[NR_BULLETS];
         for (int i = 0; i < tripleBullets.length; i++) {
-            tripleBullets[i] = new TripleBullet(bulletsprite, ship.getX(), 10 + ship.getY(), FPS);
+            tripleBullets[i] = new TripleBullet(bulletsprite2, ship.getX(), 10 + ship.getY(), FPS);
             tripleBullets[i].setTicks(i * 120 / NR_BULLETS);
         }
 
