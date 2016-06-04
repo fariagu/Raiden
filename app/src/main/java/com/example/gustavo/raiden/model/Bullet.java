@@ -58,32 +58,35 @@ public class Bullet extends Collidable {
      * Method which updates the bullet's position
      */
     public void update(long gameTime) {
-        if (gameTime > frameTicker + framePeriod) {
-            frameTicker = gameTime;
-            ticks++;
-            if (ticks > 120) {
-                ticks = 0;
-                alive = false;
-            } else {
-                this.y += speed.getYv() * speed.getyDirection();
+        if (this.alive){
+            if (gameTime > frameTicker + framePeriod) {
+                frameTicker = gameTime;
+                ticks++;
+                if (ticks > 120) {
+                    ticks = 0;
+                    alive = false;
+                } else {
+                    this.y += speed.getYv() * speed.getyDirection();
+                }
+
+
+                if (frameTicker % 10 == 0)
+                    currentFrame++; // increment the frame
+                if (currentFrame >= framenr) {
+                    currentFrame = 0;
+                }
+
+                // define the rectangle to cut out sprite
+                this.sourceRect.left = currentFrame * spriteWidth;
+                this.sourceRect.right = this.sourceRect.left + spriteWidth;
             }
-
-
-            if (frameTicker % 10 == 0)
-                currentFrame++; // increment the frame
-            if (currentFrame >= framenr) {
-                currentFrame = 0;
-            }
-
-            // define the rectangle to cut out sprite
-            this.sourceRect.left = currentFrame * spriteWidth;
-            this.sourceRect.right = this.sourceRect.left + spriteWidth;
         }
     }
 
     public void checkCollision(Droid enemy) {
         if (Collision.collisionDetected(bitmap, this.x, this.y, enemy.getBitmap(), enemy.getX(), enemy.getY())) {
             enemy.setAlive(false);
+            enemy.setComeBackCounter(-1);
         }
     }
 }

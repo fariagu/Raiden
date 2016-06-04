@@ -5,6 +5,8 @@ import android.graphics.Rect;
 
 import com.example.gustavo.raiden.model.components.Speed;
 
+import java.util.Random;
+
 public class AimedBullet extends Bullet {
     public AimedBullet(Bitmap bitmap, int FPS) {
         super(bitmap, 0, 0, FPS);
@@ -31,7 +33,8 @@ public class AimedBullet extends Bullet {
                 frameTicker = gameTime;
                 ticks++;
                 if(ticks > 150) {
-                    ticks = 0;
+                    Random r = new Random();
+                    ticks = r.nextInt(20);
                     this.alive = false;
                 }
 
@@ -40,5 +43,4 @@ public class AimedBullet extends Bullet {
             }
         }
     }
-
 }
