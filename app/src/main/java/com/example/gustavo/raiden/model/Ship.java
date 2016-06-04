@@ -14,6 +14,7 @@ public class Ship extends Collidable {
     private int frameNr;        // number of frames in animation
     private int currentFrame;   // the current frame
     private boolean touched;    // if droid is touched/picked up
+    private boolean poweredup;    // se apanhou o powerup
 
     private int oldX, oldY;     // the old X and Y coordinate of the object to calculate de frame
 
@@ -26,6 +27,7 @@ public class Ship extends Collidable {
         spriteWidth = bitmap.getWidth() / frameCount;
         spriteHeight = bitmap.getHeight();
         sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
+        poweredup = false;
     }
 
     public static String getTAG() {
@@ -89,6 +91,14 @@ public class Ship extends Collidable {
         this.oldY = oldY;
     }
 
+    public boolean isPoweredup() {
+        return poweredup;
+    }
+
+    public void setPoweredup(boolean poweredup) {
+        this.poweredup = poweredup;
+    }
+
     public void update(long gameTime) {
         if (gameTime > frameTicker + framePeriod) {
             frameTicker = gameTime;
@@ -150,6 +160,13 @@ public class Ship extends Collidable {
             setTouched(false);
         }
 
+    }
+
+    public void checkCollision(PowerUp c) {
+        if (Collision.collisionDetected(bitmap, this.x, this.y, c.getBitmap(), c.getX(), c.getY())) {
+            c.setAlive(false);
+            poweredup = true;
+        }
     }
 
     public void checkCollision(Droid d){

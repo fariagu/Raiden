@@ -25,6 +25,9 @@ public class Collidable {
         this.x = x;
         this.y = y;
 
+        spriteWidth = bitmap.getWidth();
+        spriteHeight = bitmap.getHeight();
+
         frameTicker = 0;
         framePeriod = 1000 / FPS;
 
@@ -139,6 +142,13 @@ public class Collidable {
         }
     }
 
+    //generic
+    public void checkCollision(Collidable c) {
+        if (Collision.collisionDetected(bitmap, this.x, this.y, c.getBitmap(), c.getX(), c.getY())) {
+            c.setAlive(false);
+        }
+    }
+
     public void checkCollision(Droid d) {
         if (Collision.shipCollisionDetected(bitmap, this.x, this.y, d.getBitmap(), d.getX(), d.getY())) {
             this.alive = false;
@@ -147,7 +157,7 @@ public class Collidable {
 
     public void checkCollision(AimedBullet b) {
         if (Collision.shipCollisionDetected(bitmap, this.x, this.y, b.getBitmap(), b.getX(), b.getY())) {
-            this.alive = false;
+            alive = false;
             b.setAlive(false);
         }
     }

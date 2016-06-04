@@ -37,11 +37,11 @@ public class Background {
                 yTop = bitmap.getHeight() - screenHeight + 250;
                 yBottom = screenHeight + 250;
             }
-        }
 
-        // define the rectangle to cut out sprite
-        this.sourceRect.top = yTop;
-        this.sourceRect.bottom = yBottom;
+            // define the rectangle to cut out sprite
+            this.sourceRect.top = yTop;
+            this.sourceRect.bottom = yBottom;
+        }
     }
 
     public void draw(Canvas canvas) {

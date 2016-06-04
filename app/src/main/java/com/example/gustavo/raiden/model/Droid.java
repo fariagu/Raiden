@@ -19,12 +19,10 @@ public class Droid extends Collidable {
 
 	public Droid(Bitmap bitmap, Bitmap bullet, int x, int y, Ship ship, int FPS) {
 		super(bitmap, x, y, FPS);
-		spriteWidth = bitmap.getWidth();
-		spriteHeight = bitmap.getHeight();
 		bulletBitmap = bullet;
 		speed = new Speed();
 		player = ship;
-		this.bullet = new AimedBullet(bulletBitmap, x + 16, y + 16, FPS);
+		this.bullet = new AimedBullet(bulletBitmap, x + 16, y + 16, 5, FPS);
 	}
 
 	public Bitmap getBulletBitmap() {
@@ -98,65 +96,53 @@ public class Droid extends Collidable {
 	/**
 	 * Method which updates the droid's internal state every tick
 	 */
-	public void update() {
-		if (comeBackCounter == 0) {
-			this.alive = true;
-		}
-		if (this.alive) {
-			//x += (speed.getXv() * speed.getxDirection());
-			//y += (speed.getYv() * speed.getyDirection());
-
-			if (!bullet.isAlive()) {
-				bullet.setAlive(true);
-				int dy, dx;
-				double hip;
-
-				dx = Math.abs(this.x - player.getX());
-				dy = Math.abs(this.x - player.getY());
-				hip = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-
-				Speed s = new Speed();
-				//s.setXv((float)Math.cos(angle) * 20);
-				//s.setYv((float)Math.sin(angle) * 20);
-				s.setXv((float) (dx / hip * 15));
-				s.setYv((float) (dy / hip * 15));
-				s.setyDirection(Speed.DIRECTION_DOWN);
-				if (this.x > player.getX()) {
-					s.setxDirection(Speed.DIRECTION_LEFT);
-				} else if (this.x != player.getX()) {
-					s.setxDirection(Speed.DIRECTION_RIGHT);
-				}
-
-				bullet.setY(this.y + 20);
-				bullet.setX(this.x);
-
-				bullet.setSpeed(s);
+	public void update(long gameTime) {
+		if (gameTime > frameTicker + framePeriod) {
+			frameTicker = gameTime;
+			if (comeBackCounter == 0) {
+				this.alive = true;
 			}
-			//bullet.update(System.currentTimeMillis());
-		} else if (comeBackCounter == -1) {
-			Random r = new Random();
-			setComeBackCounter(r.nextInt(150 - 75 + 1) + 75);
-		} else {
-			comeBackCounter--;
-		}
-		if (bullet.isAlive()) {
-			bullet.update(System.currentTimeMillis());
+			if (this.alive) {
+				//x += (speed.getXv() * speed.getxDirection());
+				//y += (speed.getYv() * speed.getyDirection());
+
+				if (!bullet.isAlive()) {
+					bullet.setAlive(true);
+					int dy, dx;
+					double hip;
+
+					dx = Math.abs(this.x - player.getX());
+					dy = Math.abs(this.x - player.getY());
+					hip = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+
+					Speed s = new Speed();
+					//s.setXv((float)Math.cos(angle) * 20);
+					//s.setYv((float)Math.sin(angle) * 20);
+					s.setXv((float) (dx / hip * 15));
+					s.setYv((float) (dy / hip * 15));
+					s.setyDirection(Speed.DIRECTION_DOWN);
+					if (this.x > player.getX()) {
+						s.setxDirection(Speed.DIRECTION_LEFT);
+					} else if (this.x != player.getX()) {
+						s.setxDirection(Speed.DIRECTION_RIGHT);
+					}
+
+					bullet.setY(this.y + 20);
+					bullet.setX(this.x);
+
+					bullet.setSpeed(s);
+				}
+				//bullet.update(System.currentTimeMillis());
+			} else if (comeBackCounter == -1) {
+				Random r = new Random();
+				setComeBackCounter(r.nextInt(150 - 75 + 1) + 75);
+			} else {
+				comeBackCounter--;
+			}
+			if (bullet.isAlive()) {
+				bullet.update(System.currentTimeMillis());
+			}
 		}
 	}
-
-	/**
-	 * Handles the {link MotionEvent.ACTION_DOWN} event. If the event happens on the
-	 * bitmap surface then the touched state is set to <code>true</code> otherwise to <code>false</code>
-	 * @param eventX - the event's X coordinate
-	 * @param eventY - the event's Y coordinate
-	 *//*
-	public void handleActionDown(int eventX, int eventY) {
-		if (eventX >= (x - bitmap.getWidth() / 2) && (eventX <= (x + bitmap.getWidth()/2))) {
-			if (eventY >= (y - bitmap.getHeight() / 2) && (eventY <= (y + bitmap.getHeight() / 2))) {
-				// droid touched
-				setTouched(true);
-			}
-		}
-	}*/
 
 }

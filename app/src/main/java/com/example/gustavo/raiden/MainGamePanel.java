@@ -17,7 +17,13 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
-import com.example.gustavo.raiden.model.*;
+import com.example.gustavo.raiden.model.Bullet;
+import com.example.gustavo.raiden.model.Droid;
+import com.example.gustavo.raiden.model.Explosion;
+import com.example.gustavo.raiden.model.Particle;
+import com.example.gustavo.raiden.model.PowerUp;
+import com.example.gustavo.raiden.model.Ship;
+import com.example.gustavo.raiden.model.TripleBullet;
 import com.example.gustavo.raiden.model.components.Speed;
 
 import java.util.Random;
@@ -61,19 +67,19 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
 
-		Point ScreenSize = new Point();
-		display.getSize(ScreenSize);
+        Point ScreenSize = new Point();
+        display.getSize(ScreenSize);
 
-		DisplayMetrics metrics = new DisplayMetrics();
-		display.getMetrics(metrics);
-		Log.d("ApplicationTagName", "Display width in px is " + metrics.widthPixels + " and height is " + metrics.heightPixels);
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+        Log.d("ApplicationTagName", "Display width in px is " + metrics.widthPixels + " and height is " + metrics.heightPixels);
         background = new Background(backgroundimg, metrics.heightPixels, metrics.widthPixels, FPS);
 
 
         //create Particle
         prtcl = new Particle(200, 500);
 
-		// create Ship and load bitmap
+        // create Ship and load bitmap
         ship = new Ship(
                 shipsprite
                 , metrics.widthPixels / 2, 5 * metrics.heightPixels / 6 // initial position
@@ -83,10 +89,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
         enemies = new Droid[10];
         Random r = new Random();
-        for (int i = 0; i < enemies.length; i++){
+        for (int i = 0; i < enemies.length; i++) {
             enemies[i] = new Droid(enemysprite, enemybulletsprite,
                     r.nextInt(metrics.widthPixels - enemysprite.getWidth()),
-                    r.nextInt((int)(metrics.heightPixels * 2 / 3) - enemysprite.getHeight()),
+                    r.nextInt((int) (metrics.heightPixels * 2 / 3) - enemysprite.getHeight()),
                     ship, FPS);
             enemies[i].getBullet().setTicks(-r.nextInt(50));
         }
@@ -95,20 +101,17 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         powerup = new PowerUp(powerupsprite, 100, 100, FPS);
 
 
-        tripleBullets = new TripleBullet[4];
+        tripleBullets = new TripleBullet[NR_BULLETS];
         for (int i = 0; i < tripleBullets.length; i++) {
             tripleBullets[i] = new TripleBullet(bulletsprite, ship.getX(), 10 + ship.getY(), FPS);
-            tripleBullets[i].setTicks(i * 30);
+            tripleBullets[i].setTicks(i * 120 / NR_BULLETS);
         }
 
-        /*
-        int NR_BULLETS = 6;
         firingmode = new Bullet[NR_BULLETS];
         for (int i = 0; i < firingmode.length; i++) {
             firingmode[i] = new Bullet(bulletsprite, ship.getX(), 10 + ship.getY(), FPS);
-            firingmode[i].setTicks(i * (120/NR_BULLETS));
-            //firingmode[i].setEnemy(enemies[1]);
-        }*/
+            firingmode[i].setTicks(i * (120 / NR_BULLETS));
+        }
 
         // create the game loop thread
         thread = new MainThread(getHolder(), this);
@@ -217,28 +220,24 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                 i.draw(canvas);
             }
 
-        for (TripleBullet i : tripleBullets) {
-            if (i.isAlive()) {
-                i.draw(canvas);
-            }
-        }
-/*
+        for (TripleBullet i : tripleBullets)
+            i.draw(canvas);
+
         for (Bullet i : firingmode) {
             if (i.isAlive()) {
                 i.draw(canvas);
             }
         }
-*/
+
         for (Droid i : enemies) {
             i.draw(canvas);
         }
 
         powerup.draw(canvas);
 
-        if (ship.isAlive()){
+        if (ship.isAlive()) {
             ship.draw(canvas);
-        }
-        else {
+        } else {
             ship.gameOver(canvas);
         }
 
@@ -266,7 +265,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         background.update(System.currentTimeMillis());
 
         //wall collisions
-        for (Droid i : enemies){
+        for (Droid i : enemies) {
             if (i.isAlive()) {
                 // check collision with right wall if heading right
                 if (i.getSpeed().getxDirection() == Speed.DIRECTION_RIGHT
@@ -289,17 +288,14 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                     i.getSpeed().toggleYDirection();
                 }
 
-                i.update();
-
                 ship.checkCollision(i);
-            }
-            else {
+            } else {
                 i.getBullet().update(System.currentTimeMillis());
             }
-            if (i.getBullet().isAlive()){
+            if (i.getBullet().isAlive()) {
                 ship.checkCollision(i.getBullet());
             }
-            i.update();
+            i.update(System.currentTimeMillis());
         }
 
         prtcl.update();
@@ -309,41 +305,42 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                 i.update();
             }
 
-        for (TripleBullet i : tripleBullets) {
-            if (i.isAlive()) {
-                i.update(System.currentTimeMillis());
-            } else {
-                i.setAlive(true);
-                i.setTicks(0);
-                i.setX(ship.getX());
-                i.setY(ship.getY());
+        ship.checkCollision(powerup);
+
+        if (ship.isPoweredup())
+            for (TripleBullet i : tripleBullets) {
+                if (i.isAlive()) {
+                    for (Droid j : enemies) {//this collision kills enemy droids
+                        i.checkCollision(j);
+                    }
+                    i.update(System.currentTimeMillis());
+                } else {
+                    i.setAlive(true);
+                    i.setTicks(0);
+                    i.setX(ship.getX());
+                    i.setY(ship.getY());
+                }
+            }
+        else
+            for (Bullet i : firingmode) {
+                if (i.isAlive()) {
+                    for (Droid j : enemies) {//this collision kills enemy droids
+                        i.checkCollision(j);
+                    }
+                    i.update(System.currentTimeMillis());
+                } else if (ship.isAlive()) {
+                    i.setAlive(true);
+                    i.setTicks(0);
+                    i.setX(ship.getX());
+                    i.setY(ship.getY());
+                }
+
+
             }
 
-            for (Droid j : enemies){//this collision kills enemy droids
-                i.checkCollision(j);
-            }
-        }
-/*
-        for (Bullet i : firingmode) {
-            if (i.isAlive()) {
-                i.update(System.currentTimeMillis());
-            }
-            else if (ship.isAlive()){
-                i.setAlive(true);
-                i.setTicks(0);
-                i.setX(ship.getX());
-                i.setY(ship.getY());
-            }
 
-
-            for (Droid j : enemies){//this collision kills enemy droids
-                i.checkCollision(j);
-            }
-        }
- */
-
-		ship.update(System.currentTimeMillis());
+        ship.update(System.currentTimeMillis());
 
         //this.running = ship.isAlive();
-	}
+    }
 }
