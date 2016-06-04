@@ -1,13 +1,10 @@
 package com.example.gustavo.raiden.model.components;
 
 import android.graphics.Bitmap;
-import android.graphics.Rect;
 import android.graphics.Color;
+import android.graphics.Rect;
 
-/**
- * Created by Gustavo Faria on 03/06/2016.
- */
-public class Colllision {
+public class Collision {
     public static boolean collisionDetected(Bitmap b1, int x1, int y1, Bitmap b2, int x2, int y2) {
 
         Rect bounds1 = new Rect(x1, y1, x1+b1.getWidth(), y1+b1.getHeight());
@@ -49,10 +46,10 @@ public class Colllision {
     }
 
     private static Rect getCollisionBounds(Rect rect1, Rect rect2) {
-        int left = (int) Math.max(rect1.left, rect2.left);
-        int top = (int) Math.max(rect1.top, rect2.top);
-        int right = (int) Math.min(rect1.right, rect2.right);
-        int bottom = (int) Math.min(rect1.bottom, rect2.bottom);
+        int left = Math.max(rect1.left, rect2.left);
+        int top = Math.max(rect1.top, rect2.top);
+        int right = Math.min(rect1.right, rect2.right);
+        int bottom = Math.min(rect1.bottom, rect2.bottom);
         return new Rect(left, top, right, bottom);
     }
 

@@ -5,11 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
 
-/**
- * Created by Diogo on 02/06/2016.
- */
 public class Background {
-    int yTop, yBottom, speed;
+    private int yTop, yBottom, speed;
     private Bitmap bitmap;      // the actual bitmap
     private Rect sourceRect;    // the rectangle to be drawn from the animation bitmap
     private Rect sourceRect2;   // the rectangle to be drawn from the animation bitmap
@@ -22,11 +19,11 @@ public class Background {
         this.frameTicker = 0;
         this.framePeriod = 1000 / fps;
         this.bitmap = bitmap;
-        this.screenHeight = 5 * screenHeight / 6;
+        this.screenHeight = screenHeight;
         this.screenWidth = screenWidth;
-        this.sourceRect = new Rect(0, 0, this.bitmap.getWidth(), this.screenHeight);
-        yTop = bitmap.getHeight() - screenHeight + 250;
-        yBottom = bitmap.getHeight() + 250;
+        this.sourceRect = new Rect(0, 0, this.screenWidth, this.screenHeight);
+        yTop = bitmap.getHeight() - screenHeight;
+        yBottom = bitmap.getHeight();
         speed = 1;
     }
 
@@ -50,7 +47,7 @@ public class Background {
     public void draw(Canvas canvas) {
         canvas.drawColor(Color.argb(255, 255, 250, 205)); // needed so there isnt remains of dead bitmaps
         // where to draw the sprite
-        Rect destRect = new Rect(0, 0, 2 * this.screenWidth / 3, 19 * this.screenHeight / 10);
+        Rect destRect = new Rect(0, 0, screenWidth, screenHeight);
         canvas.drawBitmap(bitmap, sourceRect, destRect, null);
     }
 }

@@ -6,44 +6,26 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
-import com.example.gustavo.raiden.model.components.Colllision;
+import com.example.gustavo.raiden.model.components.Collision;
 
-/**
- * Created by Diogo on 07/05/2016.
- */
-public class Ship {
+public class Ship extends Collidable {
     private static final String TAG = Ship.class.getSimpleName();
 
-    private Bitmap bitmap;      // the animation sequence
-    private Rect sourceRect;    // the rectangle to be drawn from the animation bitmap
     private int frameNr;        // number of frames in animation
     private int currentFrame;   // the current frame
-    private long frameTicker;   // the time of the last frame update
-    private int framePeriod;    // milliseconds between each frame (1000/fps)
     private boolean touched;    // if droid is touched/picked up
-    private boolean alive;
-    private int spriteWidth;    // the width of the sprite to calculate the cut out rectangle
-    private int spriteHeight;   // the height of the sprite
-    private int ibull;
 
-    private int x, y;           // the X and Y coordinate of the object (top left of the image)
     private int oldX, oldY;     // the old X and Y coordinate of the object to calculate de frame
 
-    public Ship(Bitmap bitmap, int x, int y, int width, int height, int fps, int frameCount) {
-        this.bitmap = bitmap;
-        this.x = x;
+    public Ship(Bitmap bitmap, int x, int y, int FPS, int frameCount) {
+        super(bitmap, x, y, FPS);
         this.oldX = x;
-        this.y = y;
         this.oldY = y;
         currentFrame = 5;
-        frameNr = frameCount;
+        frameNr = frameCount - 1;
         spriteWidth = bitmap.getWidth() / frameCount;
         spriteHeight = bitmap.getHeight();
         sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
-        framePeriod = 1000 / fps;
-        frameTicker = 0L;
-        ibull = 0;
-        this.alive = true;
     }
 
     public static String getTAG() {
@@ -51,37 +33,6 @@ public class Ship {
     }
 
     //Getters & Setters
-
-    /**
-     * Getter para obter o bitmap associado à Ship.
-     *
-     * @return Bitmap
-     */
-    public Bitmap getBitmap() {
-        return bitmap;
-    }
-
-    /**
-     * Setter para modificar o bitmap da Ship.
-     *
-     * @param bitmap
-     */
-    public void setBitmap(Bitmap bitmap) {
-        this.bitmap = bitmap;
-    }
-
-    /**
-     * Getter para obter o Rect associado à classe Ship.
-     *
-     * @return Rect
-     */
-    public Rect getSourceRect() {
-        return sourceRect;
-    }
-
-    public void setSourceRect(Rect sourceRect) {
-        this.sourceRect = sourceRect;
-    }
 
     /**
      * Getter para obter o número de Frames do sprite da Ship.
@@ -110,27 +61,6 @@ public class Ship {
     }
 
     /**
-     * Retorna o tempo do último update do Frame do sprite da Ship.
-     *
-     * @return long
-     */
-    public long getFrameTicker() {
-        return frameTicker;
-    }
-
-    public void setFrameTicker(long frameTicker) {
-        this.frameTicker = frameTicker;
-    }
-
-    public int getFramePeriod() {
-        return framePeriod;
-    }
-
-    public void setFramePeriod(int framePeriod) {
-        this.framePeriod = framePeriod;
-    }
-
-    /**
      * Retorna se a Ship está a ser tocada.
      *
      * @return boolean
@@ -141,56 +71,6 @@ public class Ship {
 
     public void setTouched(boolean touched) {
         this.touched = touched;
-    }
-
-    public boolean isAlive() {
-        return alive;
-    }
-
-    public void setAlive(boolean alive) {
-        this.alive = alive;
-    }
-
-    public int getSpriteWidth() {
-        return spriteWidth;
-    }
-
-    public void setSpriteWidth(int spriteWidth) {
-        this.spriteWidth = spriteWidth;
-    }
-
-    public int getSpriteHeight() {
-        return spriteHeight;
-    }
-
-    public void setSpriteHeight(int spriteHeight) {
-        this.spriteHeight = spriteHeight;
-    }
-
-    /**
-     * Retorna a coordenada X da Ship.
-     *
-     * @return int
-     */
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    /**
-     * Retorna a coordenada Y da Ship.
-     *
-     * @return int
-     */
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
     }
 
     public int getOldX() {
@@ -207,14 +87,6 @@ public class Ship {
 
     public void setOldY(int oldY) {
         this.oldY = oldY;
-    }
-
-    public int getIbull() {
-        return ibull;
-    }
-
-    public void setIbull(int ibull) {
-        this.ibull = ibull;
     }
 
     public void update(long gameTime) {
@@ -243,16 +115,11 @@ public class Ship {
                     currentFrame = frameNr / 2;
                 }
             }
-            if (currentFrame <= 0)
+            if (currentFrame < 0)
                 currentFrame = 0;
-            if (currentFrame >= frameNr)
-                currentFrame = frameNr - 1;
+            if (currentFrame > frameNr)
+                currentFrame = frameNr;
 
-
-            /*currentFrame++; // increment the frame
-            if (currentFrame >= frameNr) {
-                currentFrame = 0;
-            }*/
         }
 
         // define the rectangle to cut out sprite
@@ -261,17 +128,17 @@ public class Ship {
     }
 
     public void draw(Canvas canvas) {
-        if (this.alive){
+        if (alive) {
             // where to draw the sprite
-            Rect destRect = new Rect(getX() - bitmap.getWidth() / (frameNr + 1), getY() - bitmap.getHeight() / 2,
-                    getX() + bitmap.getWidth() / (frameNr + 1), getY() + bitmap.getHeight() / 2);
+            Rect destRect = new Rect(x - (spriteWidth / 2), y - (spriteHeight / 2),
+                    x + (spriteWidth / 2), y + (spriteHeight / 2));
             canvas.drawBitmap(bitmap, sourceRect, destRect, null);
         }
     }
 
     public void handleActionDown(int eventX, int eventY) {
-        if (eventX >= (x - 50 - bitmap.getWidth() / frameNr) && (eventX <= (x + 50 + bitmap.getWidth() / frameNr))) {
-            if (eventY >= (y - 50 - bitmap.getHeight() / 2) && (eventY <= (y + 50 + bitmap.getHeight() / 2))) {
+        if (eventX >= (x - 50 - spriteWidth) && (eventX <= (x + 50 + bitmap.getWidth() / frameNr))) {
+            if (eventY >= (y - 50 - spriteHeight / 2) && (eventY <= (y + 50 + spriteHeight / 2))) {
 
                 setTouched(true);// ship touched
                 oldX = eventX;
@@ -286,13 +153,13 @@ public class Ship {
     }
 
     public void checkCollision(Droid d){
-        if (Colllision.shipCollisionDetected(bitmap, this.x, this.y, d.getBitmap(), d.getX(), d.getY())){
+        if (Collision.shipCollisionDetected(bitmap, this.x, this.y, d.getBitmap(), d.getX(), d.getY())) {
             this.alive = false;
         }
     }
 
     public void checkCollision(AimedBullet b){
-        if (Colllision.shipCollisionDetected(bitmap, this.x, this.y, b.getBitmap(), b.getX(), b.getY())){
+        if (Collision.shipCollisionDetected(bitmap, this.x, this.y, b.getBitmap(), b.getX(), b.getY())) {
             this.alive = false;
             b.setAlive(false);
         }

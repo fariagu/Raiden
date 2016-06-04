@@ -6,93 +6,56 @@ import android.graphics.Rect;
 
 import com.example.gustavo.raiden.model.components.Speed;
 
-/**
- * Created by Diogo on 03/06/2016.
- */
 public class TripleBullet extends Bullet {
-    private Bitmap bitmap;      // the actual bitmap
-    private Rect sourceRect;    // the rectangle to be drawn from the animation bitmap
-    private int spriteWidth;    // the width of the sprite to calculate the cut out rectangle
-    private int spriteHeight;   // the height of the sprite
-    private int framenr;        // number of frames in animation
-    private int currentFrame;   // the current frame
-    private long frameTicker;   // the time of the last frame update
-    private int framePeriod;    // milliseconds between each frame (1000/fps)
-    private int x, y;           // the X and Y coordinates
     private int xL, yL;         // the X and Y coordinates
     private int xR, yR;         // the X and Y coordinates
-    private Speed speed;        // the speed with its directions
     private Speed speedL;       // the speed with its directions
     private Speed speedR;       // the speed with its directions
-    private boolean alive;      // whether it's still active or not
-    private int ticks;
 
     public TripleBullet(Bitmap bitmap, int x, int y, int FPS) {
-        this.frameTicker = 0;
-        this.framePeriod = 1000 / FPS;
-        this.bitmap = bitmap;
-        currentFrame = 0;
-        framenr = 2;
-        spriteWidth = bitmap.getWidth() / 2;
-        spriteHeight = bitmap.getHeight();
+        super(bitmap, x, y, FPS);
         sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
-        this.x = x;
-        this.y = y;
-        this.xL = x;
-        this.yL = y;
-        this.xR = x;
-        this.yR = y;
-        this.speed = new Speed(0, 15);
-        this.speedL = new Speed(3, 15);
-        this.speedR = new Speed(3, 15);
-        this.speed.setyDirection(Speed.DIRECTION_UP);
-        this.speedL.setyDirection(Speed.DIRECTION_UP);
-        this.speedR.setyDirection(Speed.DIRECTION_UP);
-        this.speedL.setxDirection(Speed.DIRECTION_LEFT);
-        this.speedR.setxDirection(Speed.DIRECTION_RIGHT);
-        this.alive = true;
-        this.ticks = 0;
+
+        xL = x;
+        yL = y;
+        speedL = new Speed(3, speed.getYv());
+        speedL.setyDirection(Speed.DIRECTION_UP);
+        speedL.setxDirection(Speed.DIRECTION_LEFT);
+
+        xR = x;
+        yR = y;
+        speedR = new Speed(3, speed.getYv());
+        speedR.setyDirection(Speed.DIRECTION_UP);
+        speedR.setxDirection(Speed.DIRECTION_RIGHT);
     }
 
     public void setX(int x) {
         this.x = x;
-        this.xL = x;
-        this.xR = x;
+        xL = x;
+        xR = x;
     }
 
     public void setY(int y) {
         this.y = y;
-        this.yL = y;
-        this.yR = y;
-    }
-
-    public boolean isAlive() {
-        return alive;
-    }
-
-    public void setAlive(boolean alive) {
-        this.alive = alive;
-    }
-
-    public void setTicks(int ticks) {
-        this.ticks = ticks;
+        yL = y;
+        yR = y;
     }
 
     public void draw(Canvas canvas) {
-        if (this.alive == true) {
-            Rect destRect = new Rect(this.x - (bitmap.getWidth() / 2), this.y - (bitmap.getHeight() / 2),
-                    this.x + (bitmap.getWidth() / 2), this.y + (bitmap.getHeight() / 2));
+        if (alive) {
+            Rect destRect = new Rect(x - (spriteWidth / 2), y - (spriteHeight / 2),
+                    x + (spriteWidth / 2), y + (spriteHeight / 2));
             canvas.drawBitmap(bitmap, sourceRect, destRect, null);
 
             if (this.xL > 0) {
-                Rect destRectL = new Rect(this.xL - (bitmap.getWidth() / 2), this.yL - (bitmap.getHeight() / 2),
-                        this.xL + (bitmap.getWidth() / 2), this.yL + (bitmap.getHeight() / 2));
+                Rect destRectL = new Rect(xL - (spriteWidth / 2), yL - (spriteHeight / 2),
+                        xL + (spriteWidth / 2), yL + (bitmap.getHeight() / 2));
                 canvas.drawBitmap(bitmap, sourceRect, destRectL, null);
             }
 
             if (this.xL < 1080) {
-                Rect destRectR = new Rect(this.xR - (bitmap.getWidth() / 2), this.yR - (bitmap.getHeight() / 2),
-                        this.xR + (bitmap.getWidth() / 2), this.yR + (bitmap.getHeight() / 2));
+                Rect destRectR = new Rect(xR - (spriteWidth / 2), yR - (spriteHeight / 2),
+                        xR + (spriteWidth / 2), yR + (spriteHeight / 2));
                 canvas.drawBitmap(bitmap, sourceRect, destRectR, null);
             }
 

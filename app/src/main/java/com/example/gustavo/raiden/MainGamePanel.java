@@ -17,7 +17,12 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
-import com.example.gustavo.raiden.model.*;
+import com.example.gustavo.raiden.model.Bullet;
+import com.example.gustavo.raiden.model.Droid;
+import com.example.gustavo.raiden.model.Explosion;
+import com.example.gustavo.raiden.model.Particle;
+import com.example.gustavo.raiden.model.PowerUp;
+import com.example.gustavo.raiden.model.Ship;
 import com.example.gustavo.raiden.model.components.Speed;
 
 /**
@@ -47,6 +52,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
     private int oldX, oldY;
     private int FPS = 20;
+    private int NR_BULLETS = 4;
 
     private String avgFps;
 
@@ -64,7 +70,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 		DisplayMetrics metrics = new DisplayMetrics();
 		display.getMetrics(metrics);
 		Log.d("ApplicationTagName", "Display width in px is " + metrics.widthPixels + " and height is " + metrics.heightPixels);
-        background = new Background(backgroundimg, metrics.widthPixels, metrics.heightPixels, FPS);
+        background = new Background(backgroundimg, metrics.heightPixels, metrics.widthPixels, FPS);
 
 
         //create Particle
@@ -74,7 +80,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         ship = new Ship(
                 shipsprite
                 , metrics.widthPixels / 2, 5 * metrics.heightPixels / 6 // initial position
-                , 35, 38    // width and height of sprite
                 , FPS, 11);    // FPS and number of frames in the animation
 
         // create Droid and load bitmap
@@ -93,7 +98,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
             firingmode[i] = new TripleBullet(bulletsprite, ship.getX(), 10 + ship.getY(), FPS);
             firingmode[i].setTicks(i * 30);
         }*/
-        int NR_BULLETS = 6;
         firingmode = new Bullet[NR_BULLETS];
         for (int i = 0; i < firingmode.length; i++) {
             firingmode[i] = new Bullet(bulletsprite, ship.getX(), 10 + ship.getY(), FPS);
@@ -284,7 +288,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                     i.getSpeed().toggleYDirection();
                 }
 
-                i.update();
+                i.update(System.currentTimeMillis());
 
                 ship.checkCollision(i);
                 ship.checkCollision(i.getBullet());
@@ -294,9 +298,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
             }
         }
 
-
-
-        // Updates
         prtcl.update();
 
         for (Explosion i : explosions)
