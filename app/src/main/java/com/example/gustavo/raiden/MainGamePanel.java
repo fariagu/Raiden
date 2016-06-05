@@ -89,6 +89,8 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
         // create Droid and load bitmap
 
+        Droid.setScreenHeight(metrics.heightPixels);
+        Droid.setScreenWidth(metrics.widthPixels);
         enemies = new Droid[NR_ENEMIES];
         deads = new DyingShip[NR_ENEMIES];
         Random r = new Random();

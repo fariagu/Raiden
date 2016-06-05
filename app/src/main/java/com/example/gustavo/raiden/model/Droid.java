@@ -15,7 +15,7 @@ public class Droid extends Collidable {
 	private AimedBullet bullet;
 	private Ship player;
 	private int comeBackCounter;
-	private int screenHeight, screenWidth;
+	static private int screenHeight, screenWidth;
 
 	public Droid(Bitmap bitmap, Bitmap bullet, int x, int y, Ship ship, int FPS) {
 		super(bitmap, x, y, FPS);
@@ -69,16 +69,16 @@ public class Droid extends Collidable {
 		return screenHeight;
 	}
 
-	public void setScreenHeight(int screenHeight) {
-		this.screenHeight = screenHeight;
+	static public void setScreenHeight(int h) {
+		screenHeight = h;
 	}
 
 	public int getScreenWidth() {
 		return screenWidth;
 	}
 
-	public void setScreenWidth(int screenWidth) {
-		this.screenWidth = screenWidth;
+	static public void setScreenWidth(int w) {
+		screenWidth = w;
 	}
 
 	public void draw(Canvas canvas) {
@@ -135,7 +135,9 @@ public class Droid extends Collidable {
 				//bullet.update(System.currentTimeMillis());
 			} else if (comeBackCounter == -1) {
 				Random r = new Random();
-				setComeBackCounter(r.nextInt(200 - 100 + 1) + 150);
+				setComeBackCounter(r.nextInt(200 - 100 + 1) + 200);
+				this.x = r.nextInt(screenWidth - bitmap.getWidth())+bitmap.getWidth();
+				this.y = r.nextInt((screenHeight * 2 / 3) - bitmap.getHeight())+bitmap.getHeight();
 			} else {
 				comeBackCounter--;
 			}
