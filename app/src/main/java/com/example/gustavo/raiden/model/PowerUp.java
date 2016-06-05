@@ -11,14 +11,7 @@ public class PowerUp extends Collidable {
     public PowerUp(Bitmap bitmap, int x, int y, int FPS) {
         super(bitmap, x, y, FPS);
         speed = new Speed();
-    }
-
-    public Speed getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(Speed speed) {
-        this.speed = speed;
+        alive = false;
     }
 
     /**

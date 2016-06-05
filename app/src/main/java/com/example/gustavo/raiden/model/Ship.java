@@ -42,15 +42,16 @@ public class Ship extends Collidable {
 
     /**
      * Getter para obter o número de Frames do sprite da Ship.
-     *
      * @return int
      */
     public int getFrameNr() {
         return frameNr;
     }
+
     public void setFrameNr(int frameNr) {
         this.frameNr = frameNr;
     }
+
     /**
      * Getter para obter o Frame actual no sprite da Ship.
      *
@@ -59,9 +60,11 @@ public class Ship extends Collidable {
     public int getCurrentFrame() {
         return currentFrame;
     }
+
     public void setCurrentFrame(int currentFrame) {
         this.currentFrame = currentFrame;
     }
+
     /**
      * Retorna se a Ship está a ser tocada.
      *
@@ -70,41 +73,52 @@ public class Ship extends Collidable {
     public boolean isTouched() {
         return touched;
     }
+
     public void setTouched(boolean touched) {
         this.touched = touched;
     }
+
     public int getOldX() {
         return oldX;
     }
+
     public void setOldX(int oldX) {
         this.oldX = oldX;
     }
+
     public int getOldY() {
         return oldY;
     }
+
     public void setOldY(int oldY) {
         this.oldY = oldY;
     }
+
     public boolean isPoweredup() {
         return poweredup;
     }
+
     public void setPoweredup(boolean poweredup) {
         this.poweredup = poweredup;
     }
+
     public Bitmap getStaticShip() {
         return staticShip;
     }
+
     public void setStaticShip(Bitmap staticShip) {
         this.staticShip = staticShip;
     }
+
     public int getScore() {
         return score;
     }
+
     public void setScore(int score) {
         this.score = score;
     }
 
-    public void incScore(){
+    public void incScore() {
         score++;
     }
 
@@ -147,7 +161,7 @@ public class Ship extends Collidable {
     }
 
     public void handleActionDown(int eventX, int eventY) {
-        if (alive){
+        if (alive) {
             if (eventX >= (x - 50 - spriteWidth) && (eventX <= (x + 50 + bitmap.getWidth() / frameNr))) {
                 if (eventY >= (y - 50 - spriteHeight / 2) && (eventY <= (y + 50 + spriteHeight / 2))) {
 
@@ -164,18 +178,19 @@ public class Ship extends Collidable {
     }
 
     public boolean checkCollision(PowerUp p) {
-        if (Collision.shipCollisionDetected(this, p)) {
-            p.setAlive(false);
-            poweredup = true;
-            return true;
-        }
+        if (alive && p.isAlive())
+            if (Collision.shipCollisionDetected(this, p)) {
+                p.setAlive(false);
+                poweredup = true;
+                return true;
+            }
         return false;
     }
 
-    public void checkCollision(Droid d){
+    public void checkCollision(Droid d) {
         //if (d.isAlive())
-            if (Collision.shipCollisionDetected(this, d))
-                alive = false;
+        if (Collision.shipCollisionDetected(this, d))
+            alive = false;
     }
 
     public void checkCollision(AimedBullet b) {

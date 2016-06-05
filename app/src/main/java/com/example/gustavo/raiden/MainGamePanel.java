@@ -72,7 +72,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         reset(context);
     }
 
-    public void reset(Context context){
+    public void reset(Context context) {
         // adding the callback (this) to the surface holder to intercept events
         getHolder().addCallback(this);
 
@@ -200,16 +200,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                 }
             } else {
                 ship.handleActionDown((int) event.getX(), (int) event.getY());
-
-                // check if in the lower part of the screen we exit
-                if (event.getY() > getHeight() - 50) {
-                    thread.setRunning(false);
-                    ((Activity) getContext()).finish();
-                } else {
-                    Log.d(TAG, "Coords: x=" + event.getX() + ",y=" + event.getY());
-                }
+                Log.d(TAG, "Coords: x=" + event.getX() + ",y=" + event.getY());
             }
-            if (!ship.isAlive()){
+
+            if (!ship.isAlive()) {
                 this.start = false;
                 this.reset(getContext());
             }
@@ -260,7 +254,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
             for (DyingShip ds : deads)
                 ds.draw(canvas);
 
-            if (ship.getScore() >= 10){
+            if (ship.getScore() == 10) {
+                powerup.setAlive(true);
+                powerup.draw(canvas);
+            } else if (ship.getScore() > 10) {
                 powerup.draw(canvas);
             }
 
@@ -395,8 +392,8 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
             if (ship.isAlive()) {
                 ship.update(System.currentTimeMillis());
+                powerup.update(System.currentTimeMillis());
             }
-
 
             //this.running = ship.isAlive();
         }
@@ -416,10 +413,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
     }
 
-    public void calcEnemies(){
-        int res = ship.getScore()/5 + 2;
+    public void calcEnemies() {
+        int res = ship.getScore() / 5 + 2;
 
-        if (res > 12){
+        if (res > 12) {
             res = 12;
         }
         CURRENT_ENEMIES = res;

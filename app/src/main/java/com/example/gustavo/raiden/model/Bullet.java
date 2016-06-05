@@ -58,21 +58,23 @@ public class Bullet extends Collidable {
         ticks = 0;
     }
 
-
-
     //Getters & Setters
     public Speed getSpeed() {
         return speed;
     }
+
     public void setSpeed(Speed speed) {
         this.speed = speed;
     }
+
     public void setTicks(int ticks) {
         this.ticks = ticks;
     }
+
     public Ship getShip() {
         return ship;
     }
+
     public void setShip(Ship ship) {
         this.ship = ship;
     }
@@ -111,7 +113,7 @@ public class Bullet extends Collidable {
             if (Collision.collisionDetected(bitmap, x, y, enemy.getBitmap(), enemy.getX(), enemy.getY())) {
                 enemy.setAlive(false);
                 enemy.setComeBackCounter(-1);
-                if (ship.isAlive()){
+                if (ship.isAlive()) {
                     ship.incScore();
                 }
 

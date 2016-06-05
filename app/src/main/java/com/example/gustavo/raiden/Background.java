@@ -27,8 +27,8 @@ public class Background extends Image {
             yBottom -= speed;
 
             if (yBottom < 0) { //> spriteHeight){
-                yTop = bitmap.getHeight() - screenHeight + 250;
-                yBottom = screenHeight + 250;
+                yTop = bitmap.getHeight() - screenHeight;
+                yBottom = screenHeight;
             }
 
             // define the rectangle to cut out sprite
@@ -38,9 +38,9 @@ public class Background extends Image {
     }
 
     public void draw(Canvas canvas) {
-        canvas.drawColor(Color.argb(255, 255, 250, 205)); // needed so there isnt remains of dead bitmaps
+        canvas.drawColor(Color.argb(240, 255, 254, 224)); // needed so there isnt remains of dead bitmaps
         // where to draw the sprite
-        Rect destRect = new Rect(0, 0, screenWidth, screenHeight);
+        Rect destRect = new Rect(0, 0, screenWidth, screenHeight + 200);
         canvas.drawBitmap(bitmap, sourceRect, destRect, null);
     }
 }
