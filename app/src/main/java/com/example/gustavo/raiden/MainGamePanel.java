@@ -68,6 +68,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
     public MainGamePanel(Context context) {
         super(context);
+        reset(context);
+    }
+
+    public void reset(Context context){
         // adding the callback (this) to the surface holder to intercept events
         getHolder().addCallback(this);
 
@@ -175,7 +179,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     public boolean onTouchEvent(MotionEvent event) {
         int oldX, oldY;
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-
             int currentExplosion = 0; // check if explosion is null or if it is still active
             Explosion explosion = explosions[currentExplosion];
             while (explosion != null && explosion.isAlive() && currentExplosion < explosions.length) {
@@ -204,6 +207,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                 } else {
                     Log.d(TAG, "Coords: x=" + event.getX() + ",y=" + event.getY());
                 }
+            }
+            if (!ship.isAlive()){
+                this.start = false;
+                this.reset(getContext());
             }
         }
         if (event.getAction() == MotionEvent.ACTION_MOVE) {
@@ -252,13 +259,15 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
             for (DyingShip ds : deads)
                 ds.draw(canvas);
 
-            powerup.draw(canvas);
+            if (ship.getScore() >= 10){
+                powerup.draw(canvas);
+            }
 
             if (ship.isAlive()) {
                 ship.draw(canvas);
                 ship.displayScore(canvas);
             } else {
-                ship.gameOver(canvas);
+                gameOver(canvas);
             }
         }
 
@@ -387,5 +396,19 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
             //this.running = ship.isAlive();
         }
+    }
+
+    public void gameOver(Canvas canvas) {
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.FILL);
+        canvas.drawPaint(paint);
+
+        paint.setColor(Color.WHITE);
+        paint.setTextSize(50);
+        String showScore = Integer.toString(ship.getScore());
+
+        canvas.drawText("GAME OVER", 10, 50, paint);
+        canvas.drawText("SCORE: " + showScore, 10, 100, paint);
+
     }
 }

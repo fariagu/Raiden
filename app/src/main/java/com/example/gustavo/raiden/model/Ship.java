@@ -147,19 +147,20 @@ public class Ship extends Collidable {
     }
 
     public void handleActionDown(int eventX, int eventY) {
-        if (eventX >= (x - 50 - spriteWidth) && (eventX <= (x + 50 + bitmap.getWidth() / frameNr))) {
-            if (eventY >= (y - 50 - spriteHeight / 2) && (eventY <= (y + 50 + spriteHeight / 2))) {
+        if (alive){
+            if (eventX >= (x - 50 - spriteWidth) && (eventX <= (x + 50 + bitmap.getWidth() / frameNr))) {
+                if (eventY >= (y - 50 - spriteHeight / 2) && (eventY <= (y + 50 + spriteHeight / 2))) {
 
-                setTouched(true);// ship touched
-                oldX = eventX;
-                oldY = eventY;
+                    setTouched(true);// ship touched
+                    oldX = eventX;
+                    oldY = eventY;
+                } else {
+                    setTouched(false);
+                }
             } else {
                 setTouched(false);
             }
-        } else {
-            setTouched(false);
         }
-
     }
 
     public boolean checkCollision(PowerUp p) {
@@ -183,20 +184,6 @@ public class Ship extends Collidable {
                 alive = false;
                 b.setAlive(false);
             }
-    }
-
-    public void gameOver(Canvas canvas) {
-        Paint paint = new Paint();
-        paint.setStyle(Paint.Style.FILL);
-        canvas.drawPaint(paint);
-
-        paint.setColor(Color.WHITE);
-        paint.setTextSize(50);
-        String showScore = Integer.toString(score);
-
-        canvas.drawText("GAME OVER", 10, 50, paint);
-        canvas.drawText("SCORE: " + showScore, 10, 100, paint);
-
     }
 
     public void displayScore(Canvas canvas) {
