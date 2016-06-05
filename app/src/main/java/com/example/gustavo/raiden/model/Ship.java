@@ -164,12 +164,12 @@ public class Ship extends Collidable {
 
     public void checkCollision(Droid d){
         if (d.isAlive())
-            if (Collision.collisionDetected(this, d))
+            if (Collision.shipCollisionDetected(this, d))
                 alive = false;
     }
 
     public void checkCollision(AimedBullet b){
-        if (Collision.collisionDetected(this, b)) {
+        if (Collision.shipCollisionDetected(this, b)) {
             alive = false;
             b.setAlive(false);
         }

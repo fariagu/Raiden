@@ -135,7 +135,7 @@ public class Droid extends Collidable {
 				//bullet.update(System.currentTimeMillis());
 			} else if (comeBackCounter == -1) {
 				Random r = new Random();
-				setComeBackCounter(r.nextInt(150 - 75 + 1) + 300);
+				setComeBackCounter(r.nextInt(200 - 100 + 1) + 150);
 			} else {
 				comeBackCounter--;
 			}
