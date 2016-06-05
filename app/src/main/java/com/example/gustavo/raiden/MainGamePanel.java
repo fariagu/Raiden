@@ -61,7 +61,8 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private boolean start = false;
     private int FPS = 20;
     private int NR_BULLETS = 4;
-    private int NR_ENEMIES = 10;
+    private int NR_ENEMIES = 12;
+    private int CURRENT_ENEMIES = 2;
     private DisplayMetrics metrics;
 
     private String avgFps;
@@ -253,8 +254,8 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                 for (Bullet b : firingmode)
                     b.draw(canvas);
 
-            for (Droid d : enemies)
-                d.draw(canvas);
+            for (int i = 0; i < CURRENT_ENEMIES; i++)
+                enemies[i].draw(canvas);
 
             for (DyingShip ds : deads)
                 ds.draw(canvas);
@@ -293,19 +294,22 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
      */
     public void update() {
         if (start) {
+            calcEnemies();
+
             background.update(System.currentTimeMillis());
 
-            for (Droid i : enemies) {
-                if (i.isAlive()) {
-                    ship.checkCollision(i);
+            for (int i = 0; i < CURRENT_ENEMIES; i++) {
+
+                if (enemies[i].isAlive()) {
+                    ship.checkCollision(enemies[i]);
                 }
-                if (i.getBullet().isAlive()) {
-                    ship.checkCollision(i.getBullet());
+                if (enemies[i].getBullet().isAlive()) {
+                    ship.checkCollision(enemies[i].getBullet());
                 }
             }
 
             //wall collisions
-            for (int i = 0; i < enemies.length; i++) {
+            for (int i = 0; i < CURRENT_ENEMIES; i++) {
 
                 //se morrer nao precisa de fazer o calculo das paredes
 
@@ -359,7 +363,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
             if (ship.isPoweredup()) {
                 for (TripleBullet tp : tripleBullets) {
                     if (tp.isAlive()) {
-                        for (int i = 0; i < enemies.length; i++) {//this collision kills enemy droids
+                        for (int i = 0; i < CURRENT_ENEMIES; i++) {//this collision kills enemy droids
                             if (tp.checkCollision(enemies[i]))
                                 deads[i].setAlive(true);
                         }
@@ -376,7 +380,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
             } else
                 for (Bullet b : firingmode) {
                     if (b.isAlive()) {
-                        for (int i = 0; i < enemies.length; i++) {//this collision kills enemy droids
+                        for (int i = 0; i < CURRENT_ENEMIES; i++) {//this collision kills enemy droids
                             if (b.checkCollision(enemies[i]))
                                 deads[i].setAlive(true);
                         }
@@ -410,5 +414,14 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         canvas.drawText("GAME OVER", 10, 50, paint);
         canvas.drawText("SCORE: " + showScore, 10, 100, paint);
 
+    }
+
+    public void calcEnemies(){
+        int res = ship.getScore()/5 + 2;
+
+        if (res > 12){
+            res = 12;
+        }
+        CURRENT_ENEMIES = res;
     }
 }

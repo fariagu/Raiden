@@ -40,7 +40,7 @@ public class AimedBullet extends Bullet {
             if (gameTime > frameTicker + framePeriod) {
                 frameTicker = gameTime;
                 ticks++;
-                if(ticks > 150) {
+                if(ticks > 50) {
                     Random r = new Random();
                     ticks = -r.nextInt(20);
                     alive = false;

@@ -118,8 +118,8 @@ public class Droid extends Collidable {
 					Speed s = new Speed();
 					//s.setXv((float)Math.cos(angle) * 20);
 					//s.setYv((float)Math.sin(angle) * 20);
-					s.setXv((float) (dx / hip * 15));
-					s.setYv((float) (dy / hip * 15));
+					s.setXv((float) (dx / hip * 20));
+					s.setYv((float) (dy / hip * 20));
 					s.setyDirection(Speed.DIRECTION_DOWN);
 					if (this.x > player.getX()) {
 						s.setxDirection(Speed.DIRECTION_LEFT);
@@ -135,7 +135,7 @@ public class Droid extends Collidable {
 				//bullet.update(System.currentTimeMillis());
 			} else if (comeBackCounter == -1) {
 				Random r = new Random();
-				setComeBackCounter(r.nextInt(200 - 100 + 1) + 200);
+				setComeBackCounter(r.nextInt(200 - 100 + 1) + 50);
 				this.x = r.nextInt(screenWidth - bitmap.getWidth())+bitmap.getWidth();
 				this.y = r.nextInt((screenHeight * 2 / 3) - bitmap.getHeight())+bitmap.getHeight();
 			} else {
