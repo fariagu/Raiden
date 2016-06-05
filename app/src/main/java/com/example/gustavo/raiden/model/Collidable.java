@@ -144,10 +144,10 @@ public class Collidable {
 
     //generic
     public void checkCollision(Collidable c) {
-        if (Collision.collisionDetected(this, c)) {
-            alive = false;
-            c.setAlive(false);
-        }
+        if (alive && c.isAlive())
+            if (Collision.collisionDetected(this, c)) {
+                alive = false;
+                c.setAlive(false);
+            }
     }
-
 }

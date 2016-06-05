@@ -47,9 +47,11 @@ public class Bullet extends Collidable {
     public Speed getSpeed() {
         return speed;
     }
+
     public void setSpeed(Speed speed) {
         this.speed = speed;
     }
+
     public void setTicks(int ticks) {
         this.ticks = ticks;
     }
@@ -58,7 +60,7 @@ public class Bullet extends Collidable {
      * Method which updates the bullet's position
      */
     public void update(long gameTime) {
-        if (this.alive){
+        if (this.alive) {
             if (gameTime > frameTicker + framePeriod) {
                 frameTicker = gameTime;
                 ticks++;
@@ -83,10 +85,13 @@ public class Bullet extends Collidable {
         }
     }
 
-    public void checkCollision(Droid enemy) {
-        if (Collision.collisionDetected(bitmap, x, y, enemy.getBitmap(), enemy.getX(), enemy.getY())) {
-            enemy.setAlive(false);
-            enemy.setComeBackCounter(-1);
-        }
+    public boolean checkCollision(Droid enemy) {
+        if (alive && enemy.isAlive())
+            if (Collision.collisionDetected(bitmap, x, y, enemy.getBitmap(), enemy.getX(), enemy.getY())) {
+                enemy.setAlive(false);
+                enemy.setComeBackCounter(-1);
+                return true;
+            }
+        return false;
     }
 }

@@ -130,19 +130,10 @@ public class Ship extends Collidable {
             if (currentFrame > frameNr)
                 currentFrame = frameNr;
 
-        }
+            // define the rectangle to cut out sprite
+            this.sourceRect.left = currentFrame * spriteWidth;
+            this.sourceRect.right = this.sourceRect.left + spriteWidth;
 
-        // define the rectangle to cut out sprite
-        this.sourceRect.left = currentFrame * spriteWidth;
-        this.sourceRect.right = this.sourceRect.left + spriteWidth;
-    }
-
-    public void draw(Canvas canvas) {
-        if (alive) {
-            // where to draw the sprite
-            Rect destRect = new Rect(x - (spriteWidth / 2), y - (spriteHeight / 2),
-                    x + (spriteWidth / 2), y + (spriteHeight / 2));
-            canvas.drawBitmap(bitmap, sourceRect, destRect, null);
         }
     }
 
