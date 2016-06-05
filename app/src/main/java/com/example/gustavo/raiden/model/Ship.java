@@ -164,14 +164,15 @@ public class Ship extends Collidable {
                 alive = false;
     }
 
-    public void checkCollision(AimedBullet b){
-        if (Collision.shipCollisionDetected(this, b)) {
-            alive = false;
-            b.setAlive(false);
-        }
+    public void checkCollision(AimedBullet b) {
+        if (alive && b.isAlive())
+            if (Collision.collisionDetected(this, b)) {
+                alive = false;
+                b.setAlive(false);
+            }
     }
 
-    public void gameOver(Canvas canvas){
+    public void gameOver(Canvas canvas) {
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         canvas.drawPaint(paint);
