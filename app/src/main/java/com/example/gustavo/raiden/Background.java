@@ -5,23 +5,16 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
 
-public class Background {
+public class Background extends Image {
     private int yTop, yBottom, speed;
-    private Bitmap bitmap;      // the actual bitmap
-    private Rect sourceRect;    // the rectangle to be drawn from the animation bitmap
     private Rect sourceRect2;   // the rectangle to be drawn from the animation bitmap
-    private int screenWidth;    // the width of the screen
-    private int screenHeight;   // the height of the screen
     private long frameTicker;   // the time of the last frame update
     private int framePeriod;    // milliseconds between each frame (1000/fps)
 
     public Background(Bitmap bitmap, int screenHeight, int screenWidth, int fps) {
+        super(bitmap, screenHeight, screenWidth);
         this.frameTicker = 0;
         this.framePeriod = 1000 / fps;
-        this.bitmap = bitmap;
-        this.screenHeight = screenHeight;
-        this.screenWidth = screenWidth;
-        this.sourceRect = new Rect(0, 0, this.screenWidth, this.screenHeight);
         yTop = bitmap.getHeight() - screenHeight;
         yBottom = bitmap.getHeight();
         speed = 1;
