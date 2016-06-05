@@ -16,6 +16,7 @@ public class Bullet extends Collidable {
     protected int currentFrame;   // the current frame
     protected Speed speed;        // the speed with its directions
     protected int ticks;
+    private Ship ship;
 
     public Bullet() {
         this.frameTicker = 0;
@@ -30,8 +31,22 @@ public class Bullet extends Collidable {
         this.ticks = 0;
     }
 
-    public Bullet(Bitmap bitmap, int x, int y, int FPS) {
-        super(bitmap, x, y, FPS);
+    public Bullet(Bitmap bitmap, Ship s, int FPS) {
+        super(bitmap, s.getX(), s.getY(), FPS);
+
+        ship = s;
+        currentFrame = 0;
+        framenr = 2;
+        spriteWidth = bitmap.getWidth() / 2;
+        spriteHeight = bitmap.getHeight();
+        sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
+        speed = new Speed(0, 15);
+        speed.setyDirection(Speed.DIRECTION_UP);
+        ticks = 0;
+    }
+
+    public Bullet(Bitmap bitmap, int FPS) {
+        super(bitmap, 0, 0, FPS);
 
         currentFrame = 0;
         framenr = 2;
@@ -43,17 +58,23 @@ public class Bullet extends Collidable {
         ticks = 0;
     }
 
+
+
     //Getters & Setters
     public Speed getSpeed() {
         return speed;
     }
-
     public void setSpeed(Speed speed) {
         this.speed = speed;
     }
-
     public void setTicks(int ticks) {
         this.ticks = ticks;
+    }
+    public Ship getShip() {
+        return ship;
+    }
+    public void setShip(Ship ship) {
+        this.ship = ship;
     }
 
     /**
@@ -90,6 +111,10 @@ public class Bullet extends Collidable {
             if (Collision.collisionDetected(bitmap, x, y, enemy.getBitmap(), enemy.getX(), enemy.getY())) {
                 enemy.setAlive(false);
                 enemy.setComeBackCounter(-1);
+                if (ship.isAlive()){
+                    ship.incScore();
+                }
+
                 return true;
             }
         return false;

@@ -12,10 +12,10 @@ public class TripleBullet extends Bullet {
     private int xR, yR;         // the X and Y coordinates
     private Speed speedL;       // the speed with its directions
     private Speed speedR;       // the speed with its directions
-    //private Ship ship;
+    private Ship ship;
 
-    public TripleBullet(Bitmap bitmap, int x, int y, int FPS) {
-        super(bitmap, x, y, FPS);
+    public TripleBullet(Bitmap bitmap, Ship s, int FPS) {
+        super(bitmap, s, FPS);
         sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
 
         xL = x;
@@ -36,11 +36,16 @@ public class TripleBullet extends Bullet {
         xL = x;
         xR = x;
     }
-
     public void setY(int y) {
         this.y = y;
         yL = y;
         yR = y;
+    }
+    public Ship getShip() {
+        return ship;
+    }
+    public void setShip(Ship ship) {
+        this.ship = ship;
     }
 
     public void draw(Canvas canvas) {
@@ -102,16 +107,28 @@ public class TripleBullet extends Bullet {
             if (Collision.collisionDetected(bitmap, this.x, this.y, enemy.getBitmap(), enemy.getX(), enemy.getY())) {
                 enemy.setAlive(false);
                 enemy.setComeBackCounter(-1);
+                if (ship.isAlive()){
+                    ship.incScore();
+                }
+
                 return true;
             }
             if (Collision.collisionDetected(bitmap, this.xR, this.yR, enemy.getBitmap(), enemy.getX(), enemy.getY())) {
                 enemy.setAlive(false);
                 enemy.setComeBackCounter(-1);
+                if (ship.isAlive()){
+                    ship.incScore();
+                }
+
                 return true;
             }
             if (Collision.collisionDetected(bitmap, this.xL, this.yL, enemy.getBitmap(), enemy.getX(), enemy.getY())) {
                 enemy.setAlive(false);
                 enemy.setComeBackCounter(-1);
+                if (ship.isAlive()){
+                    ship.incScore();
+                }
+
                 return true;
             }
         }

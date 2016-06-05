@@ -9,16 +9,15 @@ import java.util.Random;
 
 public class AimedBullet extends Bullet {
     public AimedBullet(Bitmap bitmap, int FPS) {
-        super(bitmap, 0, 0, FPS);
+        super(bitmap, FPS);
         spriteWidth = bitmap.getWidth();
         spriteHeight = bitmap.getHeight();
         sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
         this.speed = new Speed();
-        Random r = new Random();
     }
 
     public AimedBullet(Bitmap bitmap, int x, int y, int FPS) {
-        super(bitmap, x, y, FPS);
+        super(bitmap, FPS);
         spriteWidth = bitmap.getWidth();
         spriteHeight = bitmap.getHeight();
         sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
@@ -26,7 +25,7 @@ public class AimedBullet extends Bullet {
     }
 
     public AimedBullet(Bitmap bitmap, int x, int y, int speed, int FPS) {
-        super(bitmap, x, y, FPS);
+        super(bitmap, FPS);
         spriteWidth = bitmap.getWidth();
         spriteHeight = bitmap.getHeight();
         sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);

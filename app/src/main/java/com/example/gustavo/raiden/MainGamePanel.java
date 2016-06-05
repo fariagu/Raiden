@@ -111,13 +111,14 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
         tripleBullets = new TripleBullet[NR_BULLETS];
         for (int i = 0; i < tripleBullets.length; i++) {
-            tripleBullets[i] = new TripleBullet(bulletsprite2, ship.getX(), 10 + ship.getY(), FPS);
+            tripleBullets[i] = new TripleBullet(bulletsprite2, ship, FPS);
+            tripleBullets[i].setShip(ship);
             tripleBullets[i].setTicks(i * 120 / NR_BULLETS);
         }
 
         firingmode = new Bullet[NR_BULLETS];
         for (int i = 0; i < firingmode.length; i++) {
-            firingmode[i] = new Bullet(bulletsprite, ship.getX(), 10 + ship.getY(), FPS);
+            firingmode[i] = new Bullet(bulletsprite, ship, FPS);
             firingmode[i].setTicks(i * (120 / NR_BULLETS));
         }
 
@@ -240,6 +241,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
         if (ship.isAlive()) {
             ship.draw(canvas);
+            ship.displayScore(canvas);
         } else {
             ship.gameOver(canvas);
         }

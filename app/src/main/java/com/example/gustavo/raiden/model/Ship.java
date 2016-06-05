@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 
 import com.example.gustavo.raiden.model.components.Collision;
 
@@ -16,6 +17,7 @@ public class Ship extends Collidable {
     private boolean touched;    // if droid is touched/picked up
     private boolean poweredup;    // se apanhou o powerup
     private Bitmap staticShip;
+    private int score;
 
     private int oldX, oldY;     // the old X and Y coordinate of the object to calculate de frame
 
@@ -29,6 +31,7 @@ public class Ship extends Collidable {
         spriteHeight = bitmap.getHeight();
         sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
         poweredup = false;
+        score = 0;
     }
 
     public static String getTAG() {
@@ -93,6 +96,16 @@ public class Ship extends Collidable {
     }
     public void setStaticShip(Bitmap staticShip) {
         this.staticShip = staticShip;
+    }
+    public int getScore() {
+        return score;
+    }
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public void incScore(){
+        score++;
     }
 
     public void update(long gameTime) {
@@ -179,6 +192,21 @@ public class Ship extends Collidable {
 
         paint.setColor(Color.WHITE);
         paint.setTextSize(50);
+        String showScore = Integer.toString(score);
+
         canvas.drawText("GAME OVER", 10, 50, paint);
+        canvas.drawText("SCORE: " + showScore, 10, 100, paint);
+
+    }
+
+    public void displayScore(Canvas canvas) {
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.FILL);
+        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        paint.setColor(Color.BLACK);
+        paint.setTextSize(40);
+
+        String showScore = Integer.toString(score);
+        canvas.drawText(showScore, 10, 50, paint);
     }
 }
