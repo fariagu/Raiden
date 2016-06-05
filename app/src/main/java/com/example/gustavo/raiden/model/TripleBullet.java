@@ -20,13 +20,13 @@ public class TripleBullet extends Bullet {
 
         xL = x;
         yL = y;
-        speedL = new Speed(3, speed.getYv());
+        speedL = new Speed(2, speed.getYv());
         speedL.setyDirection(Speed.DIRECTION_UP);
         speedL.setxDirection(Speed.DIRECTION_LEFT);
 
         xR = x;
         yR = y;
-        speedR = new Speed(3, speed.getYv());
+        speedR = new Speed(2, speed.getYv());
         speedR.setyDirection(Speed.DIRECTION_UP);
         speedR.setxDirection(Speed.DIRECTION_RIGHT);
     }

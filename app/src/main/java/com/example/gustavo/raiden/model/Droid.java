@@ -13,6 +13,7 @@ public class Droid extends Collidable {
 	static private int screenHeight, screenWidth;
 	private Bitmap bulletBitmap;
 	private Speed speed;    // the speed with its directions
+	private int absspeed;
 	private AimedBullet bullet;
 	private Ship player;
 	private int comeBackCounter;
@@ -21,6 +22,7 @@ public class Droid extends Collidable {
 		super(bitmap, x, y, FPS);
 		bulletBitmap = bullet;
 		speed = new Speed();
+		absspeed = 20;
 		player = ship;
 		this.bullet = new AimedBullet(bulletBitmap, x + 16, y + 16, 5, FPS);
 	}
@@ -39,6 +41,14 @@ public class Droid extends Collidable {
 
 	public void setSpeed(Speed speed) {
 		this.speed = speed;
+	}
+
+	public int getAbsspeed() {
+		return absspeed;
+	}
+
+	public void setAbsspeed(int absspeed) {
+		this.absspeed = absspeed;
 	}
 
 	public AimedBullet getBullet() {
@@ -100,9 +110,9 @@ public class Droid extends Collidable {
 		if (gameTime > frameTicker + framePeriod) {
 			frameTicker = gameTime;
 			if (comeBackCounter == 0) {
-				this.alive = true;
+				alive = true;
 			}
-			if (this.alive) {
+			if (alive) {
 				x += (speed.getXv() * speed.getxDirection());
 				y += (speed.getYv() * speed.getyDirection());
 
@@ -111,19 +121,17 @@ public class Droid extends Collidable {
 					int dy, dx;
 					double hip;
 
-					dx = Math.abs(this.x - player.getX()+18);
-					dy = Math.abs(this.x - player.getY()+19);
+					dx = Math.abs(x - player.getX() + 18);
+					dy = Math.abs(y - player.getY() + 19);
 					hip = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
 					Speed s = new Speed();
-					//s.setXv((float)Math.cos(angle) * 20);
-					//s.setYv((float)Math.sin(angle) * 20);
-					s.setXv((float) (dx / hip * 20));
-					s.setYv((float) (dy / hip * 20));
+					s.setXv((float) (dx / hip * absspeed));
+					s.setYv((float) (dy / hip * absspeed));
 					s.setyDirection(Speed.DIRECTION_DOWN);
-					if (this.x > player.getX()) {
+					if (x > player.getX()) {
 						s.setxDirection(Speed.DIRECTION_LEFT);
-					} else if (this.x != player.getX()) {
+					} else {
 						s.setxDirection(Speed.DIRECTION_RIGHT);
 					}
 
@@ -134,10 +142,25 @@ public class Droid extends Collidable {
 				}
 				//bullet.update(System.currentTimeMillis());
 			} else if (comeBackCounter == -1) {
+				//making a new ship
 				Random r = new Random();
 				setComeBackCounter(r.nextInt(200 - 100 + 1) + 50);
-				this.x = r.nextInt(screenWidth - bitmap.getWidth())+bitmap.getWidth();
-				this.y = r.nextInt((screenHeight * 2 / 3) - bitmap.getHeight())+bitmap.getHeight();
+				speed.setXv(speed.getXv() + (absspeed / 15));
+				speed.setYv(speed.getYv() + (absspeed / 15));
+				if (r.nextInt(1) == 0)
+					speed.setxDirection(Speed.DIRECTION_LEFT);
+				else
+					speed.setxDirection(Speed.DIRECTION_RIGHT);
+				if (r.nextInt(1) == 0)
+					speed.setyDirection(Speed.DIRECTION_UP);
+				else
+					speed.setyDirection(Speed.DIRECTION_DOWN);
+				do {
+					x = r.nextInt(screenWidth - bitmap.getWidth()) + bitmap.getWidth() / 2;
+				} while ((x >= player.getX() - 200) && (x <= player.getX() + 200));
+				do {
+					y = r.nextInt((screenHeight * 2 / 3) - bitmap.getHeight()) + bitmap.getHeight() / 2;
+				} while ((y >= player.getY() - 200) && (y <= player.getY() + 200));
 			} else {
 				comeBackCounter--;
 			}

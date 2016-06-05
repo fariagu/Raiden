@@ -24,6 +24,7 @@ import com.example.gustavo.raiden.model.Explosion;
 import com.example.gustavo.raiden.model.PowerUp;
 import com.example.gustavo.raiden.model.Ship;
 import com.example.gustavo.raiden.model.TripleBullet;
+import com.example.gustavo.raiden.model.components.Speed;
 
 import java.util.Random;
 
@@ -33,7 +34,6 @@ import java.util.Random;
 public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private static final String TAG = MainGamePanel.class.getSimpleName();
-    private final Bitmap welcomeimg = BitmapFactory.decodeResource(getResources(), R.drawable.startimg);
     private final Bitmap backgroundimg = BitmapFactory.decodeResource(getResources(), R.drawable.backgroundds);
     private final Bitmap bulletsprite = BitmapFactory.decodeResource(getResources(), R.drawable.shoot);
     private final Bitmap bulletsprite2 = BitmapFactory.decodeResource(getResources(), R.drawable.shoot2);
@@ -47,6 +47,9 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private final int FPS = 20;
     private final int NR_BULLETS = 4;
     private final int NR_ENEMIES = 12;
+    private int ABS_SPEED = 20;
+    private int tick;
+
     private MainThread thread;
     private Image welcome;
     private Droid[] enemies;
@@ -81,7 +84,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         metrics = new DisplayMetrics();
         display.getMetrics(metrics);
         Log.d("ApplicationTagName", "Display width in px is " + metrics.widthPixels + " and height is " + metrics.heightPixels);
-        welcome = new Image(welcomeimg, metrics.heightPixels, metrics.widthPixels);
         background = new Background(backgroundimg, metrics.heightPixels, metrics.widthPixels, FPS);
 
         // create Ship and load bitmap
@@ -111,7 +113,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         }
 
         //create a powerup
-        powerup = new PowerUp(powerupsprite, 100, 100, FPS);
+        powerup = new PowerUp(powerupsprite, 100, 150, FPS);
 
 
         tripleBullets = new TripleBullet[NR_BULLETS];
@@ -227,16 +229,17 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
     public void render(Canvas canvas) {
         if (!start) {
-            canvas.drawColor(Color.WHITE); // needed so there isnt remains of dead bitmaps
-            welcome.draw(canvas);
+            startgame(canvas);
         } else {
             background.draw(canvas);// needed so there isnt remains of dead bitmaps
 
+            //draw explosion on touch
             for (Explosion e : explosions)
                 if (e != null && e.isAlive()) {
                     e.draw(canvas);
                 }
 
+            //draw corret ship's bullets
             if (ship.isPoweredup())
                 for (TripleBullet tp : tripleBullets)
                     tp.draw(canvas);
@@ -244,23 +247,29 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                 for (Bullet b : firingmode)
                     b.draw(canvas);
 
+            //draw enemies
             for (int i = 0; i < CURRENT_ENEMIES; i++)
                 enemies[i].draw(canvas);
 
+            //draw dead ships
             for (DyingShip ds : deads)
                 ds.draw(canvas);
 
-            if (ship.getScore() == 10) {
-                powerup.setAlive(true);
-                powerup.draw(canvas);
-            } else if (ship.getScore() > 10) {
-                powerup.draw(canvas);
-            }
+            //draw powerup
+            if (!ship.isPoweredup())
+                if (ship.getScore() == 16) {
+                    powerup.setAlive(true);
+                    powerup.draw(canvas);
+                } else {
+                    powerup.draw(canvas);
+                }
 
+            //draw ship
             if (ship.isAlive()) {
                 ship.draw(canvas);
                 ship.displayScore(canvas);
             } else {
+                //draw game over
                 gameOver(canvas);
             }
         }
@@ -311,30 +320,31 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                     deads[i].setAlive(false);
                     deads[i].setX(enemies[i].getX());
                     deads[i].setY(enemies[i].getY());
-/*
-                // check collision with right wall if heading right
-                if (enemies[i].getSpeed().getxDirection() == Speed.DIRECTION_RIGHT
-                        && enemies[i].getX() + enemies[i].getBitmap().getWidth() / 2 >= getWidth()) {
-                    enemies[i].getSpeed().toggleXDirection();
-                }
-                // check collision with left wall if heading left
-                if (enemies[i].getSpeed().getxDirection() == Speed.DIRECTION_LEFT
-                        && enemies[i].getX() - enemies[i].getBitmap().getWidth() / 2 <= 0) {
-                    enemies[i].getSpeed().toggleXDirection();
-                }
-                // check collision with bottom wall if heading down
-                if (enemies[i].getSpeed().getyDirection() == Speed.DIRECTION_DOWN
-                        && enemies[i].getY() + enemies[i].getBitmap().getHeight() / 2 >= getHeight()) {
-                    enemies[i].getSpeed().toggleYDirection();
-                }
-                // check collision with top wall if heading up
-                if (enemies[i].getSpeed().getyDirection() == Speed.DIRECTION_UP
-                        && enemies[i].getY() - enemies[i].getBitmap().getHeight() / 2 <= 0) {
-                    enemies[i].getSpeed().toggleYDirection();
-                }*/
+
+                    // check collision with right wall if heading right
+                    if (enemies[i].getSpeed().getxDirection() == Speed.DIRECTION_RIGHT
+                            && enemies[i].getX() + enemies[i].getBitmap().getWidth() / 2 >= getWidth()) {
+                        enemies[i].getSpeed().toggleXDirection();
+                    }
+                    // check collision with left wall if heading left
+                    if (enemies[i].getSpeed().getxDirection() == Speed.DIRECTION_LEFT
+                            && enemies[i].getX() - enemies[i].getBitmap().getWidth() / 2 <= 0) {
+                        enemies[i].getSpeed().toggleXDirection();
+                    }
+                    // check collision with bottom wall if heading down
+                    if (enemies[i].getSpeed().getyDirection() == Speed.DIRECTION_DOWN
+                            && enemies[i].getY() + enemies[i].getBitmap().getHeight() / 2 >= getHeight()) {
+                        enemies[i].getSpeed().toggleYDirection();
+                    }
+                    // check collision with top wall if heading up
+                    if (enemies[i].getSpeed().getyDirection() == Speed.DIRECTION_UP
+                            && enemies[i].getY() - enemies[i].getBitmap().getHeight() / 2 <= 0) {
+                        enemies[i].getSpeed().toggleYDirection();
+                    }
                 } else {
                     deads[i].update(System.currentTimeMillis());
                 }
+                enemies[i].setAbsspeed(ABS_SPEED);
                 enemies[i].update(System.currentTimeMillis());
             }
 
@@ -395,26 +405,57 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         }
     }
 
+    private void startgame(Canvas canvas) {
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.FILL);
+        paint.setTextAlign(Paint.Align.CENTER);
+        paint.setColor(Color.WHITE);
+        canvas.drawPaint(paint);
+
+        paint.setColor(Color.RED);
+        paint.setTextSize(100);
+        canvas.drawText("START", canvas.getWidth() / 2, canvas.getHeight() * 3 / 8, paint);
+        canvas.drawText("EXIT", canvas.getWidth() / 2, canvas.getHeight() * 3 / 4, paint);
+        paint.setTextSize(200);
+        paint.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+        canvas.drawText("RAIDEN", canvas.getWidth() / 2, canvas.getHeight() / 5, paint);
+    }
+
     private void gameOver(Canvas canvas) {
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
+        paint.setTextAlign(Paint.Align.CENTER);
         canvas.drawPaint(paint);
 
         paint.setColor(Color.WHITE);
+        paint.setTextSize(150);
+        canvas.drawText("GAME OVER", canvas.getWidth() / 2, canvas.getHeight() / 2, paint);
         paint.setTextSize(50);
         String showScore = Integer.toString(ship.getScore());
-
-        canvas.drawText("GAME OVER", 10, 50, paint);
-        canvas.drawText("SCORE: " + showScore, 10, 100, paint);
-
+        canvas.drawText("SCORE: " + showScore, canvas.getWidth() / 2, canvas.getHeight() * 2 / 3, paint);
     }
 
     private void calcEnemies() {
-        int res = ship.getScore() / 5 + 2;
+        int numenem = ship.getScore() / 5 + 3;
 
-        if (res > 12) {
-            res = 12;
+        if (ABS_SPEED < 35) {
+            if (numenem > 12) {
+                tick++;
+                numenem = 12;
+            }
+
+            if (tick > 3) {
+                tick = 0;
+                ABS_SPEED++;
+            }
+        } else {
+            tick++;
+            if (tick > 6) {
+                tick = 0;
+                numenem++;
+            }
         }
-        CURRENT_ENEMIES = res;
+
+        CURRENT_ENEMIES = numenem;
     }
 }

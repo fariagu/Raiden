@@ -21,12 +21,13 @@ public class PowerUp extends Collidable {
      * Method which updates the powerup's internal state every tick
      */
     public void update(long gameTime) {
-        if (gameTime > frameTicker + framePeriod) {
-            frameTicker = gameTime;
-            if (alive) {
-                x += speed.getXv() * speed.getxDirection();
-                y += speed.getYv() * speed.getyDirection();
+        if (alive)
+            if (gameTime > frameTicker + framePeriod) {
+                frameTicker = gameTime;
+                if (alive) {
+                    x += speed.getXv() * speed.getxDirection();
+                    y += speed.getYv() * speed.getyDirection();
+                }
             }
-        }
     }
 }
