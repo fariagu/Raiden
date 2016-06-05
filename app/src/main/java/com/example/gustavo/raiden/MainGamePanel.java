@@ -272,7 +272,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                 deads[i].setAlive(false);
                 deads[i].setX(enemies[i].getX());
                 deads[i].setY(enemies[i].getY());
-
+/*
                 // check collision with right wall if heading right
                 if (enemies[i].getSpeed().getxDirection() == Speed.DIRECTION_RIGHT
                         && enemies[i].getX() + enemies[i].getBitmap().getWidth() / 2 >= getWidth()) {
@@ -292,7 +292,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                 if (enemies[i].getSpeed().getyDirection() == Speed.DIRECTION_UP
                         && enemies[i].getY() - enemies[i].getBitmap().getHeight() / 2 <= 0) {
                     enemies[i].getSpeed().toggleYDirection();
-                }
+                }*/
             } else {
                 enemies[i].getBullet().update(System.currentTimeMillis());
                 deads[i].update(System.currentTimeMillis());
