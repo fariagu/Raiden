@@ -12,7 +12,7 @@ import com.example.gustavo.raiden.model.components.Speed;
  * Wait till it gets a weapon!
  */
 public class Bullet extends Collidable {
-    protected int framenr;        // number of frames in animation
+    protected final int framenr;        // number of frames in animation
     protected int currentFrame;   // the current frame
     protected Speed speed;        // the speed with its directions
     protected int ticks;

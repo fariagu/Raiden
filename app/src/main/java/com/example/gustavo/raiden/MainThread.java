@@ -1,11 +1,10 @@
 package com.example.gustavo.raiden;
 
-import java.io.IOException;
-import java.text.DecimalFormat;
-
 import android.graphics.Canvas;
 import android.util.Log;
 import android.view.SurfaceHolder;
+
+import java.text.DecimalFormat;
 
 /**
  * The Main thread which contains the game loop.
@@ -18,34 +17,32 @@ public class MainThread extends Thread {
 	private final static int    MAX_FPS = 60; // desired fps
 	private final static int    MAX_FRAME_SKIPS = 5; // maximum number of frames to be skipped
 	private final static int    FRAME_PERIOD = 1000 / MAX_FPS; // the frame period
-
-	// Stuff for stats
-	private DecimalFormat df = new DecimalFormat("0.##");  // 2 dp
 	// we'll be reading the stats every second
 	private final static int    STAT_INTERVAL = 1000; //ms
 	// the average will be calculated by storing
 	private final static int    FPS_HISTORY_NR = 10; // the last n FPSs
+	// Stuff for stats
+	private final DecimalFormat df = new DecimalFormat("0.##");  // 2 dp
+	private final SurfaceHolder surfaceHolder; // Surface holder that can access the physical surface
+	private final MainGamePanel gamePanel;// The actual view that handles inputs, and draws to the surface
 	private long lastStatusStore = 0; // last time the status was stored
 	private long statusIntervalTimer = 0L; // the status time counter
 	private long totalFramesSkipped = 0L; // number of frames skipped since the game started
 	private long framesSkippedPerStatCycle = 0L; // number of frames skipped in a store cycle (1 sec)
-
 	private int frameCountPerStatCycle = 0; // number of rendered frames in an interval
 	private long totalFrameCount = 0L;
 	private double  fpsStore[]; // the last FPS values
 	private long    statsCount = 0; // the number of times the stat has been read
 	private double  averageFps = 0.0; // the average FPS since the game started
-
-	private SurfaceHolder surfaceHolder; // Surface holder that can access the physical surface
-	private MainGamePanel gamePanel;// The actual view that handles inputs, and draws to the surface
-
 	private boolean running; // flag to hold game state
-	public void setRunning(boolean running) {this.running = running;}
-
 	public MainThread(SurfaceHolder surfaceHolder, MainGamePanel gamePanel) {
 		super();
 		this.surfaceHolder = surfaceHolder;
 		this.gamePanel = gamePanel;
+	}
+
+	public void setRunning(boolean running) {
+		this.running = running;
 	}
 
 	@Override
@@ -58,8 +55,6 @@ public class MainThread extends Thread {
 		long timeDiff;      // the time it took for the cycle to execute, diferenca entre final e inicial
 		int sleepTime;      // ms to sleep (<0 if we're behind), comparar
 		int framesSkipped;  // number of frames being skipped, diferenca de frames
-
-		sleepTime = 0;
 
 		while (running) {
 			canvas = null;
@@ -86,7 +81,8 @@ public class MainThread extends Thread {
 					if (sleepTime > 0) { // if sleepTime > 0 we're OK
 						try {
 							Thread.sleep(sleepTime); // send the thread to sleep for a short period
-						} catch (InterruptedException e) {}
+						} catch (InterruptedException ignored) {
+						}
 					}
 
 					while (sleepTime < 0 && framesSkipped < MAX_FRAME_SKIPS) { // we need to catch up

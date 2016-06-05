@@ -33,7 +33,7 @@ public class AimedBullet extends Bullet {
     }
 
     /**
-     * Method which updates the aimedbullet's position
+     * Method which updates the AimedBullet's position
      */
     public void update(long gameTime) {
         if (alive) {

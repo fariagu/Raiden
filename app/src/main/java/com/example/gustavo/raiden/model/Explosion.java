@@ -3,9 +3,6 @@ package com.example.gustavo.raiden.model;
 import android.graphics.Canvas;
 import android.util.Log;
 
-/**
- * Created by Diogo on 08/05/2016.
- */
 public class Explosion {
 
     public static final int STATE_ALIVE 	= 1;	// at least 1 particle is alive
@@ -48,9 +45,9 @@ public class Explosion {
     public void update() {
         if (this.state != STATE_DEAD) {
             boolean isDead = true;
-            for (int i = 0; i < this.particles.length; i++)
-                if (this.particles[i].isAlive()) {
-                    this.particles[i].update();
+            for (Particle particle : this.particles)
+                if (particle.isAlive()) {
+                    particle.update();
                     isDead = false;
                 }
             if (isDead)
@@ -59,8 +56,8 @@ public class Explosion {
     }
 
     public void draw(Canvas canvas) {
-        for(int i = 0; i < this.particles.length; i++)
-            if (this.particles[i].isAlive())
-                this.particles[i].draw(canvas);
+        for (Particle particle : this.particles)
+            if (particle.isAlive())
+                particle.draw(canvas);
     }
 }

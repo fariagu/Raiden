@@ -9,13 +9,13 @@ import java.util.Random;
 import static java.lang.Math.pow;
 
 public class Particle {
-    public static final int STATE_ALIVE = 1;	// particle is alive
-    public static final int STATE_DEAD = 0;		// particle is dead
+    private static final int STATE_ALIVE = 1;    // particle is alive
+    private static final int STATE_DEAD = 0;        // particle is dead
 
-    public static final int DEFAULT_LIFETIME 	= 200;	// play with this
-    public static final int MAX_DIMENSION		= 5;	// the maximum width or height
-    public static final int MAX_SPEED			= 10;	// maximum speed (per update)
-
+    private static final int DEFAULT_LIFETIME = 200;    // play with this
+    private static final int MAX_DIMENSION = 5;    // the maximum width or height
+    private static final int MAX_SPEED = 10;    // maximum speed (per update)
+    private final int color;            // the color of the particle
     private int state;			// particle is alive or dead
     private float width;		// width of the particle
     private float height;		// height of the particle
@@ -23,7 +23,6 @@ public class Particle {
     private double dx, dy;		// vertical and horizontal velocity
     private int age;			// current age of the particle
     private int lifetime;		// particle dies when it reaches this value
-    private int color;			// the color of the particle
     private Paint paint;		// internal use to avoid instantiation
 
     public Particle(int x, int y) {
@@ -33,6 +32,7 @@ public class Particle {
         this.state = Particle.STATE_ALIVE;
         this.lifetime = DEFAULT_LIFETIME;
         this.width = 1 + generator.nextInt(MAX_DIMENSION);
+        //noinspection SuspiciousNameCombination
         this.height = this.width; // square
         this.age = 0;
         this.dx = (generator.nextInt(MAX_SPEED * 2) - MAX_SPEED);
@@ -43,9 +43,6 @@ public class Particle {
             dy *= 0.7;
         }
         generator = new Random();
-        int r = generator.nextInt(255);
-        int g = generator.nextInt(255);
-        int b = generator.nextInt(255);
         this.color = Color.argb(255, generator.nextInt(255), generator.nextInt(255), generator.nextInt(255));
         this.paint = new Paint(this.color);
     }

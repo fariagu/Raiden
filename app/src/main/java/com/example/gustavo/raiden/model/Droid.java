@@ -10,12 +10,12 @@ import java.util.Random;
 
 public class Droid extends Collidable {
 
+	static private int screenHeight, screenWidth;
 	private Bitmap bulletBitmap;
 	private Speed speed;    // the speed with its directions
 	private AimedBullet bullet;
 	private Ship player;
 	private int comeBackCounter;
-	static private int screenHeight, screenWidth;
 
 	public Droid(Bitmap bitmap, Bitmap bullet, int x, int y, Ship ship, int FPS) {
 		super(bitmap, x, y, FPS);
@@ -103,8 +103,8 @@ public class Droid extends Collidable {
 				this.alive = true;
 			}
 			if (this.alive) {
-				//x += (speed.getXv() * speed.getxDirection());
-				//y += (speed.getYv() * speed.getyDirection());
+				x += (speed.getXv() * speed.getxDirection());
+				y += (speed.getYv() * speed.getyDirection());
 
 				if (!bullet.isAlive()) {
 					bullet.setAlive(true);

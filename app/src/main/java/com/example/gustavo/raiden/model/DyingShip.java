@@ -5,7 +5,7 @@ import android.graphics.Rect;
 
 public class DyingShip extends Collidable {
 
-    private int frameNr;        // number of frames in animation
+    private final int frameNr;        // number of frames in animation
     private int currentFrame;   // the current frame
 
     public DyingShip(Bitmap bitmap, int x, int y, int FPS, int frameCount) {

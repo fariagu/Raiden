@@ -33,7 +33,20 @@ import java.util.Random;
 public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private static final String TAG = MainGamePanel.class.getSimpleName();
-
+    private final Bitmap welcomeimg = BitmapFactory.decodeResource(getResources(), R.drawable.startimg);
+    private final Bitmap backgroundimg = BitmapFactory.decodeResource(getResources(), R.drawable.backgroundds);
+    private final Bitmap bulletsprite = BitmapFactory.decodeResource(getResources(), R.drawable.shoot);
+    private final Bitmap bulletsprite2 = BitmapFactory.decodeResource(getResources(), R.drawable.shoot2);
+    private final Bitmap shipsprite = BitmapFactory.decodeResource(getResources(), R.drawable.shipsprite);
+    private final Bitmap shipsprite2 = BitmapFactory.decodeResource(getResources(), R.drawable.shipsprite2);
+    private final Bitmap staticship = BitmapFactory.decodeResource(getResources(), R.drawable.staticship);
+    private final Bitmap enemybulletsprite = BitmapFactory.decodeResource(getResources(), R.drawable.bullet);
+    private final Bitmap enemysprite = BitmapFactory.decodeResource(getResources(), R.drawable.enemy);
+    private final Bitmap powerupsprite = BitmapFactory.decodeResource(getResources(), R.drawable.powerup);
+    private final Bitmap explosion = BitmapFactory.decodeResource(getResources(), R.drawable.explosion);
+    private final int FPS = 20;
+    private final int NR_BULLETS = 4;
+    private final int NR_ENEMIES = 12;
     private MainThread thread;
     private Image welcome;
     private Droid[] enemies;
@@ -42,26 +55,9 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private TripleBullet[] tripleBullets;
     private Bullet[] firingmode;
     private PowerUp powerup;
-
-    private Bitmap welcomeimg = BitmapFactory.decodeResource(getResources(), R.drawable.startimg);
-    private Bitmap backgroundimg = BitmapFactory.decodeResource(getResources(), R.drawable.backgroundds);
-    private Bitmap bulletsprite = BitmapFactory.decodeResource(getResources(), R.drawable.shoot);
-    private Bitmap bulletsprite2 = BitmapFactory.decodeResource(getResources(), R.drawable.shoot2);
-    private Bitmap shipsprite = BitmapFactory.decodeResource(getResources(), R.drawable.shipsprite);
-    private Bitmap shipsprite2 = BitmapFactory.decodeResource(getResources(), R.drawable.shipsprite2);
-    private Bitmap staticship = BitmapFactory.decodeResource(getResources(), R.drawable.staticship);
-    private Bitmap enemybulletsprite = BitmapFactory.decodeResource(getResources(), R.drawable.bullet);
-    private Bitmap enemysprite = BitmapFactory.decodeResource(getResources(), R.drawable.enemy);
-    private Bitmap powerupsprite = BitmapFactory.decodeResource(getResources(), R.drawable.powerup);
-    private Bitmap explosion = BitmapFactory.decodeResource(getResources(), R.drawable.explosion);
-
     private Background background;
     private Ship ship;
-
     private boolean start = false;
-    private int FPS = 20;
-    private int NR_BULLETS = 4;
-    private int NR_ENEMIES = 12;
     private int CURRENT_ENEMIES = 2;
     private DisplayMetrics metrics;
 
@@ -72,7 +68,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         reset(context);
     }
 
-    public void reset(Context context) {
+    private void reset(Context context) {
         // adding the callback (this) to the surface holder to intercept events
         getHolder().addCallback(this);
 
@@ -399,7 +395,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         }
     }
 
-    public void gameOver(Canvas canvas) {
+    private void gameOver(Canvas canvas) {
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         canvas.drawPaint(paint);
@@ -413,7 +409,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
     }
 
-    public void calcEnemies() {
+    private void calcEnemies() {
         int res = ship.getScore() / 5 + 2;
 
         if (res > 12) {

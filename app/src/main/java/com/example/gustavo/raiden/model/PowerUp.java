@@ -9,7 +9,7 @@ import com.example.gustavo.raiden.model.components.Speed;
  */
 public class PowerUp extends Collidable {
 
-    private Speed speed;        // the speed with its directions
+    private final Speed speed;        // the speed with its directions
 
     public PowerUp(Bitmap bitmap, int x, int y, int FPS) {
         super(bitmap, x, y, FPS);
