@@ -4,6 +4,9 @@ import android.graphics.Bitmap;
 
 import com.example.gustavo.raiden.model.components.Speed;
 
+/**
+ * PowerUp changes the shooting patern of the ship.
+ */
 public class PowerUp extends Collidable {
 
     private Speed speed;        // the speed with its directions
