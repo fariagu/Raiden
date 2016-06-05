@@ -12,6 +12,7 @@ public class TripleBullet extends Bullet {
     private int xR, yR;         // the X and Y coordinates
     private Speed speedL;       // the speed with its directions
     private Speed speedR;       // the speed with its directions
+    //private Ship ship;
 
     public TripleBullet(Bitmap bitmap, int x, int y, int FPS) {
         super(bitmap, x, y, FPS);

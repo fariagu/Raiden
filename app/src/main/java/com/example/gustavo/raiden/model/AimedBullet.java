@@ -42,7 +42,7 @@ public class AimedBullet extends Bullet {
                 ticks++;
                 if(ticks > 150) {
                     Random r = new Random();
-                    ticks = r.nextInt(20);
+                    ticks = -r.nextInt(20);
                     alive = false;
                 }
 

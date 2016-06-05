@@ -317,8 +317,15 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                 i.update();
             }
 
-        if (ship.checkCollision(powerup))
+        if (ship.checkCollision(powerup)) {
             ship.setBitmap(shipsprite2);
+
+            //necessary so first triple bullet isn't fired from ship's initial position
+            for (TripleBullet i : tripleBullets){
+                i.setX(ship.getX());
+                i.setY(ship.getY());
+            }
+        }
 
         if (ship.isPoweredup()) {
             for (TripleBullet tp : tripleBullets) {
