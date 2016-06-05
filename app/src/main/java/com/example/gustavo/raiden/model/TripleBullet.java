@@ -100,14 +100,17 @@ public class TripleBullet extends Bullet {
         if (alive && enemy.isAlive()) {
             if (Collision.collisionDetected(bitmap, this.x, this.y, enemy.getBitmap(), enemy.getX(), enemy.getY())) {
                 enemy.setAlive(false);
+                enemy.setComeBackCounter(-1);
                 return true;
             }
             if (Collision.collisionDetected(bitmap, this.xR, this.yR, enemy.getBitmap(), enemy.getX(), enemy.getY())) {
                 enemy.setAlive(false);
+                enemy.setComeBackCounter(-1);
                 return true;
             }
             if (Collision.collisionDetected(bitmap, this.xL, this.yL, enemy.getBitmap(), enemy.getX(), enemy.getY())) {
                 enemy.setAlive(false);
+                enemy.setComeBackCounter(-1);
                 return true;
             }
         }
