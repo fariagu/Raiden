@@ -265,6 +265,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         for (int i = 0; i < enemies.length; i++) {
 
             ship.checkCollision(enemies[i]);//se morrer nao precisa de fazer o calculo das paredes
+            ship.checkCollision(enemies[i].getBullet());
 
             if (enemies[i].isAlive()) {
 
@@ -295,9 +296,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
             } else {
                 enemies[i].getBullet().update(System.currentTimeMillis());
                 deads[i].update(System.currentTimeMillis());
-            }
-            if (enemies[i].getBullet().isAlive()) {
-                ship.checkCollision(enemies[i].getBullet());
             }
             enemies[i].update(System.currentTimeMillis());
         }

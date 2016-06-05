@@ -162,20 +162,21 @@ public class Ship extends Collidable {
         return false;
     }
 
-    public void checkCollision(Droid d){
+    public void checkCollision(Droid d) {
         if (d.isAlive())
             if (Collision.collisionDetected(this, d))
                 alive = false;
     }
 
-    public void checkCollision(AimedBullet b){
-        if (Collision.collisionDetected(this, b)) {
-            alive = false;
-            b.setAlive(false);
-        }
+    public void checkCollision(AimedBullet b) {
+        if (alive && b.isAlive())
+            if (Collision.collisionDetected(this, b)) {
+                alive = false;
+                b.setAlive(false);
+            }
     }
 
-    public void gameOver(Canvas canvas){
+    public void gameOver(Canvas canvas) {
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         canvas.drawPaint(paint);
