@@ -14,6 +14,7 @@ public class AimedBullet extends Bullet {
         spriteHeight = bitmap.getHeight();
         sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
         this.speed = new Speed();
+        Random r = new Random();
     }
 
     public AimedBullet(Bitmap bitmap, int x, int y, int FPS) {

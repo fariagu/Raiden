@@ -150,7 +150,7 @@ public class Ship extends Collidable {
     }
 
     public boolean checkCollision(PowerUp p) {
-        if (Collision.collisionDetected(this, p)) {
+        if (Collision.shipCollisionDetected(this, p)) {
             p.setAlive(false);
             poweredup = true;
             return true;
@@ -166,7 +166,7 @@ public class Ship extends Collidable {
 
     public void checkCollision(AimedBullet b) {
         if (alive && b.isAlive())
-            if (Collision.collisionDetected(this, b)) {
+            if (Collision.shipCollisionDetected(this, b)) {
                 alive = false;
                 b.setAlive(false);
             }

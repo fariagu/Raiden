@@ -99,7 +99,8 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                     r.nextInt(metrics.widthPixels - enemysprite.getWidth()),
                     r.nextInt((metrics.heightPixels * 2 / 3) - enemysprite.getHeight()),
                     ship, FPS);
-            enemies[i].getBullet().setTicks(-r.nextInt(50));
+            enemies[i].getBullet().setTicks(-(r.nextInt(50)+25));
+            enemies[i].getBullet().setAlive(false);
 
             deads[i] = new DyingShip(explosion, 0, 0, FPS, 16);
         }
