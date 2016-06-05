@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 
 import com.example.gustavo.raiden.model.Collidable;
+import com.example.gustavo.raiden.model.Ship;
 
 public class Collision {
 
@@ -54,9 +55,11 @@ public class Collision {
     }
 
     public static boolean shipCollisionDetected(Collidable body1, Collidable body2) {
-        Bitmap b1 = body1.getBitmap(), b2 = body2.getBitmap();
-        int b1H = body1.getSpriteHeight(), b1W = (int)body1.getSpriteWidth() / 11;
-        int b2H = body2.getSpriteHeight(), b2W = body2.getSpriteWidth();
+        Ship s = (Ship)body1;
+        Bitmap b1 = s.getStaticShip(), b2 = body2.getBitmap();
+
+        int b1H = b1.getHeight(), b1W = b1.getWidth();
+        int b2H = b2.getHeight(), b2W = b2.getWidth();
         int x1 = body1.getX(), x2 = body2.getX();
         int y1 = body1.getY(), y2 = body2.getY();
 

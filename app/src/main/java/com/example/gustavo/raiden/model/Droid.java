@@ -111,8 +111,8 @@ public class Droid extends Collidable {
 					int dy, dx;
 					double hip;
 
-					dx = Math.abs(this.x - player.getX());
-					dy = Math.abs(this.x - player.getY());
+					dx = Math.abs(this.x - player.getX()+18);
+					dy = Math.abs(this.x - player.getY()+19);
 					hip = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
 					Speed s = new Speed();

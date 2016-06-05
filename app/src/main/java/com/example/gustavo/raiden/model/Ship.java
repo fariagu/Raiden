@@ -15,6 +15,7 @@ public class Ship extends Collidable {
     private int currentFrame;   // the current frame
     private boolean touched;    // if droid is touched/picked up
     private boolean poweredup;    // se apanhou o powerup
+    private Bitmap staticShip;
 
     private int oldX, oldY;     // the old X and Y coordinate of the object to calculate de frame
 
@@ -44,11 +45,9 @@ public class Ship extends Collidable {
     public int getFrameNr() {
         return frameNr;
     }
-
     public void setFrameNr(int frameNr) {
         this.frameNr = frameNr;
     }
-
     /**
      * Getter para obter o Frame actual no sprite da Ship.
      *
@@ -57,11 +56,9 @@ public class Ship extends Collidable {
     public int getCurrentFrame() {
         return currentFrame;
     }
-
     public void setCurrentFrame(int currentFrame) {
         this.currentFrame = currentFrame;
     }
-
     /**
      * Retorna se a Ship está a ser tocada.
      *
@@ -70,33 +67,32 @@ public class Ship extends Collidable {
     public boolean isTouched() {
         return touched;
     }
-
     public void setTouched(boolean touched) {
         this.touched = touched;
     }
-
     public int getOldX() {
         return oldX;
     }
-
     public void setOldX(int oldX) {
         this.oldX = oldX;
     }
-
     public int getOldY() {
         return oldY;
     }
-
     public void setOldY(int oldY) {
         this.oldY = oldY;
     }
-
     public boolean isPoweredup() {
         return poweredup;
     }
-
     public void setPoweredup(boolean poweredup) {
         this.poweredup = poweredup;
+    }
+    public Bitmap getStaticShip() {
+        return staticShip;
+    }
+    public void setStaticShip(Bitmap staticShip) {
+        this.staticShip = staticShip;
     }
 
     public void update(long gameTime) {
@@ -163,7 +159,7 @@ public class Ship extends Collidable {
     }
 
     public void checkCollision(Droid d){
-        if (d.isAlive())
+        //if (d.isAlive())
             if (Collision.shipCollisionDetected(this, d))
                 alive = false;
     }

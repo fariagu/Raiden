@@ -48,6 +48,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private Bitmap bulletsprite2 = BitmapFactory.decodeResource(getResources(), R.drawable.shoot2);
     private Bitmap shipsprite = BitmapFactory.decodeResource(getResources(), R.drawable.shipsprite);
     private Bitmap shipsprite2 = BitmapFactory.decodeResource(getResources(), R.drawable.shipsprite2);
+    private Bitmap staticship = BitmapFactory.decodeResource(getResources(), R.drawable.staticship);
     private Bitmap enemybulletsprite = BitmapFactory.decodeResource(getResources(), R.drawable.bullet);
     private Bitmap enemysprite = BitmapFactory.decodeResource(getResources(), R.drawable.enemy);
     private Bitmap powerupsprite = BitmapFactory.decodeResource(getResources(), R.drawable.powerup);
@@ -83,6 +84,8 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                 shipsprite
                 , metrics.widthPixels / 2, 5 * metrics.heightPixels / 6 // initial position
                 , FPS, 11);    // FPS and number of frames in the animation
+
+        ship.setStaticShip(staticship);
 
         // create Droid and load bitmap
 
@@ -210,7 +213,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     public void render(Canvas canvas) {
         //canvas.drawColor(Color.BLACK); // needed so there isnt remains of dead bitmaps
 
-        background.draw(canvas);
+        background.draw(canvas);// needed so there isnt remains of dead bitmaps
 
         for (Explosion e : explosions)
             if (e != null && e.isAlive()) {
@@ -261,10 +264,19 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     public void update() {
         background.update(System.currentTimeMillis());
 
+        for (Droid i : enemies){
+            if (i.isAlive()){
+                ship.checkCollision(i);
+            }
+            if (i.getBullet().isAlive()){
+                ship.checkCollision(i.getBullet());
+            }
+        }
+
         //wall collisions
         for (int i = 0; i < enemies.length; i++) {
 
-            ship.checkCollision(enemies[i]);//se morrer nao precisa de fazer o calculo das paredes
+            //se morrer nao precisa de fazer o calculo das paredes
 
             if (enemies[i].isAlive()) {
 
@@ -293,11 +305,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                     enemies[i].getSpeed().toggleYDirection();
                 }*/
             } else {
-                enemies[i].getBullet().update(System.currentTimeMillis());
                 deads[i].update(System.currentTimeMillis());
-            }
-            if (enemies[i].getBullet().isAlive()) {
-                ship.checkCollision(enemies[i].getBullet());
             }
             enemies[i].update(System.currentTimeMillis());
         }
@@ -343,7 +351,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                 }
             }
 
-        ship.update(System.currentTimeMillis());
+        if (ship.isAlive()){
+            ship.update(System.currentTimeMillis());
+        }
+
 
         //this.running = ship.isAlive();
     }
