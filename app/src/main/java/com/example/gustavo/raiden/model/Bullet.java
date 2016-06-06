@@ -16,6 +16,7 @@ public class Bullet extends Collidable {
     int currentFrame;   // the current frame
     Speed speed;        // the speed with its directions
     int ticks;
+    int MAX_TICKS = 120;
 
     Bullet() {
         this.frameTicker = 0;
@@ -33,6 +34,7 @@ public class Bullet extends Collidable {
     public Bullet(Bitmap bitmap, Ship s, int FPS) {
         super(bitmap, s.getX(), s.getY(), FPS);
 
+        framePeriod = 500 / FPS;
         currentFrame = 0;
         framenr = 2;
         spriteWidth = bitmap.getWidth() / 2;
@@ -74,7 +76,7 @@ public class Bullet extends Collidable {
             frameTicker = gameTime;
             if (this.alive) {
                 ticks++;
-                if (ticks > 120) {
+                if (ticks > MAX_TICKS) {
                     ticks = 0;
                     alive = false;
                 } else {

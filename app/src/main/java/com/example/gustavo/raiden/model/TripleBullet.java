@@ -17,15 +17,17 @@ public class TripleBullet extends Bullet {
         super(bitmap, s, FPS);
         sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
 
+        MAX_TICKS = 180;
+
         xL = x;
         yL = y;
-        speedL = new Speed(2, speed.getYv());
+        speedL = new Speed(1, speed.getYv());
         speedL.setyDirection(Speed.DIRECTION_UP);
         speedL.setxDirection(Speed.DIRECTION_LEFT);
 
         xR = x;
         yR = y;
-        speedR = new Speed(2, speed.getYv());
+        speedR = new Speed(1, speed.getYv());
         speedR.setyDirection(Speed.DIRECTION_UP);
         speedR.setxDirection(Speed.DIRECTION_RIGHT);
     }
@@ -70,7 +72,7 @@ public class TripleBullet extends Bullet {
             frameTicker = gameTime;
             if (this.alive) {
                 ticks++;
-                if (ticks > 120) {
+                if (ticks > MAX_TICKS) {
                     ticks = 0;
                     alive = false;
                 } else {

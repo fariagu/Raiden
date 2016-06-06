@@ -46,9 +46,8 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private final Bitmap explosion = BitmapFactory.decodeResource(getResources(), R.drawable.explosion);
     private int ABS_SPEED = 20;
     private int tick;
-    private int FPS = 20;
-    private long frameTicker = 0;   // the time of the last frame update
-    private int framePeriod = 1000 / FPS;    // milliseconds between each frame (1000/fps)
+    private int FPS = 60;
+    private DisplayMetrics metrics;
 
     private MainThread thread;
     private Droid[] enemies;
@@ -60,10 +59,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private Background background;
     private Ship ship;
     private boolean start = false;
+    private int STARTING_ENEMIES = 3;
     private int CURRENT_ENEMIES = 2;
-    private int NR_ENEMIES = 25;
+    private int NR_ENEMIES = 24;
     private int NR_BULLETS = 4;
-    private DisplayMetrics metrics;
 
     private String avgFps;
 
@@ -90,7 +89,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         // create Ship and load bitmap
         ship = new Ship(
                 shipsprite
-                , metrics.widthPixels / 2, 5 * metrics.heightPixels / 6 // initial position
+                , metrics.widthPixels / 2, metrics.heightPixels * 5 / 6 // initial position
                 , FPS);    // FPS and number of frames in the animation
 
         ship.setStaticShip(staticship);
@@ -119,7 +118,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         tripleBullets = new TripleBullet[NR_BULLETS];
         for (int i = 0; i < tripleBullets.length; i++) {
             tripleBullets[i] = new TripleBullet(bulletsprite2, ship, FPS);
-            tripleBullets[i].setTicks(i * 120 / NR_BULLETS);
+            tripleBullets[i].setTicks(i * 180 / NR_BULLETS);
         }
 
         firingmode = new Bullet[NR_BULLETS];
@@ -291,116 +290,112 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
      * engine's update method.
      */
     public void update() {
-        if (System.currentTimeMillis() > frameTicker + framePeriod) {
-            frameTicker = System.currentTimeMillis();
-            if (start) {
-                calcEnemies();
+        if (start) {
+            calcEnemies();
 
-                background.update(System.currentTimeMillis());
+            background.update(System.currentTimeMillis());
 
-                for (int i = 0; i < CURRENT_ENEMIES; i++) {
+            for (int i = 0; i < CURRENT_ENEMIES; i++) {
 
-                    if (enemies[i].isAlive()) {
-                        ship.checkCollision(enemies[i]);
-                    }
-                    if (enemies[i].getBullet().isAlive()) {
-                        ship.checkCollision(enemies[i].getBullet());
-                    }
+                if (enemies[i].isAlive()) {
+                    ship.checkCollision(enemies[i]);
                 }
-
-                //wall collisions
-                for (int i = 0; i < CURRENT_ENEMIES; i++) {
-
-                    //se morrer nao precisa de fazer o calculo das paredes
-
-                    if (enemies[i].isAlive()) {
-
-                        deads[i].setAlive(false);
-                        deads[i].setX(enemies[i].getX());
-                        deads[i].setY(enemies[i].getY());
-
-                        // check collision with right wall if heading right
-                        if (enemies[i].getSpeed().getxDirection() == Speed.DIRECTION_RIGHT
-                                && enemies[i].getX() + enemies[i].getBitmap().getWidth() / 2 >= getWidth()) {
-                            enemies[i].getSpeed().toggleXDirection();
-                        }
-                        // check collision with left wall if heading left
-                        if (enemies[i].getSpeed().getxDirection() == Speed.DIRECTION_LEFT
-                                && enemies[i].getX() - enemies[i].getBitmap().getWidth() / 2 <= 0) {
-                            enemies[i].getSpeed().toggleXDirection();
-                        }
-                        // check collision with bottom wall if heading down
-                        if (enemies[i].getSpeed().getyDirection() == Speed.DIRECTION_DOWN
-                                && enemies[i].getY() + enemies[i].getBitmap().getHeight() / 2 >= getHeight()) {
-                            enemies[i].getSpeed().toggleYDirection();
-                        }
-                        // check collision with top wall if heading up
-                        if (enemies[i].getSpeed().getyDirection() == Speed.DIRECTION_UP
-                                && enemies[i].getY() - enemies[i].getBitmap().getHeight() / 2 <= 0) {
-                            enemies[i].getSpeed().toggleYDirection();
-                        }
-                    } else {
-                        deads[i].update(System.currentTimeMillis());
-                    }
-                    enemies[i].setAbsspeed(ABS_SPEED);
-                    enemies[i].update(System.currentTimeMillis());
+                if (enemies[i].getBullet().isAlive()) {
+                    ship.checkCollision(enemies[i].getBullet());
                 }
-
-                for (Explosion i : explosions)
-                    if (i != null && i.isAlive()) {
-                        i.update();
-                    }
-
-                if (ship.checkCollision(powerup)) {
-                    ship.setBitmap(shipsprite2);
-
-                    //necessary so first triple bullet isn't fired from ship's initial position
-                    for (TripleBullet i : tripleBullets) {
-                        i.setX(ship.getX());
-                        i.setY(ship.getY());
-                    }
-                }
-
-                if (ship.isPoweredup()) {
-                    for (TripleBullet tp : tripleBullets) {
-                        if (tp.isAlive()) {
-                            for (int i = 0; i < CURRENT_ENEMIES; i++) {//this collision kills enemy droids
-                                if (tp.checkCollision(enemies[i], ship))
-                                    deads[i].setAlive(true);
-                            }
-                            tp.update(System.currentTimeMillis());
-                        } else {
-                            tp.setAlive(true);
-                            tp.setTicks(0);
-                            tp.setX(ship.getX());
-                            tp.setY(ship.getY());
-                        }
-                    }
-                    for (Bullet i : firingmode)
-                        i.setAlive(false);
-                } else
-                    for (Bullet b : firingmode) {
-                        if (b.isAlive()) {
-                            for (int i = 0; i < CURRENT_ENEMIES; i++) {//this collision kills enemy droids
-                                if (b.checkCollision(enemies[i], ship))
-                                    deads[i].setAlive(true);
-                            }
-                            b.update(System.currentTimeMillis());
-                        } else {
-                            b.setAlive(true);
-                            b.setTicks(0);
-                            b.setX(ship.getX());
-                            b.setY(ship.getY());
-                        }
-                    }
-
-                if (ship.isAlive()) {
-                    ship.update(System.currentTimeMillis());
-                    powerup.update(System.currentTimeMillis());
-                }
-
-                //this.running = ship.isAlive();
             }
+
+            //wall collisions
+            for (int i = 0; i < CURRENT_ENEMIES; i++) {
+
+                //se morrer nao precisa de fazer o calculo das paredes
+
+                if (enemies[i].isAlive()) {
+
+                    deads[i].setAlive(false);
+                    deads[i].setX(enemies[i].getX());
+                    deads[i].setY(enemies[i].getY());
+
+                    // check collision with right wall if heading right
+                    if (enemies[i].getSpeed().getxDirection() == Speed.DIRECTION_RIGHT
+                            && enemies[i].getX() + enemies[i].getBitmap().getWidth() / 2 >= getWidth()) {
+                        enemies[i].getSpeed().toggleXDirection();
+                    }
+                    // check collision with left wall if heading left
+                    if (enemies[i].getSpeed().getxDirection() == Speed.DIRECTION_LEFT
+                            && enemies[i].getX() - enemies[i].getBitmap().getWidth() / 2 <= 0) {
+                        enemies[i].getSpeed().toggleXDirection();
+                    }
+                    // check collision with bottom wall if heading down
+                    if (enemies[i].getSpeed().getyDirection() == Speed.DIRECTION_DOWN
+                            && enemies[i].getY() + enemies[i].getBitmap().getHeight() / 2 >= getHeight()) {
+                        enemies[i].getSpeed().toggleYDirection();
+                    }
+                    // check collision with top wall if heading up
+                    if (enemies[i].getSpeed().getyDirection() == Speed.DIRECTION_UP
+                            && enemies[i].getY() - enemies[i].getBitmap().getHeight() / 2 <= 0) {
+                        enemies[i].getSpeed().toggleYDirection();
+                    }
+                } else {
+                    deads[i].update(System.currentTimeMillis());
+                }
+                enemies[i].setAbsspeed(ABS_SPEED);
+                enemies[i].update(System.currentTimeMillis());
+            }
+
+            for (Explosion i : explosions)
+                if (i != null && i.isAlive()) {
+                    i.update();
+                }
+
+            if (ship.checkCollision(powerup)) {
+                ship.setBitmap(shipsprite2);
+
+                //necessary so first triple bullet isn't fired from ship's initial position
+                for (TripleBullet i : tripleBullets) {
+                    i.setX(ship.getX());
+                    i.setY(ship.getY());
+                }
+            }
+
+            if (ship.isPoweredup()) {
+                for (TripleBullet tp : tripleBullets) {
+                    if (tp.isAlive()) {
+                        for (int i = 0; i < CURRENT_ENEMIES; i++) {//this collision kills enemy droids
+                            if (tp.checkCollision(enemies[i], ship))
+                                deads[i].setAlive(true);
+                        }
+                        tp.update(System.currentTimeMillis());
+                    } else {
+                        tp.setAlive(true);
+                        tp.setTicks(0);
+                        tp.setX(ship.getX());
+                        tp.setY(ship.getY());
+                    }
+                }
+                for (Bullet i : firingmode)
+                    i.setAlive(false);
+            } else
+                for (Bullet b : firingmode) {
+                    if (b.isAlive()) {
+                        for (int i = 0; i < CURRENT_ENEMIES; i++) {//this collision kills enemy droids
+                            if (b.checkCollision(enemies[i], ship))
+                                deads[i].setAlive(true);
+                        }
+                        b.update(System.currentTimeMillis());
+                    } else {
+                        b.setAlive(true);
+                        b.setTicks(0);
+                        b.setX(ship.getX());
+                        b.setY(ship.getY());
+                    }
+                }
+
+            if (ship.isAlive()) {
+                ship.update(System.currentTimeMillis());
+                powerup.update(System.currentTimeMillis());
+            }
+
         }
     }
 
@@ -435,9 +430,9 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     }
 
     private void calcEnemies() {
-        int numenem = ship.getScore() / 5 + 3;
+        int numenem = ship.getScore() / 5 + STARTING_ENEMIES;
 
-        if (ABS_SPEED < 35) {
+        if (ABS_SPEED < 36) {
             if (numenem > 12) {
                 tick++;
                 numenem = 12;
@@ -447,14 +442,14 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                 tick = 0;
                 ABS_SPEED++;
             }
-        } else if (numenem < 26) {
+        } else if (numenem < NR_ENEMIES - 1) {
             tick++;
             if (tick > 6) {
                 tick = 0;
                 numenem++;
             }
         } else {
-            numenem = 24;
+            numenem = NR_ENEMIES;
             ABS_SPEED = 35;
         }
 

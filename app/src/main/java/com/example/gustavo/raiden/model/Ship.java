@@ -23,6 +23,7 @@ public class Ship extends Collidable {
     public Ship(Bitmap bitmap, int x, int y, int FPS) {
         super(bitmap, x, y, FPS);
         this.oldX = x;
+        framePeriod = 2000 / FPS;
         currentFrame = 5;
         frameNr = 11 - 1;
         spriteWidth = bitmap.getWidth() / 11;
