@@ -6,6 +6,9 @@ import android.graphics.Rect;
 
 import com.raiden.gui.Image;
 
+/**
+ * Class of every object in the game that can collide with another object.
+ */
 public class Collidable extends Image {
 
     long frameTicker;   // the time of the last frame update
@@ -17,6 +20,14 @@ public class Collidable extends Image {
     int y;           // the X and Y coordinate of the object (top left of the image)
     boolean alive;      // if the power up was picked up
 
+    /**
+     * Construtor do Collidable.
+     *
+     * @param bitmap Imagem para o objecto
+     * @param x      posição na horizontal
+     * @param y      posição na vertical
+     * @param FPS    velocidade de jogo
+     */
     Collidable(Bitmap bitmap, int x, int y, int FPS) {
         super(bitmap, 0, 0);
         this.x = x;
@@ -32,9 +43,9 @@ public class Collidable extends Image {
     }
 
     //Getters & Setters
+
     /**
-     * Getter para obter o bitmap associado ao Collidable.
-     *
+     * Getter for the bitmap of the Collidable.
      * @return Bitmap
      */
     public Bitmap getBitmap() {
@@ -42,14 +53,17 @@ public class Collidable extends Image {
     }
 
     /**
-     * Setter para modificar o bitmap do Collidable.
-     *
+     * Setter to change the bitmap of the Collidable.
      * @param bitmap Nova imagem
      */
     public void setBitmap(Bitmap bitmap) {
         this.bitmap = bitmap;
     }
 
+    /**
+     * Getter of the Width of the Sprite.
+     * @return int
+     */
     public int getSpriteWidth() {
         return spriteWidth;
     }
@@ -59,37 +73,57 @@ public class Collidable extends Image {
     }
 
     /**
-     * Retorna a coordenada X do Collidable.
+     * Getter of the X cordinate of the Collidable.
      * @return int
      */
     public int getX() {
         return x;
     }
 
+    /**
+     * Setter for the X cordinate of the Collidable.
+     * @param x
+     */
     public void setX(int x) {
         this.x = x;
     }
 
     /**
-     * Retorna a coordenada Y do Collidable.
+     * Getter of the Y cordinate of the Collidable.
      * @return int
      */
     public int getY() {
         return y;
     }
 
+    /**
+     * Setter for the X cordinate of the Collidable.
+     * @param y
+     */
     public void setY(int y) {
         this.y = y;
     }
 
+    /**
+     * Checks if the Collidable is Alive.
+     * @return true when alive, false when dead
+     */
     public boolean isAlive() {
         return alive;
     }
 
+    /**
+     * Changes the value of alive.
+     * @param alive new state of alive
+     */
     public void setAlive(boolean alive) {
         this.alive = alive;
     }
 
+    /**
+     * Draws the bitmap to the screen of the mobile.
+     * @param canvas mobile screen
+     */
     public void draw(Canvas canvas) {
         if (alive) {
             // where to draw the sprite
