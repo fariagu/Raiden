@@ -4,11 +4,12 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
-public class Collidable {
+import com.raiden.gui.Image;
+
+public class Collidable extends Image {
 
     long frameTicker;   // the time of the last frame update
     int framePeriod;    // milliseconds between each frame (1000/fps)
-    Bitmap bitmap;      // the actual bitmap
     Rect sourceRect;    // the rectangle to be drawn from the animation bitmap
     int spriteWidth;    // the width of the sprite to calculate the cut out rectangle
     int spriteHeight;   // the height of the sprite
@@ -16,11 +17,8 @@ public class Collidable {
     int y;           // the X and Y coordinate of the object (top left of the image)
     boolean alive;      // if the power up was picked up
 
-    Collidable() {
-    }
-
     Collidable(Bitmap bitmap, int x, int y, int FPS) {
-        this.bitmap = bitmap;
+        super(bitmap, 0, 0);
         this.x = x;
         this.y = y;
 

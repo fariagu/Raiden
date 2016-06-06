@@ -1,4 +1,4 @@
-package com.raiden.game;
+package com.raiden.client;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,9 +17,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
-import com.raiden.Background;
-import com.raiden.MainThread;
 import com.raiden.R;
+import com.raiden.gui.Background;
 import com.raiden.logic.Bullet;
 import com.raiden.logic.Droid;
 import com.raiden.logic.DyingShip;

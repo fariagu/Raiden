@@ -1,10 +1,8 @@
-package com.raiden;
+package com.raiden.client;
 
 import android.graphics.Canvas;
 import android.util.Log;
 import android.view.SurfaceHolder;
-
-import com.raiden.game.MainGamePanel;
 
 import java.text.DecimalFormat;
 

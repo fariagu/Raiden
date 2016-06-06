@@ -18,19 +18,6 @@ public class Bullet extends Collidable {
     int ticks;
     int MAX_TICKS = 120;
 
-    Bullet() {
-        this.frameTicker = 0;
-        this.framePeriod = 0;
-        currentFrame = 0;
-        framenr = 2;
-        spriteWidth = 0;
-        spriteHeight = 0;
-        sourceRect = new Rect(0, 0, 1, 1);
-        this.speed = new Speed(0, 0);
-        this.alive = false;
-        this.ticks = 0;
-    }
-
     public Bullet(Bitmap bitmap, Ship s, int FPS) {
         super(bitmap, s.getX(), s.getY(), FPS);
 

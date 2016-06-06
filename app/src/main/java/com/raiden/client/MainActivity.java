@@ -1,11 +1,9 @@
-package com.raiden;
+package com.raiden.client;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-
-import com.raiden.game.MainGamePanel;
 
 public class MainActivity extends Activity {
     /**

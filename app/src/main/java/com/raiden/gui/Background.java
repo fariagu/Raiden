@@ -1,4 +1,4 @@
-package com.raiden;
+package com.raiden.gui;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
