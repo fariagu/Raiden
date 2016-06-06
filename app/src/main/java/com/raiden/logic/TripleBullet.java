@@ -1,11 +1,11 @@
-package com.example.gustavo.raiden.model;
+package com.raiden.logic;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
-import com.example.gustavo.raiden.model.components.Collision;
-import com.example.gustavo.raiden.model.components.Speed;
+import com.raiden.logic.components.Collision;
+import com.raiden.logic.components.Speed;
 
 public class TripleBullet extends Bullet {
     private final Speed speedL;       // the speed with its directions

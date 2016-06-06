@@ -1,4 +1,4 @@
-package com.example.gustavo.raiden;
+package com.raiden.game;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,14 +17,17 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
-import com.example.gustavo.raiden.model.Bullet;
-import com.example.gustavo.raiden.model.Droid;
-import com.example.gustavo.raiden.model.DyingShip;
-import com.example.gustavo.raiden.model.Explosion;
-import com.example.gustavo.raiden.model.PowerUp;
-import com.example.gustavo.raiden.model.Ship;
-import com.example.gustavo.raiden.model.TripleBullet;
-import com.example.gustavo.raiden.model.components.Speed;
+import com.raiden.Background;
+import com.raiden.MainThread;
+import com.raiden.R;
+import com.raiden.logic.Bullet;
+import com.raiden.logic.Droid;
+import com.raiden.logic.DyingShip;
+import com.raiden.logic.Explosion;
+import com.raiden.logic.PowerUp;
+import com.raiden.logic.Ship;
+import com.raiden.logic.TripleBullet;
+import com.raiden.logic.components.Speed;
 
 import java.util.Random;
 

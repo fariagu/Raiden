@@ -1,10 +1,10 @@
-package com.example.gustavo.raiden.model;
+package com.raiden.logic;
 
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 
-import com.example.gustavo.raiden.model.components.Collision;
-import com.example.gustavo.raiden.model.components.Speed;
+import com.raiden.logic.components.Collision;
+import com.raiden.logic.components.Speed;
 
 /**
  * This is a test droid that is dragged, dropped, moved, smashed against

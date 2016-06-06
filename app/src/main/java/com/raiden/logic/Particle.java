@@ -1,4 +1,4 @@
-package com.example.gustavo.raiden.model;
+package com.raiden.logic;
 
 import android.graphics.Canvas;
 import android.graphics.Color;

@@ -1,11 +1,11 @@
-package com.example.gustavo.raiden.model.components;
+package com.raiden.logic.components;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
 
-import com.example.gustavo.raiden.model.Collidable;
-import com.example.gustavo.raiden.model.Ship;
+import com.raiden.logic.Collidable;
+import com.raiden.logic.Ship;
 
 public class Collision {
 

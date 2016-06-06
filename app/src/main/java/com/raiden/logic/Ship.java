@@ -1,4 +1,4 @@
-package com.example.gustavo.raiden.model;
+package com.raiden.logic;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -7,7 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 
-import com.example.gustavo.raiden.model.components.Collision;
+import com.raiden.logic.components.Collision;
 
 public class Ship extends Collidable {
 

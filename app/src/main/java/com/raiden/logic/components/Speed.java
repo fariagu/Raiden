@@ -1,4 +1,4 @@
-package com.example.gustavo.raiden.model.components;
+package com.raiden.logic.components;
 
 /**
  * The Speed class keeps track of the bearing of an object
