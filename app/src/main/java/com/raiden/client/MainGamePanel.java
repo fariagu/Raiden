@@ -50,6 +50,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private final int STARTING_ENEMIES = 3;
     private final int NR_ENEMIES = 24;
     private final int NR_BULLETS = 4;
+    private int CURRENT_ENEMIES = STARTING_ENEMIES;
     private int ABS_SPEED = 20;
     private int tick;
     private DisplayMetrics metrics;
@@ -63,12 +64,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private Background background;
     private Ship ship;
     private boolean start = false;
-    private int CURRENT_ENEMIES = 2;
     private String avgFps;
 
     /**
      * The MainGamePanel constructor.
-     *
      * @param context
      */
     public MainGamePanel(Context context) {
@@ -144,7 +143,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     }
 
     /**
-     * setAvgFps calculates the FPS the mobile is using.
+     * setAvgFps saves the FPS at which the mobile is working.
      * @param avgFps
      */
     public void setAvgFps(String avgFps) {
@@ -259,7 +258,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
     /**
      * Draw to the screen.
-     * @param canvas
+     * @param canvas mobile screen
      */
     public void render(Canvas canvas) {
         if (!start) {
@@ -313,8 +312,8 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
     /**
      * Draws the FPS to the screen.
-     * @param canvas
-     * @param FPS
+     * @param canvas mobile screen
+     * @param FPS game fps
      */
     private void displayFps(Canvas canvas, String FPS) {
         if (canvas != null && FPS != null) {
