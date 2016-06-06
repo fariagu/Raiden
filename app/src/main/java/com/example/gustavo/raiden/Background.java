@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
 
-public class Background extends Image {
+class Background extends Image {
     private final int speed;
     private final int framePeriod;    // milliseconds between each frame (1000/fps)
     private int yTop;

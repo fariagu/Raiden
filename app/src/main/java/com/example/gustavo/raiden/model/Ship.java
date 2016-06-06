@@ -10,60 +10,29 @@ import android.graphics.Typeface;
 import com.example.gustavo.raiden.model.components.Collision;
 
 public class Ship extends Collidable {
-    private static final String TAG = Ship.class.getSimpleName();
 
-    private int frameNr;        // number of frames in animation
+    private final int frameNr;        // number of frames in animation
     private int currentFrame;   // the current frame
     private boolean touched;    // if droid is touched/picked up
     private boolean poweredup;    // se apanhou o powerup
     private Bitmap staticShip;
     private int score;
 
-    private int oldX, oldY;     // the old X and Y coordinate of the object to calculate de frame
+    private int oldX;
 
-    public Ship(Bitmap bitmap, int x, int y, int FPS, int frameCount) {
+    public Ship(Bitmap bitmap, int x, int y, int FPS) {
         super(bitmap, x, y, FPS);
         this.oldX = x;
-        this.oldY = y;
         currentFrame = 5;
-        frameNr = frameCount - 1;
-        spriteWidth = bitmap.getWidth() / frameCount;
+        frameNr = 11 - 1;
+        spriteWidth = bitmap.getWidth() / 11;
         spriteHeight = bitmap.getHeight();
         sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
         poweredup = false;
         score = 0;
     }
 
-    public static String getTAG() {
-        return TAG;
-    }
-
     //Getters & Setters
-
-    /**
-     * Getter para obter o número de Frames do sprite da Ship.
-     * @return int
-     */
-    public int getFrameNr() {
-        return frameNr;
-    }
-
-    public void setFrameNr(int frameNr) {
-        this.frameNr = frameNr;
-    }
-
-    /**
-     * Getter para obter o Frame actual no sprite da Ship.
-     *
-     * @return int
-     */
-    public int getCurrentFrame() {
-        return currentFrame;
-    }
-
-    public void setCurrentFrame(int currentFrame) {
-        this.currentFrame = currentFrame;
-    }
 
     /**
      * Retorna se a Ship está a ser tocada.
@@ -78,28 +47,12 @@ public class Ship extends Collidable {
         this.touched = touched;
     }
 
-    public int getOldX() {
-        return oldX;
-    }
-
     public void setOldX(int oldX) {
         this.oldX = oldX;
     }
 
-    public int getOldY() {
-        return oldY;
-    }
-
-    public void setOldY(int oldY) {
-        this.oldY = oldY;
-    }
-
     public boolean isPoweredup() {
         return poweredup;
-    }
-
-    public void setPoweredup(boolean poweredup) {
-        this.poweredup = poweredup;
     }
 
     public Bitmap getStaticShip() {
@@ -112,10 +65,6 @@ public class Ship extends Collidable {
 
     public int getScore() {
         return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
     }
 
     public void incScore() {
@@ -167,7 +116,6 @@ public class Ship extends Collidable {
 
                     setTouched(true);// ship touched
                     oldX = eventX;
-                    oldY = eventY;
                 } else {
                     setTouched(false);
                 }

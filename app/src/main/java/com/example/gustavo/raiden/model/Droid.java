@@ -11,11 +11,11 @@ import java.util.Random;
 public class Droid extends Collidable {
 
 	static private int screenHeight, screenWidth;
-	private Bitmap bulletBitmap;
-	private Speed speed;    // the speed with its directions
+	private final Bitmap bulletBitmap;
+	private final Speed speed;    // the speed with its directions
+	private final AimedBullet bullet;
+	private final Ship player;
 	private int absspeed;
-	private AimedBullet bullet;
-	private Ship player;
 	private int comeBackCounter;
 
 	public Droid(Bitmap bitmap, Bitmap bullet, int x, int y, Ship ship, int FPS) {
@@ -24,27 +24,19 @@ public class Droid extends Collidable {
 		speed = new Speed();
 		absspeed = 20;
 		player = ship;
-		this.bullet = new AimedBullet(bulletBitmap, x + 16, y + 16, 5, FPS);
+		this.bullet = new AimedBullet(bulletBitmap, FPS);
 	}
 
-	public Bitmap getBulletBitmap() {
-		return bulletBitmap;
+	static public void setScreenHeight(int h) {
+		screenHeight = h;
 	}
 
-	public void setBulletBitmap(Bitmap bulletBitmap) {
-		this.bulletBitmap = bulletBitmap;
+	static public void setScreenWidth(int w) {
+		screenWidth = w;
 	}
 
 	public Speed getSpeed() {
 		return speed;
-	}
-
-	public void setSpeed(Speed speed) {
-		this.speed = speed;
-	}
-
-	public int getAbsspeed() {
-		return absspeed;
 	}
 
 	public void setAbsspeed(int absspeed) {
@@ -55,40 +47,8 @@ public class Droid extends Collidable {
 		return bullet;
 	}
 
-	public void setBullet(AimedBullet bullet) {
-		this.bullet = bullet;
-	}
-
-	public Ship getPlayer() {
-		return player;
-	}
-
-	public void setPlayer(Ship player) {
-		this.player = player;
-	}
-
-	public int getComeBackCounter() {
-		return comeBackCounter;
-	}
-
 	public void setComeBackCounter(int comeBackCounter) {
 		this.comeBackCounter = comeBackCounter;
-	}
-
-	public int getScreenHeight() {
-		return screenHeight;
-	}
-
-	static public void setScreenHeight(int h) {
-		screenHeight = h;
-	}
-
-	public int getScreenWidth() {
-		return screenWidth;
-	}
-
-	static public void setScreenWidth(int w) {
-		screenWidth = w;
 	}
 
 	public void draw(Canvas canvas) {

@@ -8,11 +8,10 @@ import com.example.gustavo.raiden.model.components.Collision;
 import com.example.gustavo.raiden.model.components.Speed;
 
 public class TripleBullet extends Bullet {
+    private final Speed speedL;       // the speed with its directions
+    private final Speed speedR;       // the speed with its directions
     private int xL, yL;         // the X and Y coordinates
     private int xR, yR;         // the X and Y coordinates
-    private Speed speedL;       // the speed with its directions
-    private Speed speedR;       // the speed with its directions
-    private Ship ship;
 
     public TripleBullet(Bitmap bitmap, Ship s, int FPS) {
         super(bitmap, s, FPS);
@@ -41,12 +40,6 @@ public class TripleBullet extends Bullet {
         yL = y;
         yR = y;
     }
-    public Ship getShip() {
-        return ship;
-    }
-    public void setShip(Ship ship) {
-        this.ship = ship;
-    }
 
     public void draw(Canvas canvas) {
         if (alive) {
@@ -73,9 +66,9 @@ public class TripleBullet extends Bullet {
      * Method which updates the bullet's position
      */
     public void update(long gameTime) {
-        if (this.alive) {
-            if (gameTime > frameTicker + framePeriod) {
-                frameTicker = gameTime;
+        if (gameTime > frameTicker + framePeriod) {
+            frameTicker = gameTime;
+            if (this.alive) {
                 ticks++;
                 if (ticks > 120) {
                     ticks = 0;
@@ -102,9 +95,9 @@ public class TripleBullet extends Bullet {
         }
     }
 
-    public boolean checkCollision(Droid enemy) {
+    public boolean checkCollision(Droid enemy, Ship ship) {
         if (alive && enemy.isAlive()) {
-            if (Collision.collisionDetected(bitmap, this.x, this.y, enemy.getBitmap(), enemy.getX(), enemy.getY())) {
+            if (Collision.collisionDetected(this, enemy)) {
                 enemy.setAlive(false);
                 enemy.setComeBackCounter(-1);
                 if (ship.isAlive()){

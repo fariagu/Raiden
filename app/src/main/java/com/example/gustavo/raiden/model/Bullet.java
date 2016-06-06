@@ -12,13 +12,12 @@ import com.example.gustavo.raiden.model.components.Speed;
  * Wait till it gets a weapon!
  */
 public class Bullet extends Collidable {
-    protected final int framenr;        // number of frames in animation
-    protected int currentFrame;   // the current frame
-    protected Speed speed;        // the speed with its directions
-    protected int ticks;
-    private Ship ship;
+    final int framenr;        // number of frames in animation
+    int currentFrame;   // the current frame
+    Speed speed;        // the speed with its directions
+    int ticks;
 
-    public Bullet() {
+    Bullet() {
         this.frameTicker = 0;
         this.framePeriod = 0;
         currentFrame = 0;
@@ -34,7 +33,6 @@ public class Bullet extends Collidable {
     public Bullet(Bitmap bitmap, Ship s, int FPS) {
         super(bitmap, s.getX(), s.getY(), FPS);
 
-        ship = s;
         currentFrame = 0;
         framenr = 2;
         spriteWidth = bitmap.getWidth() / 2;
@@ -45,7 +43,7 @@ public class Bullet extends Collidable {
         ticks = 0;
     }
 
-    public Bullet(Bitmap bitmap, int FPS) {
+    Bullet(Bitmap bitmap, int FPS) {
         super(bitmap, 0, 0, FPS);
 
         currentFrame = 0;
@@ -59,9 +57,6 @@ public class Bullet extends Collidable {
     }
 
     //Getters & Setters
-    public Speed getSpeed() {
-        return speed;
-    }
 
     public void setSpeed(Speed speed) {
         this.speed = speed;
@@ -71,21 +66,13 @@ public class Bullet extends Collidable {
         this.ticks = ticks;
     }
 
-    public Ship getShip() {
-        return ship;
-    }
-
-    public void setShip(Ship ship) {
-        this.ship = ship;
-    }
-
     /**
      * Method which updates the bullet's position
      */
     public void update(long gameTime) {
-        if (this.alive) {
-            if (gameTime > frameTicker + framePeriod) {
-                frameTicker = gameTime;
+        if (gameTime > frameTicker + framePeriod) {
+            frameTicker = gameTime;
+            if (this.alive) {
                 ticks++;
                 if (ticks > 120) {
                     ticks = 0;
@@ -108,9 +95,9 @@ public class Bullet extends Collidable {
         }
     }
 
-    public boolean checkCollision(Droid enemy) {
+    public boolean checkCollision(Droid enemy, Ship ship) {
         if (alive && enemy.isAlive())
-            if (Collision.collisionDetected(bitmap, x, y, enemy.getBitmap(), enemy.getX(), enemy.getY())) {
+            if (Collision.collisionDetected(this, enemy)) {
                 enemy.setAlive(false);
                 enemy.setComeBackCounter(-1);
                 if (ship.isAlive()) {

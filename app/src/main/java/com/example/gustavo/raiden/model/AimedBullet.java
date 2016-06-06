@@ -13,32 +13,16 @@ public class AimedBullet extends Bullet {
         spriteWidth = bitmap.getWidth();
         spriteHeight = bitmap.getHeight();
         sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
-        this.speed = new Speed();
-    }
-
-    public AimedBullet(Bitmap bitmap, int x, int y, int FPS) {
-        super(bitmap, FPS);
-        spriteWidth = bitmap.getWidth();
-        spriteHeight = bitmap.getHeight();
-        sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
-        speed = new Speed();
-    }
-
-    public AimedBullet(Bitmap bitmap, int x, int y, int speed, int FPS) {
-        super(bitmap, FPS);
-        spriteWidth = bitmap.getWidth();
-        spriteHeight = bitmap.getHeight();
-        sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
-        this.speed = new Speed(speed, speed);
+        this.speed = new Speed(5, 5);
     }
 
     /**
      * Method which updates the AimedBullet's position
      */
     public void update(long gameTime) {
-        if (alive) {
-            if (gameTime > frameTicker + framePeriod) {
-                frameTicker = gameTime;
+        if (gameTime > frameTicker + framePeriod) {
+            frameTicker = gameTime;
+            if (alive) {
                 ticks++;
                 if(ticks > 50) {
                     Random r = new Random();

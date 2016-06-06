@@ -8,22 +8,21 @@ import java.util.Random;
 
 import static java.lang.Math.pow;
 
-public class Particle {
+class Particle {
     private static final int STATE_ALIVE = 1;    // particle is alive
     private static final int STATE_DEAD = 0;        // particle is dead
 
     private static final int DEFAULT_LIFETIME = 200;    // play with this
     private static final int MAX_DIMENSION = 5;    // the maximum width or height
     private static final int MAX_SPEED = 10;    // maximum speed (per update)
-    private final int color;            // the color of the particle
+    private final int lifetime;        // particle dies when it reaches this value
+    private final Paint paint;        // internal use to avoid instantiation
     private int state;			// particle is alive or dead
     private float width;		// width of the particle
     private float height;		// height of the particle
     private float x, y;			// horizontal and vertical position
     private double dx, dy;		// vertical and horizontal velocity
     private int age;			// current age of the particle
-    private int lifetime;		// particle dies when it reaches this value
-    private Paint paint;		// internal use to avoid instantiation
 
     public Particle(int x, int y) {
         Random generator = new Random();
@@ -42,43 +41,13 @@ public class Particle {
             dx *= 0.7;
             dy *= 0.7;
         }
-        generator = new Random();
-        this.color = Color.argb(255, generator.nextInt(255), generator.nextInt(255), generator.nextInt(255));
-        this.paint = new Paint(this.color);
+        int color = Color.argb(255, generator.nextInt(255), generator.nextInt(255), generator.nextInt(255));
+        this.paint = new Paint(color);
     }
 
-    // getters & setters
-    public static int getStateAlive() {return STATE_ALIVE;}
-    public static int getStateDead() {return STATE_DEAD;}
-    public static int getDefaultLifetime() {return DEFAULT_LIFETIME;}
-    public static int getMaxDimension() {return MAX_DIMENSION;}
-    public static int getMaxSpeed() {return MAX_SPEED;}
-    public int getState() {return state;}
-    public void setState(int state) {this.state = state;}
     public boolean isAlive() {
         return this.state == STATE_ALIVE;
     }
-    public boolean isDead() {
-        return this.state == STATE_DEAD;
-    }
-    public float getWidth() {return width;}
-    public void setWidth(float width) {this.width = width;}
-    public float getHeight() {return height;}
-    public void setHeight(float height) {this.height = height;}
-    public float getX() {return x;}
-    public void setX(float x) {this.x = x;}
-    public float getY() {return y;}
-    public void setY(float y) {this.y = y;}
-    public double getDx() {return dx;}
-    public void setDx(double dx) {this.dx = dx;}
-    public double getDy() {return dy;}
-    public void setDy(double dy) {this.dy = dy;}
-    public int getAge() {return age;}
-    public void setAge(int age) {this.age = age;}
-    public int getLifetime() {return lifetime;}
-    public void setLifetime(int lifetime) {this.lifetime = lifetime;}
-    public Paint getPaint() {return paint;}
-    public void setPaint(Paint paint) {this.paint = paint;}
 
     public void update() {
         if (this.state != STATE_DEAD) {

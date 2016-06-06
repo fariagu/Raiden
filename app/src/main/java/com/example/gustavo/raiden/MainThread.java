@@ -10,7 +10,7 @@ import java.text.DecimalFormat;
  * The Main thread which contains the game loop.
  * The thread must have access to the surface view and holder to trigger events every game tick.
  */
-public class MainThread extends Thread {
+class MainThread extends Thread {
 
 	private static final String TAG = MainThread.class.getSimpleName();
 
@@ -33,7 +33,6 @@ public class MainThread extends Thread {
 	private long totalFrameCount = 0L;
 	private double  fpsStore[]; // the last FPS values
 	private long    statsCount = 0; // the number of times the stat has been read
-	private double  averageFps = 0.0; // the average FPS since the game started
 	private boolean running; // flag to hold game state
 	public MainThread(SurfaceHolder surfaceHolder, MainGamePanel gamePanel) {
 		super();
@@ -134,6 +133,7 @@ public class MainThread extends Thread {
 			}
 
 			// obtain the average
+			double averageFps;
 			if (statsCount < FPS_HISTORY_NR) {// in case of the first 10 triggers
 				averageFps = totalFps / statsCount;
 			} else { // every case after the 10 first

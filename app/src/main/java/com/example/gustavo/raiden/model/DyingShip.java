@@ -8,11 +8,11 @@ public class DyingShip extends Collidable {
     private final int frameNr;        // number of frames in animation
     private int currentFrame;   // the current frame
 
-    public DyingShip(Bitmap bitmap, int x, int y, int FPS, int frameCount) {
-        super(bitmap, x, y, FPS);
+    public DyingShip(Bitmap bitmap, int FPS) {
+        super(bitmap, 0, 0, FPS);
         currentFrame = 0;
-        frameNr = frameCount - 1;
-        spriteWidth = bitmap.getWidth() / frameCount;
+        frameNr = 16 - 1;
+        spriteWidth = bitmap.getWidth() / 16;
         spriteHeight = bitmap.getHeight();
         sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
         alive = false;

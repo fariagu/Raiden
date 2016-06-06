@@ -4,6 +4,7 @@
 
     <application
         android:allowBackup="true"
+        android:fullBackupContent="true"
         android:icon="@mipmap/raidenicon"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -14,8 +15,16 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:host="www.github.com"
+                    android:pathPrefix="/fariagu/Raiden"
+                    android:scheme="http"/>
             </intent-filter>
         </activity>
     </application>
