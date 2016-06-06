@@ -66,11 +66,20 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private int CURRENT_ENEMIES = 2;
     private String avgFps;
 
+    /**
+     * The MainGamePanel constructor.
+     *
+     * @param context
+     */
     public MainGamePanel(Context context) {
         super(context);
         reset(context);
     }
 
+    /**
+     * The game loop.
+     * @param context
+     */
     private void reset(Context context) {
         // adding the callback (this) to the surface holder to intercept events
         getHolder().addCallback(this);
@@ -134,15 +143,31 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         setFocusable(true);
     }
 
+    /**
+     * setAvgFps calculates the FPS the mobile is using.
+     * @param avgFps
+     */
     public void setAvgFps(String avgFps) {
         this.avgFps = avgFps;
     }
 
+    /**
+     * Handler for changing screen on the mobile.
+     * @param holder
+     * @param format
+     * @param width
+     * @param height
+     */
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 
     }
 
+    /**
+     * surfaceCreated is initialized when the mobile starts the game.
+     * Used for starting variables.
+     * @param holder
+     */
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         explosions = new Explosion[50];
@@ -155,6 +180,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         thread.start();
     }
 
+    /**
+     * Used for safely close the app.
+     * @param holder
+     */
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         Log.d(TAG, "Surface is being destroyed");
@@ -172,6 +201,11 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         Log.d(TAG, "Thread was shut down cleanly.");
     }
 
+    /**
+     * Handler for touches on the screen.
+     * @param event
+     * @return boolean, true when ends
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int oldX;
@@ -223,6 +257,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         return true;
     }
 
+    /**
+     * Draw to the screen.
+     * @param canvas
+     */
     public void render(Canvas canvas) {
         if (!start) {
             startgame(canvas);
@@ -273,6 +311,11 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         displayFps(canvas, avgFps);
     }
 
+    /**
+     * Draws the FPS to the screen.
+     * @param canvas
+     * @param FPS
+     */
     private void displayFps(Canvas canvas, String FPS) {
         if (canvas != null && FPS != null) {
             Paint paint = new Paint();
@@ -285,9 +328,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     }
 
     /**
-     * This is the game update method. It iterates through all the objects
-     * and calls their update method if they have one or calls specific
-     * engine's update method.
+     * Iterates through all the objects and calls their update method
      */
     public void update() {
         if (start) {
@@ -399,6 +440,13 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         }
     }
 
+    /**
+     * Draws the opening screen of the app.
+     * The top half of the screen will start the app.
+     * The bottom half of the screen will close the app.
+     * The touches on the screen are handled in the onTouchEvent.
+     * @param canvas
+     */
     private void startgame(Canvas canvas) {
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
@@ -415,6 +463,12 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         canvas.drawText("RAIDEN", canvas.getWidth() / 2, canvas.getHeight() / 5, paint);
     }
 
+    /**
+     * Draws the ending screen of the app.
+     * There you can see your final score of the run.
+     * Touching the screen will return to the starting screen.
+     * @param canvas
+     */
     private void gameOver(Canvas canvas) {
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
@@ -429,6 +483,9 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         canvas.drawText("SCORE: " + showScore, canvas.getWidth() / 2, canvas.getHeight() * 2 / 3, paint);
     }
 
+    /**
+     * Auxiliary function to update the game dificulty.
+     */
     private void calcEnemies() {
         int numenem = ship.getScore() / 5 + STARTING_ENEMIES;
 
