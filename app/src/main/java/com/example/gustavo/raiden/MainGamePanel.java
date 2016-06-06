@@ -44,11 +44,13 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private final Bitmap enemysprite = BitmapFactory.decodeResource(getResources(), R.drawable.enemy);
     private final Bitmap powerupsprite = BitmapFactory.decodeResource(getResources(), R.drawable.powerup);
     private final Bitmap explosion = BitmapFactory.decodeResource(getResources(), R.drawable.explosion);
+    private final int FPS = 60;
+    private final int STARTING_ENEMIES = 3;
+    private final int NR_ENEMIES = 24;
+    private final int NR_BULLETS = 4;
     private int ABS_SPEED = 20;
     private int tick;
-    private int FPS = 60;
     private DisplayMetrics metrics;
-
     private MainThread thread;
     private Droid[] enemies;
     private DyingShip[] deads;
@@ -59,11 +61,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private Background background;
     private Ship ship;
     private boolean start = false;
-    private int STARTING_ENEMIES = 3;
     private int CURRENT_ENEMIES = 2;
-    private int NR_ENEMIES = 24;
-    private int NR_BULLETS = 4;
-
     private String avgFps;
 
     public MainGamePanel(Context context) {
