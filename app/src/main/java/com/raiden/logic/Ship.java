@@ -20,6 +20,14 @@ public class Ship extends Collidable {
 
     private int oldX;
 
+    public Ship() {
+        super();
+        currentFrame = 0;
+        frameNr = 0;
+        touched = false;
+        poweredup = false;
+        score = 0;
+    }
     public Ship(Bitmap bitmap, int x, int y, int FPS) {
         super(bitmap, x, y, FPS);
         this.oldX = x;
@@ -142,11 +150,11 @@ public class Ship extends Collidable {
             alive = false;
     }
 
-    public void checkCollision(AimedBullet b) {
-        if (alive && b.isAlive())
-            if (Collision.shipCollisionDetected(this, b)) {
+    public void checkCollision(AimedBullet ab) {
+        if (alive && ab.isAlive())
+            if (Collision.shipCollisionDetected(this, ab)) {
                 alive = false;
-                b.setAlive(false);
+                ab.setAlive(false);
             }
     }
 

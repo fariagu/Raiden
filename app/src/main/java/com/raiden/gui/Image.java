@@ -10,6 +10,12 @@ public class Image {
     protected Bitmap bitmap;      // the actual bitmap
     protected Rect sourceRect;    // the rectangle to be drawn from the animation bitmap
 
+    public Image() {
+        bitmap = Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888);
+        this.screenHeight = 1000;
+        this.screenWidth = 1000;
+        this.sourceRect = new Rect(0, 0, 10, 10);
+    }
 
     public Image(Bitmap bitmap, int screenHeight, int screenWidth) {
         this.bitmap = bitmap;

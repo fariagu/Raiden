@@ -20,6 +20,20 @@ public class Collidable extends Image {
     int y;           // the X and Y coordinate of the object (top left of the image)
     boolean alive;      // if the power up was picked up
 
+    public Collidable() {
+        super();
+        x = 0;
+        y = 0;
+
+        spriteWidth = 10;
+        spriteHeight = 10;
+
+        frameTicker = 0;
+        framePeriod = 1;
+
+        alive = true;
+    }
+
     /**
      * Construtor do Collidable.
      *
