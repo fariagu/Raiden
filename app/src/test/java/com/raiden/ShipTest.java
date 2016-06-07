@@ -1,19 +1,31 @@
 package com.raiden;
 
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
+import com.raiden.client.MainActivity;
 import com.raiden.logic.AimedBullet;
 import com.raiden.logic.Droid;
 import com.raiden.logic.Ship;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricGradleTestRunner;
+import org.robolectric.annotation.Config;
 
 import static org.junit.Assert.assertEquals;
 
 /**
  * To work on unit tests, switch the Test Artifact in the Build Variants view.
  */
+@RunWith(RobolectricGradleTestRunner.class)
+@Config(constants = BuildConfig.class)
 public class ShipTest {
+    private MainActivity activity;
+
     @Test
     public void ShipMoves() throws Exception {
         Ship s = new Ship();
@@ -56,12 +68,10 @@ public class ShipTest {
 
     @Test
     public void ShipDies() throws Exception {
-        Ship s = new Ship();
-        s.setStaticShip(s.getBitmap());
-        Droid d = new Droid();
-        //Canvas canvas = new Canvas(s.getBitmap());
-        //canvas.drawBitmap(d.getBitmap(), d.getX(), d.getY(), null);
-        //AimedBullet b = new AimedBullet();
+        Ship s = new Ship(BitmapFactory.decodeResource(activity.getResources(), R.drawable.shipsprite), 0, 0, 0);
+        Droid d = new Droid(BitmapFactory.decodeResource(activity.getResources(), R.drawable.enemy),
+                BitmapFactory.decodeResource(activity.getResources(), R.drawable.bullet),
+                0, 0, s, 0);
 
         assertEquals(true, s.isAlive());
 
