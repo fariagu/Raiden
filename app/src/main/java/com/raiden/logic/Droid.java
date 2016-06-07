@@ -8,6 +8,9 @@ import com.raiden.logic.components.Speed;
 
 import java.util.Random;
 
+/**
+ * The enemies in the game.
+ */
 public class Droid extends Collidable {
 
 	static private int screenHeight, screenWidth;
@@ -29,7 +32,7 @@ public class Droid extends Collidable {
 	}
 
 	/**
-	 *
+	 * Construtor do Droid.
 	 * @param bitmap
 	 * @param bullet
 	 * @param x
@@ -46,30 +49,59 @@ public class Droid extends Collidable {
 		this.bullet = new AimedBullet(bulletBitmap, FPS);
 	}
 
+	/**
+	 * Setter to change the Screen Height stored in the Droid.
+	 *
+	 * @param h screen Height
+	 */
 	static public void setScreenHeight(int h) {
 		screenHeight = h;
 	}
 
+	/**
+	 * Setter to change the Screen Height stored in the Droid.
+	 * @param w screen Width
+	 */
 	static public void setScreenWidth(int w) {
 		screenWidth = w;
 	}
 
+	/**
+	 * Setter to change the Speed of the Droid with a x velocity and a y velocity and the direction.
+	 * @return
+	 */
 	public Speed getSpeed() {
 		return speed;
 	}
 
+	/**
+	 * Setter to change the speed in both x and y directions.
+	 * @param absspeed the new speed to both directions
+	 */
 	public void setAbsspeed(int absspeed) {
 		this.absspeed = absspeed;
 	}
 
+	/**
+	 * Getter for the Bullet the Droid is shooting.
+	 * @return
+	 */
 	public AimedBullet getBullet() {
 		return bullet;
 	}
 
+	/**
+	 * Setter to change the amount of time the Droid will take to revive.
+	 * @param comeBackCounter time
+	 */
 	public void setComeBackCounter(int comeBackCounter) {
 		this.comeBackCounter = comeBackCounter;
 	}
 
+	/**
+	 * Draws the bitmap of the Droid to the screen of the mobile and invokes the draw of his bullet.
+	 * @param canvas mobile screen
+	 */
 	public void draw(Canvas canvas) {
 		if (alive) {
 			// where to draw the sprite
@@ -84,6 +116,7 @@ public class Droid extends Collidable {
 
 	/**
 	 * Method which updates the droid's internal state every tick
+	 * @param gameTime the gametime to know if there should be an update.
 	 */
 	public void update(long gameTime) {
 		if (gameTime > frameTicker + framePeriod) {

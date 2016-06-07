@@ -8,6 +8,9 @@ import java.util.Random;
 
 import static java.lang.Math.pow;
 
+/**
+ * A sub-part of the explosion.
+ */
 class Particle {
     private static final int STATE_ALIVE = 1;    // particle is alive
     private static final int STATE_DEAD = 0;        // particle is dead
@@ -24,6 +27,12 @@ class Particle {
     private double dx, dy;		// vertical and horizontal velocity
     private int age;			// current age of the particle
 
+    /**
+     * The constructor of the particle.
+     *
+     * @param x horizontal coordinate of where it will appear.
+     * @param y vertical coordinate of where it will appear.
+     */
     public Particle(int x, int y) {
         Random generator = new Random();
         this.x = x;
@@ -45,10 +54,17 @@ class Particle {
         this.paint = new Paint(color);
     }
 
+    /**
+     * Getter to know if the explosion is alive.
+     * @return True if alive
+     */
     public boolean isAlive() {
         return this.state == STATE_ALIVE;
     }
 
+    /**
+     * Method which updates the Particle.
+     */
     public void update() {
         if (this.state != STATE_DEAD) {
             this.x += this.dx;
@@ -70,8 +86,13 @@ class Particle {
         }
     }
 
+    /**
+     * Draws the particle to the canvas with random colors.
+     * @param canvas
+     */
     public void draw(Canvas canvas) {
-        paint.setARGB(255, 128, 255, 50);
+        Random generator = new Random();
+        paint.setARGB(255, generator.nextInt(155) + 100, generator.nextInt(155) + 100, generator.nextInt(155)+100);
         canvas.drawRect(this.x, this.y, this.x + this.width, this.y + this.height, paint);
     }
 }

@@ -3,11 +3,20 @@ package com.raiden.logic;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 
+/**
+ * The animation that appears when a Droid is destroyed.
+ */
 public class DyingShip extends Collidable {
 
     private final int frameNr;        // number of frames in animation
     private int currentFrame;   // the current frame
 
+    /**
+     * Constructor of the Animation of a Dying Ship
+     *
+     * @param bitmap the sprite of a explosion
+     * @param FPS    the FPS the game is using
+     */
     public DyingShip(Bitmap bitmap, int FPS) {
         super(bitmap, 0, 0, FPS);
         currentFrame = 0;
@@ -18,6 +27,9 @@ public class DyingShip extends Collidable {
         alive = false;
     }
 
+    /**
+     * Default constructor for the DyingShip.
+     */
     public DyingShip() {
         super();
         currentFrame = 0;
@@ -28,6 +40,10 @@ public class DyingShip extends Collidable {
         alive = false;
     }
 
+    /**
+     * Method which updates the DyingShip's internal state every tick
+     * @param gameTime the gametime to know if there should be an update.
+     */
     public void update(long gameTime) {
         if (gameTime > frameTicker + framePeriod) {
             frameTicker = gameTime;
