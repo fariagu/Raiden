@@ -32,13 +32,24 @@ public class Bullet extends Collidable {
         ticks = 0;
     }
 
-    Bullet(Bitmap bitmap, int FPS) {
+    public Bullet(Bitmap bitmap, int FPS) {
         super(bitmap, 0, 0, FPS);
 
         currentFrame = 0;
         framenr = 2;
         spriteWidth = bitmap.getWidth() / 2;
         spriteHeight = bitmap.getHeight();
+        sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
+        speed = new Speed(0, 15);
+        speed.setyDirection(Speed.DIRECTION_UP);
+        ticks = 0;
+    }
+
+    public Bullet() {
+        super();
+
+        currentFrame = 0;
+        framenr = 2;
         sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
         speed = new Speed(0, 15);
         speed.setyDirection(Speed.DIRECTION_UP);

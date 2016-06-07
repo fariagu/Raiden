@@ -26,6 +26,14 @@ public class AimedBullet extends Bullet {
         this.speed = new Speed(5, 5);
     }
 
+    public AimedBullet() {
+        super();
+        spriteWidth = 0;
+        spriteHeight = 0;
+        sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
+        this.speed = new Speed(5, 5);
+    }
+
     /**
      * Method which updates the AimedBullet's position
      * @param gameTime fps controller

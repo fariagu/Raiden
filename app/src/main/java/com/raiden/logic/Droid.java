@@ -11,12 +11,19 @@ import java.util.Random;
 public class Droid extends Collidable {
 
 	static private int screenHeight, screenWidth;
-	private final Bitmap bulletBitmap;
+	private Bitmap bulletBitmap;
 	private final Speed speed;    // the speed with its directions
 	private final AimedBullet bullet;
-	private final Ship player;
+	private Ship player;
 	private int absspeed;
 	private int comeBackCounter;
+
+	public Droid() {
+		super();
+		speed = new Speed();
+		absspeed = 20;
+		this.bullet = new AimedBullet();
+	}
 
 	public Droid(Bitmap bitmap, Bitmap bullet, int x, int y, Ship ship, int FPS) {
 		super(bitmap, x, y, FPS);

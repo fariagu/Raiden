@@ -11,7 +11,7 @@ public class Image {
     protected Rect sourceRect;    // the rectangle to be drawn from the animation bitmap
 
     public Image() {
-        bitmap = Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888);
+        bitmap = Bitmap.createBitmap(10, 10, Bitmap.Config.RGB_565);
         this.screenHeight = 1000;
         this.screenWidth = 1000;
         this.sourceRect = new Rect(0, 0, 10, 10);
@@ -19,6 +19,8 @@ public class Image {
 
     public Image(Bitmap bitmap, int screenHeight, int screenWidth) {
         this.bitmap = bitmap;
+        this.bitmap.setWidth(screenWidth);
+        this.bitmap.setHeight(screenHeight);
         this.screenHeight = screenHeight;
         this.screenWidth = screenWidth;
         this.sourceRect = new Rect(0, 0, this.bitmap.getWidth(), this.bitmap.getHeight());
