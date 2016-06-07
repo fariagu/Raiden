@@ -9,6 +9,9 @@ import android.graphics.Typeface;
 
 import com.raiden.logic.components.Collision;
 
+/**
+ * Ship class is the user's medium of interacting with the game
+ */
 public class Ship extends Collidable {
 
     private final int frameNr;        // number of frames in animation
@@ -20,6 +23,9 @@ public class Ship extends Collidable {
 
     private int oldX;
 
+    /**
+     * Ship Constructor necessary for testing
+     */
     public Ship() {
         super();
         currentFrame = 0;
@@ -28,6 +34,15 @@ public class Ship extends Collidable {
         poweredup = false;
         score = 0;
     }
+
+    /**
+     * The main constructor for the Ship
+     *
+     * @param bitmap
+     * @param x
+     * @param y
+     * @param FPS
+     */
     public Ship(Bitmap bitmap, int x, int y, int FPS) {
         super(bitmap, x, y, FPS);
         this.oldX = x;
@@ -44,7 +59,7 @@ public class Ship extends Collidable {
     //Getters & Setters
 
     /**
-     * Retorna se a Ship está a ser tocada.
+     * Getter for touched boolean
      *
      * @return boolean
      */
@@ -52,34 +67,72 @@ public class Ship extends Collidable {
         return touched;
     }
 
+    /**
+     * Setter for touched boolean
+     *
+     * @param touched
+     */
     public void setTouched(boolean touched) {
         this.touched = touched;
     }
 
+    /**
+     * Setter for oldX
+     *
+     * @param oldX
+     */
     public void setOldX(int oldX) {
         this.oldX = oldX;
     }
 
+    /**
+     * Getter for powereup boolean
+     *
+     * @return
+     */
     public boolean isPoweredup() {
         return poweredup;
     }
 
+    /**
+     * Getter for staticShip
+     *
+     * @return
+     */
     public Bitmap getStaticShip() {
         return staticShip;
     }
 
+    /**
+     * Setter for staticShip
+     *
+     * @param staticShip
+     */
     public void setStaticShip(Bitmap staticShip) {
         this.staticShip = staticShip;
     }
 
+    /**
+     * Getter for score
+     *
+     * @return
+     */
     public int getScore() {
         return score;
     }
 
+    /**
+     * Increments score
+     */
     public void incScore() {
         score++;
     }
 
+    /**
+     * Method which updates the ship's status
+     *
+     * @param gameTime
+     */
     public void update(long gameTime) {
         if (gameTime > frameTicker + framePeriod) {
             frameTicker = gameTime;
@@ -118,6 +171,12 @@ public class Ship extends Collidable {
         }
     }
 
+    /**
+     * Method that handles user input
+     *
+     * @param eventX
+     * @param eventY
+     */
     public void handleActionDown(int eventX, int eventY) {
         if (alive) {
             if (eventX >= (x - 50 - spriteWidth) && (eventX <= (x + 50 + bitmap.getWidth() / frameNr))) {
@@ -134,6 +193,12 @@ public class Ship extends Collidable {
         }
     }
 
+    /**
+     * Method for collision testing between ship and powerup
+     *
+     * @param p
+     * @return
+     */
     public boolean checkCollision(PowerUp p) {
         if (alive && p.isAlive())
             if (Collision.shipCollisionDetected(this, p)) {
@@ -144,12 +209,22 @@ public class Ship extends Collidable {
         return false;
     }
 
+    /**
+     * Method for collision testing between ship and enemy
+     *
+     * @param d
+     */
     public void checkCollision(Droid d) {
         //if (d.isAlive())
         if (Collision.shipCollisionDetected(this, d))
             alive = false;
     }
 
+    /**
+     * Method for collision testing between ship and enemy's bullet
+     *
+     * @param ab
+     */
     public void checkCollision(AimedBullet ab) {
         if (alive && ab.isAlive())
             if (Collision.shipCollisionDetected(this, ab)) {
@@ -158,6 +233,10 @@ public class Ship extends Collidable {
             }
     }
 
+    /**Method that displays the score on the top left corner
+     *
+     * @param canvas
+     */
     public void displayScore(Canvas canvas) {
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);

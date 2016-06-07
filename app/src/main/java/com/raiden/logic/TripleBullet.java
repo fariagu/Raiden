@@ -7,12 +7,22 @@ import android.graphics.Rect;
 import com.raiden.logic.components.Collision;
 import com.raiden.logic.components.Speed;
 
+/**
+ * This is the class of the bullets fired from the ship after it is powered up
+ */
 public class TripleBullet extends Bullet {
     private final Speed speedL;       // the speed with its directions
     private final Speed speedR;       // the speed with its directions
     private int xL, yL;         // the X and Y coordinates
     private int xR, yR;         // the X and Y coordinates
 
+    /**
+     * The main constructor for the Triplebullet.
+     *
+     * @param bitmap
+     * @param s
+     * @param FPS
+     */
     public TripleBullet(Bitmap bitmap, Ship s, int FPS) {
         super(bitmap, s, FPS);
         sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
@@ -32,6 +42,9 @@ public class TripleBullet extends Bullet {
         speedR.setxDirection(Speed.DIRECTION_RIGHT);
     }
 
+    /**
+     * TripleBullet Constructor necessary for testing
+     */
     public TripleBullet() {
         super();
         sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
@@ -51,17 +64,33 @@ public class TripleBullet extends Bullet {
         speedR.setxDirection(Speed.DIRECTION_RIGHT);
     }
 
+    /**
+     * Setter for the x position
+     *
+     * @param x coord of the center.
+     */
     public void setX(int x) {
         this.x = x;
         xL = x;
         xR = x;
     }
+
+    /**
+     * Setter for the y position
+     *
+     * @param y coord of the center.
+     */
     public void setY(int y) {
         this.y = y;
         yL = y;
         yR = y;
     }
 
+    /**
+     * Draws the bitmap to the screen of the mobile.
+     *
+     * @param canvas mobile screen
+     */
     public void draw(Canvas canvas) {
         if (alive) {
             Rect destRect = new Rect(x - (spriteWidth / 2), y - (spriteHeight / 2),
@@ -85,6 +114,8 @@ public class TripleBullet extends Bullet {
 
     /**
      * Method which updates the bullet's position
+     *
+     * @param gameTime the gametime to know if there should be an update.
      */
     public void update(long gameTime) {
         if (gameTime > frameTicker + framePeriod) {
@@ -116,6 +147,14 @@ public class TripleBullet extends Bullet {
         }
     }
 
+    /**
+     * Handler for the collision between a bullet and an enemy.
+     * Destroying a Droid will increase the player's score.
+     *
+     * @param enemy the Droid that collided with the Bullet.
+     * @param ship the player for score update.
+     * @return
+     */
     public boolean checkCollision(Droid enemy, Ship ship) {
         if (alive && enemy.isAlive()) {
             if (Collision.collisionDetected(this, enemy)) {
