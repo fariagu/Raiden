@@ -54,10 +54,6 @@ public class Droid extends Collidable {
 		return bullet;
 	}
 
-	public void setPlayer(Ship player) {
-		this.player = player;
-	}
-
 	public void setComeBackCounter(int comeBackCounter) {
 		this.comeBackCounter = comeBackCounter;
 	}
