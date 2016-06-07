@@ -7,9 +7,8 @@ import com.raiden.logic.components.Collision;
 import com.raiden.logic.components.Speed;
 
 /**
- * This is a test droid that is dragged, dropped, moved, smashed against
- * the wall and done other terrible things with.
- * Wait till it gets a weapon!
+ * The Bullet class is the weapon for the Ship class.
+ * Used to destroy the Droids.
  */
 public class Bullet extends Collidable {
     final int framenr;        // number of frames in animation
@@ -18,6 +17,13 @@ public class Bullet extends Collidable {
     int ticks;
     int MAX_TICKS = 120;
 
+    /**
+     * The main constructor for the Bullet.
+     *
+     * @param bitmap the sprite of the bullet.
+     * @param s      the user's ship for the position the Bullet is to be created.
+     * @param FPS    the FPS the game is using.
+     */
     public Bullet(Bitmap bitmap, Ship s, int FPS) {
         super(bitmap, s.getX(), s.getY(), FPS);
 
@@ -32,6 +38,12 @@ public class Bullet extends Collidable {
         ticks = 0;
     }
 
+    /**
+     * A constructor for the Bullet without a specified position to be created.
+     *
+     * @param bitmap the Sprite
+     * @param FPS    the FPS the game is using.
+     */
     public Bullet(Bitmap bitmap, int FPS) {
         super(bitmap, 0, 0, FPS);
 
@@ -45,29 +57,27 @@ public class Bullet extends Collidable {
         ticks = 0;
     }
 
-    public Bullet() {
-        super();
-
-        currentFrame = 0;
-        framenr = 2;
-        sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
-        speed = new Speed(0, 15);
-        speed.setyDirection(Speed.DIRECTION_UP);
-        ticks = 0;
-    }
-
     //Getters & Setters
 
+    /**
+     * Setter to change the speed the Bullet is traveling.
+     * @param speed
+     */
     public void setSpeed(Speed speed) {
         this.speed = speed;
     }
 
+    /**
+     * Change the time left for the bullet to be resetted.
+     * @param ticks
+     */
     public void setTicks(int ticks) {
         this.ticks = ticks;
     }
 
     /**
-     * Method which updates the bullet's position
+     * Method which updates the bullet's position, living state and velocity.
+     * @param gameTime the gametime to know if there should be an update.
      */
     public void update(long gameTime) {
         if (gameTime > frameTicker + framePeriod) {
@@ -95,6 +105,13 @@ public class Bullet extends Collidable {
         }
     }
 
+    /**
+     * Handler for the collision between a bullet and an enemy.
+     * Destroying a Droid will increase the player's score.
+     * @param enemy the Droid that collided with the Bullet.
+     * @param ship the player for score update.
+     * @return boolean true if there was a collision.
+     */
     public boolean checkCollision(Droid enemy, Ship ship) {
         if (alive && enemy.isAlive())
             if (Collision.collisionDetected(this, enemy)) {
