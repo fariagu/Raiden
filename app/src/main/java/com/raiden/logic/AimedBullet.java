@@ -26,6 +26,9 @@ public class AimedBullet extends Bullet {
         this.speed = new Speed(5, 5);
     }
 
+    /**
+     * Default constructor for the AimedBullet.
+     */
     public AimedBullet() {
         super();
         spriteWidth = 0;
