@@ -32,6 +32,25 @@ public class TripleBullet extends Bullet {
         speedR.setxDirection(Speed.DIRECTION_RIGHT);
     }
 
+    public TripleBullet() {
+        super();
+        sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
+
+        MAX_TICKS = 180;
+
+        xL = x;
+        yL = y;
+        speedL = new Speed(1, speed.getYv());
+        speedL.setyDirection(Speed.DIRECTION_UP);
+        speedL.setxDirection(Speed.DIRECTION_LEFT);
+
+        xR = x;
+        yR = y;
+        speedR = new Speed(1, speed.getYv());
+        speedR.setyDirection(Speed.DIRECTION_UP);
+        speedR.setxDirection(Speed.DIRECTION_RIGHT);
+    }
+
     public void setX(int x) {
         this.x = x;
         xL = x;

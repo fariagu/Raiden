@@ -17,6 +17,12 @@ public class PowerUp extends Collidable {
         alive = false;
     }
 
+    public PowerUp() {
+        super();
+        speed = new Speed();
+        alive = false;
+    }
+
     /**
      * Method which updates the powerup's internal state every tick
      */
