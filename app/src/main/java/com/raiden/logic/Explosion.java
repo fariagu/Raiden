@@ -21,6 +21,10 @@ public class Explosion {
         }
     }
 
+    public void setState(int state) {
+        this.state = state;
+    }
+
     public boolean isAlive() {
         return this.state == STATE_ALIVE;
     }
@@ -37,7 +41,7 @@ public class Explosion {
                     isDead = false;
                 }
             if (isDead)
-                this.state = STATE_DEAD;
+                this.setState(STATE_DEAD);
         }
     }
 

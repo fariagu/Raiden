@@ -18,6 +18,16 @@ public class DyingShip extends Collidable {
         alive = false;
     }
 
+    public DyingShip() {
+        super();
+        currentFrame = 0;
+        frameNr = 16 - 1;
+        spriteWidth = 10;
+        spriteHeight = 10;
+        sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
+        alive = false;
+    }
+
     public void update(long gameTime) {
         if (gameTime > frameTicker + framePeriod) {
             frameTicker = gameTime;
