@@ -18,6 +18,9 @@ public class Droid extends Collidable {
 	private int absspeed;
 	private int comeBackCounter;
 
+	/**
+	 * Default constructor of the Droid.
+	 */
 	public Droid() {
 		super();
 		speed = new Speed();
@@ -25,6 +28,15 @@ public class Droid extends Collidable {
 		this.bullet = new AimedBullet();
 	}
 
+	/**
+	 *
+	 * @param bitmap
+	 * @param bullet
+	 * @param x
+	 * @param y
+	 * @param ship
+	 * @param FPS
+	 */
 	public Droid(Bitmap bitmap, Bitmap bullet, int x, int y, Ship ship, int FPS) {
 		super(bitmap, x, y, FPS);
 		bulletBitmap = bullet;

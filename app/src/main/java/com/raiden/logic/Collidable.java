@@ -16,10 +16,12 @@ public class Collidable extends Image {
     Rect sourceRect;    // the rectangle to be drawn from the animation bitmap
     int spriteWidth;    // the width of the sprite to calculate the cut out rectangle
     int spriteHeight;   // the height of the sprite
-    int x;
-    int y;           // the X and Y coordinate of the object (top left of the image)
+    int x, y;           // the X and Y coordinate of the object (top left of the image)
     boolean alive;      // if the power up was picked up
 
+    /**
+     * Default constructor for the Collidable.
+     */
     public Collidable() {
         super();
         x = 0;
@@ -35,7 +37,7 @@ public class Collidable extends Image {
     }
 
     /**
-     * Construtor do Collidable.
+     * Main constructor of the Collidable.
      *
      * @param bitmap Imagem para o objecto
      * @param x      posição na horizontal
@@ -76,12 +78,16 @@ public class Collidable extends Image {
 
     /**
      * Getter of the Width of the Sprite.
-     * @return int
+     * @return int Sprite width
      */
     public int getSpriteWidth() {
         return spriteWidth;
     }
 
+    /**
+     * Getter of the Height of the Sprite.
+     * @return int Sprite height
+     */
     public int getSpriteHeight() {
         return spriteHeight;
     }
@@ -96,7 +102,7 @@ public class Collidable extends Image {
 
     /**
      * Setter for the X cordinate of the Collidable.
-     * @param x
+     * @param x coord of the center.
      */
     public void setX(int x) {
         this.x = x;
@@ -111,8 +117,8 @@ public class Collidable extends Image {
     }
 
     /**
-     * Setter for the X cordinate of the Collidable.
-     * @param y
+     * Setter for the Y cordinate of the Collidable.
+     * @param y coord of the center.
      */
     public void setY(int y) {
         this.y = y;

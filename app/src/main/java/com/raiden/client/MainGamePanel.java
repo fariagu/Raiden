@@ -454,10 +454,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         canvas.drawPaint(paint);
 
         paint.setColor(Color.RED);
-        paint.setTextSize(100);
-        canvas.drawText("START", canvas.getWidth() / 2, canvas.getHeight() * 3 / 8, paint);
-        canvas.drawText("EXIT", canvas.getWidth() / 2, canvas.getHeight() * 3 / 4, paint);
         paint.setTextSize(200);
+        canvas.drawText("START", canvas.getWidth() / 2, canvas.getHeight() * 7 / 16, paint);
+        canvas.drawText("EXIT", canvas.getWidth() / 2, canvas.getHeight() * 7 / 8, paint);
+        paint.setTextSize(300);
         paint.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
         canvas.drawText("RAIDEN", canvas.getWidth() / 2, canvas.getHeight() / 5, paint);
     }
