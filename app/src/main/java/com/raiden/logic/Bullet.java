@@ -57,6 +57,20 @@ public class Bullet extends Collidable {
         ticks = 0;
     }
 
+    /**
+     * Default constructor for the Bullet.
+     */
+    public Bullet() {
+        super();
+
+        currentFrame = 0;
+        framenr = 2;
+        sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
+        speed = new Speed(0, 15);
+        speed.setyDirection(Speed.DIRECTION_UP);
+        ticks = 0;
+    }
+
     //Getters & Setters
 
     /**
