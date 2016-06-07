@@ -19,8 +19,6 @@ public class Image {
 
     public Image(Bitmap bitmap, int screenHeight, int screenWidth) {
         this.bitmap = bitmap;
-        this.bitmap.setWidth(screenWidth);
-        this.bitmap.setHeight(screenHeight);
         this.screenHeight = screenHeight;
         this.screenWidth = screenWidth;
         this.sourceRect = new Rect(0, 0, this.bitmap.getWidth(), this.bitmap.getHeight());
